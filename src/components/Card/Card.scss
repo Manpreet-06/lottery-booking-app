@@ -1,4 +1,48 @@
-.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input{
-    width: 20px;
-    height: 10px;
-}
+.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root{
+    border-radius: 16px !important;
+    height:50px
+  }
+  .text-input-1 {
+    background: #E6F0EA;
+    width: 59px;
+    height: 50px;
+    border: none;
+    border-radius: 16px;
+  
+    .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+      font-size: 16px;
+      font-weight: 500;
+      color: #003F63;
+      text-align: center;
+    }
+  }
+  .text-input-2 {
+    background: #E6F0EA;
+    width: 62px;
+    height: 50px;
+    border: none;
+    border-radius: 16px;
+  
+    .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+      font-size: 16px;
+      font-weight: 500;
+      color: #003F63;
+      text-align: center;
+    }
+  }
+  .text-input-3 {
+    background: #E6F0EA;
+    border-radius: 16px;
+    width: 100px;
+    height: 50px;
+    border: none;
+  
+    .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+      font-size: 12px;
+      font-weight: 600;
+      color: #630012;
+      text-align: center;
+      height: 10px;
+    }
+  }
+  
