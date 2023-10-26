@@ -13,10 +13,11 @@ const Cards = ({ cardData }) => {
               <Card
                 style={{
                   border: "1px solid lightgrey",
-                  width: "100%",
+                  width: "90%",
                   height: "130px",
                   boxShadow: "none",
                   backgroundImage: `${data.backgroundImage}`,
+                  backgroundSize: "100%",
                   display: "flex",
                   alignItems: "end",
                   justifyContent:"space-around",

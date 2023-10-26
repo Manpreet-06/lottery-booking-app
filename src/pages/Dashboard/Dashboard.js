@@ -3,6 +3,7 @@ import React from "react";
 import Cards from "../../components/Card/Card";
 import TicketCard from "../../components/TicketCard/TicketCard";
 import WinnerList from "../../components/WinnerList/WinnerList";
+import LastOpenBook from "../../components/LastOpenBook/LastOpenBook";
 
 const Dashboard = () => {
   const cardData = [
@@ -11,70 +12,70 @@ const Dashboard = () => {
       image: "",
       input: "15",
       type: "Any",
-      backgroundImage: `url("/assets/template2.png")`
+      backgroundImage: `url("/assets/template2.svg")`
     },
     {
       id: 2,
       image: "",
       input: "15",
       type: "Any",
-      backgroundImage: `url("/assets/template.png")`
+      backgroundImage: `url("/assets/template.svg")`
     },
     {
       id: 3,
       image: "",
       input: "15",
       type: "Any",
-      backgroundImage: `url("/assets/template.png")`
+      backgroundImage: `url("/assets/template.svg")`
     },
     {
       id: 4,
       image: "",
       input: "15",
       type: "Any",
-      backgroundImage: `url("/assets/template2.png")`
+      backgroundImage: `url("/assets/template2.svg")`
     },
     {
       id: 5,
       image: "",
       input: "15",
       type: "Any",
-      backgroundImage: `url("/assets/template2.png")`
+      backgroundImage: `url("/assets/template2.svg")`
     },
     {
       id: 6,
       image: "",
       input: "15",
       type: "Any",
-      backgroundImage: `url("/assets/template.png")`
+      backgroundImage: `url("/assets/template.svg")`
     },
     {
       id: 7,
       image: "",
       input: "15",
       type: "Any",
-      backgroundImage: `url("/assets/template.png")`
+      backgroundImage: `url("/assets/template.svg")`
     },
     {
       id: 8,
       image: "",
       input: "15",
       type: "Any",
-      backgroundImage: `url("/assets/template2.png")`
+      backgroundImage: `url("/assets/template2.svg")`
     },
     {
       id: 9,
       image: "",
       input: "15",
       type: "Any",
-      backgroundImage: `url("/assets/template2.png")`
+      backgroundImage: `url("/assets/template2.svg")`
     },
     {
       id: 10,
       image: "",
       input: "15",
       type: "Any",
-      backgroundImage: `url("/assets/template.png")`
+      backgroundImage: `url("/assets/template.svg")`
     },
   ];
   return (
@@ -85,6 +86,7 @@ const Dashboard = () => {
         <Grid lg={4} paddingLeft={6}>
           <WinnerList />
           <TicketCard />
+          <LastOpenBook />
         </Grid>
       </Grid>
   );
