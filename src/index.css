@@ -1,13 +1,33 @@
+
+@font-face {
+  font-family: "Roboto Condensed";
+  src: url("../public/fonts/RobotoCondensed-Black.ttf") format("truetype");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Roboto Condensed";
+  src: url("../public/fonts/RobotoCondensed-Medium.ttf") format("truetype");
+  font-weight: 500;
+}
+@font-face {
+  font-family: "Roboto Condensed";
+  src: url("../public/fonts/RobotoCondensed-Bold.ttf") format("truetype");
+  font-weight: 600;
+}
+@font-face {
+  font-family: "Roboto Condensed";
+  src: url("../public/fonts/RobotoCondensed-ExtraBold.ttf") format("truetype");
+  font-weight: 700;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: "Roboto Condensed" !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: "Roboto Condensed" !important;
 }

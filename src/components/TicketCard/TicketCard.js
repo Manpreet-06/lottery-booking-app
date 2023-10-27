@@ -1,6 +1,8 @@
 import { Box, Card, Typography } from "@mui/material";
 import React from "react";
 
+import './Ticket.scss';
+
 const TicketCard = () => {
   const ticketArray = [
     {
@@ -20,31 +22,70 @@ const TicketCard = () => {
     },
   ];
   return (
-    <div>
+    <Box
+    className="ticket-box"
+      style={{
+        // padding: 0,
+        // margin: 0,
+        // height: "200px",
+        // overflow: "auto",
+        // boxShadow: "none",
+        // border: "none",
+      }}
+    >
       {ticketArray?.map((item) => {
         return (
-          <Card style={{ padding: "10px", color: "#0c3b5e", margin: '2px', boxShadow: "0px 2px 3px 2px lightgrey" }}>
+          <Card
+          className="ticket-card"
+            style={{
+              // padding: "6px",
+              // color: "#0c3b5e",
+              // margin: "2px",
+              // boxShadow: "0px 4px 10px 0px rgba(0, 0, 0, 0.10)",
+              // borderRadius: "5px",
+            }}
+          >
             <Typography
-              style={{ textAlign: "left", fontSize: "16px", fontWeight: 600 }}
+            className="ticket-number-text"
+              style={{
+                // textAlign: "left",
+                // fontSize: "14px",
+                // fontWeight: 500,
+                // fontFamily: "Roboto Condensed",
+              }}
             >
               TICKET NUMBER:-
             </Typography>
             <Box
               display="flex"
-              alignItems={"center"}
+              alignItems={"baseline"}
               justifyContent={"space-between"}
             >
-              <Typography style={{ fontSize: "16px", fontWeight: 600, textAlign: "left" }}>
+              <Typography
+                style={{
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  textAlign: "left",
+                  fontFamily: "Roboto Condensed",
+                }}
+              >
                 {item.ticketNo}
               </Typography>
-              <Typography style={{ fontSize: "16px", fontWeight: 600,  textAlign: "left" }}>
+              <Typography
+                style={{
+                  fontSize: "20px",
+                  fontWeight: 600,
+                  textAlign: "left",
+                  fontFamily: "Roboto Condensed",
+                }}
+              >
                 {item.price}
               </Typography>
             </Box>
           </Card>
         );
       })}
-    </div>
+    </Box>
   );
 };
 

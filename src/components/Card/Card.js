@@ -4,44 +4,24 @@ import "./Card.scss";
 
 const Cards = ({ cardData }) => {
   return (
-    <div>
-      <Grid container m={1} columnGap={2}>
-        {cardData?.map((data) => {
+    <div className="card-component">
+      <Grid container columnGap={2}>
+        {cardData?.map((data, index) => {
+          const isLastCard = index === cardData?.length - 1;
           return (
-            <Grid lg={5.8} display="flex" alignItems="center" mb={1}>
-              <Typography style={{ margin: "0px 10px", fontSize: "" }}>{data.id}</Typography>
+            <Grid lg={5.8}  display="flex" alignItems="center" mt={0.1}>
+              <Typography className="card-number">{data.id}</Typography>
               <Card
+                className="card-content"
                 style={{
-                  border: "1px solid lightgrey",
-                  width: "90%",
-                  height: "130px",
-                  boxShadow: "none",
                   backgroundImage: `${data.backgroundImage}`,
-                  backgroundSize: "100%",
-                  display: "flex",
-                  alignItems: "end",
-                  justifyContent:"space-around",
-                  borderRadius: "10px",
-                  padding: "5px"
+                  ...(isLastCard && { marginLeft: "-12px" }),
                 }}
               >
-                  <TextField className="text-input-1" defaultValue="15" />
-                  <TextField className="text-input-2" defaultValue="ANY" />
-                  <TextField className="text-input-3" defaultValue="7500" />
-                  <Button
-                    style={{
-                      background: "#A9CBB7",
-                      fontSize: "12px",
-                      fontWeight: 600,
-                      color: "white",
-                      padding: "10px",
-                      borderRadius: "16px",
-                      width: "99.638px",
-                      height: "50px"
-                    }}
-                  >
-                    Pre Book
-                  </Button>
+                <TextField className="text-input-1" defaultValue="15" />
+                <TextField className="text-input-2" defaultValue="ANY" />
+                <TextField className="text-input-3" defaultValue="7500" />
+                <Button className="card-button">Pre-Book</Button>
               </Card>
             </Grid>
           );

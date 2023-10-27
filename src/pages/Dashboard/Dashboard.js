@@ -4,6 +4,7 @@ import Cards from "../../components/Card/Card";
 import TicketCard from "../../components/TicketCard/TicketCard";
 import WinnerList from "../../components/WinnerList/WinnerList";
 import LastOpenBook from "../../components/LastOpenBook/LastOpenBook";
+import VerticalCard from "../../components/VerticalCard/VerticalCard";
 
 const Dashboard = () => {
   const cardData = [
@@ -78,15 +79,39 @@ const Dashboard = () => {
       backgroundImage: `url("/assets/template.svg")`
     },
   ];
+  const winnerListData =[
+    {
+      id:1,
+      image:"/assets/Rectangle.svg"
+    }
+  ]
+  const lastOpenBook = [
+    {
+      id: 1,
+      rectangleimg: "/assets/image1.svg",
+      templateimg : "/assets/rectangle1.svg"
+    },
+    {
+      id: 2,
+      rectangleimg: "/assets/image2.svg",
+      templateimg : "/assets/rectangle1.svg"
+    },
+    {
+      id: 3,
+      rectangleimg: "/assets/image1.svg",
+      templateimg : "/assets/rectangle1.svg"
+    }
+  ]
   return (
-      <Grid container spacing={2} mt={0.5}>
-        <Grid lg={8}>
+      <Grid container columnGap={12}>
+        <Grid lg={8} sm={12} md={12} xs={12}>
           <Cards cardData={cardData} />
+          {/* <VerticalCard  cardData={cardData} /> */}
         </Grid>
-        <Grid lg={4} paddingLeft={6}>
-          <WinnerList />
+        <Grid lg={3} sm={12} md={12} xs={12}>
+          <WinnerList winnerListData={winnerListData} />
           <TicketCard />
-          <LastOpenBook />
+          <LastOpenBook lastOpenBook={lastOpenBook} />
         </Grid>
       </Grid>
   );
