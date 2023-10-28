@@ -1,6 +1,5 @@
 import { Grid } from "@mui/material";
 import React from "react";
-import Cards from "../../components/Card/Card";
 import TicketCard from "../../components/TicketCard/TicketCard";
 import WinnerList from "../../components/WinnerList/WinnerList";
 import LastOpenBook from "../../components/LastOpenBook/LastOpenBook";
@@ -103,10 +102,9 @@ const Dashboard = () => {
     }
   ]
   return (
-      <Grid container columnGap={12}>
-        <Grid lg={8} sm={12} md={12} xs={12}>
-          <Cards cardData={cardData} />
-          {/* <VerticalCard  cardData={cardData} /> */}
+      <Grid container columnGap={6}>
+        <Grid lg={8.5} sm={12} md={12} xs={12}>
+          <VerticalCard  cardData={cardData} />
         </Grid>
         <Grid lg={3} sm={12} md={12} xs={12}>
           <WinnerList winnerListData={winnerListData} />

@@ -1,60 +1,37 @@
 import { Box, Typography } from "@mui/material";
-import React from "react";
+import "./LastOpenBook.scss";
 
 const LastOpenBook = ({ lastOpenBook }) => {
   return (
-    <>
-      <Typography
-        style={{ color: "#003F63", fontWeight: "700", fontSize: "20px", fontFamily:"Roboto Condensed" }}
-      >
-        LAST OPEN BOOK
-      </Typography>
+    <div className="lastopenbook-page">
+      <Box className="lastopenbook-title">
+        <Typography>LAST OPEN BOOK</Typography>
+      </Box>
       {lastOpenBook?.map((data) => {
         return (
           <>
-            <Box display="flex" justifyContent="space-around">
+            <Box
+              display="flex"
+              justifyContent="space-around"
+              className="total-imgs"
+            >
               <Box position={"relative"}>
                 <img
                   src={data.rectangleimg}
                   alt=""
-                  style={{
-                    width: "147px",
-                    height: "99px",
-                    marginBottom: "10px",
-                  }}
+                  className="lastopenbook-img"
                 />
-                <Typography
-                  position="absolute"
-                  top="30%"
-                  left="50%"
-                  color="#003F63"
-                  style={{fontSize: "24px" ,fontWeight:"500" , fontFamily: "Roboto Condensed"}}
-                >
-                  5
-                </Typography>
+                <Typography>5</Typography>
               </Box>
               <Box position="relative">
-              <img
-                src={data.templateimg}
-                alt=""
-                style={{ width: "146px", height: "99px" }}
-              />
-               <Typography
-                  position="absolute"
-                  top="30%"
-                  left="40%"
-                  color="#003F63"
-                  
-                  style={{fontSize: "24px" ,fontWeight:"500", fontFamily: "Roboto Condensed"}}
-                >
-                  16
-                </Typography>
-                </Box>
+                <img src={data.templateimg} alt="" className="template-img" />
+                <Typography>16</Typography>
+              </Box>
             </Box>
           </>
         );
       })}
-    </>
+    </div>
   );
 };
 
