@@ -6,7 +6,8 @@ const Cards = ({ cardData }) => {
   return (
     <div>
       <Grid container m={1} className="cards-page">
-        {cardData?.map((data) => {
+        {cardData?.map((data, index) => {
+         const isLastCard = index === cardData?.length - 1;
           return (
             <Grid
               lg={6}
@@ -38,6 +39,7 @@ const Cards = ({ cardData }) => {
                     className="cards"
                     style={{
                       backgroundImage: `${data.backgroundImage}`,
+                      ...(isLastCard && { marginLeft: "-11px" }),
                     }}
                   ></Card>
                 </Grid>
