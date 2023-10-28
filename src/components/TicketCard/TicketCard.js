@@ -1,36 +1,33 @@
-import { Card, Typography } from "@mui/material";
+import { Box, Card, Typography } from "@mui/material";
 import React from "react";
 
-const TicketCard = () => {
-  const ticketArray = [
-    {
-      id: 1,
-      ticketNo: "RATLMISHOP1_GAME_3_A",
-      price: "35000",
-    },
-    {
-      id: 2,
-      ticketNo: "RATLMISHOP1_GAME_3_A",
-      price: "25000",
-    },
-    {
-      id: 3,
-      ticketNo: "RATLMISHOP1_GAME_3_A",
-      price: "55000",
-    },
-  ];
+import "./Ticket.scss";
+
+const TicketCard = ({ ticketArray }) => {
   return (
-    <div>
+    <Box className="ticket-box">
       {ticketArray?.map((item) => {
         return (
-          <Card>
-            <Typography>Ticket Number:-</Typography>
-            <Typography>{item.ticketNo}</Typography>
-            <Typography>{item.price}</Typography>
+          <Card className="ticket-card">
+            <Typography className="ticket-number-text">
+              TICKET NUMBER:-
+            </Typography>
+            <Box
+              display="flex"
+              alignItems={"baseline"}
+              justifyContent={"space-between"}
+            >
+              <Typography className="ticket-card__number">
+                {item.ticketNo}
+              </Typography>
+              <Typography className="ticket-card__price">
+                {item.price}
+              </Typography>
+            </Box>
           </Card>
         );
       })}
-    </div>
+    </Box>
   );
 };
 

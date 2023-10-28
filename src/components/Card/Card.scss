@@ -1,4 +1,82 @@
-.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input{
-    width: 20px;
-    height: 10px;
+.card-component {
+  .card-number {
+    font-size: 21px;
+    margin: 15px;
+  }
+  .card-content {
+    border: none;
+    width: 90%;
+    box-shadow: none;
+    display: flex;
+    align-items: end;
+    justify-content: space-around;
+    border-radius: 10px;
+    padding: 5px;
+    height: 140px;
+    margin-bottom: 2px;
+  }
+  .card-button {
+    background-color: #a9cbb7;
+    font-size: 12px;
+    font-weight: 500;
+    color: #fff;
+    border-radius: 16px;
+    width: 90.638px;
+    height: 40px;
+    font-family: Roboto Condensed;
+  }
+  .MuiButton-root:hover {
+    background-color: #a9cbb7;
+  }
+  .MuiOutlinedInput-root {
+    border-radius: 16px !important;
+    height: 40px;
+  }
+  .text-input-1 {
+    background: #e6f0ea;
+    width: 49px;
+    height: 40px;
+    border: none;
+    border-radius: 16px;
+    font-family: "Roboto Condensed";
+
+    .MuiOutlinedInput-input {
+      font-size: 13px;
+      font-weight: 500;
+      color: #003f63;
+      text-align: center;
+      height: 40px;
+    }
+  }
+  .text-input-2 {
+    background: #e6f0ea;
+    width: 55px;
+    height: 40px;
+    border: none;
+    border-radius: 16px;
+    font-family: "Roboto Condensed";
+
+    .MuiOutlinedInput-input {
+      font-size: 13px;
+      font-weight: 500;
+      color: #003f63;
+      text-align: center;
+    }
+  }
+  .text-input-3 {
+    background: #e6f0ea;
+    border-radius: 16px;
+    width: 90px;
+    height: 40px;
+    border: none;
+    font-family: "Roboto Condensed";
+
+    .MuiOutlinedInput-input {
+      font-size: 13px;
+      font-weight: 600;
+      color: #630012;
+      text-align: center;
+      height: 40px;
+    }
+  }
 }

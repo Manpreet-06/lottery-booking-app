@@ -1,0 +1,53 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  .clock {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .timer {
+    display: flex;
+    align-items: center;
+  }
+  .wallet {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .header-logo {
+    width: 27px;
+    height: 32px;
+  }
+  .header-logo__title {
+    font-size: 18px;
+    font-weight: 700;
+    font-family: Roboto Condensed;
+  }
+  .clock__img {
+    width: 25px;
+    height: 25px;
+  }
+  .clock__title {
+    font-size: 18px;
+    font-weight: 700;
+    font-family: Roboto Condensed;
+  }
+  .timer__img {
+    width: 30px;
+    height: 31px;
+    font-weight: 700;
+  }
+  .timer__title {
+    margin-left: 5px;
+    font-size: 18px;
+    font-weight: 700;
+    font-family: Roboto Condensed;
+  }
+  .wallet__img {
+    width: 30px;
+    height: 30px;
+  }
+}
