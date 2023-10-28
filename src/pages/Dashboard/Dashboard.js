@@ -9,56 +9,48 @@ const Dashboard = () => {
   const cardData = [
     {
       id: 1,
-      image: "",
       input: "15",
       type: "Any",
       backgroundImage: `url("/assets/template2.svg")`
     },
     {
       id: 2,
-      image: "",
       input: "15",
       type: "Any",
       backgroundImage: `url("/assets/template.svg")`
     },
     {
       id: 3,
-      image: "",
       input: "15",
       type: "Any",
       backgroundImage: `url("/assets/template.svg")`
     },
     {
       id: 4,
-      image: "",
       input: "15",
       type: "Any",
       backgroundImage: `url("/assets/template2.svg")`
     },
     {
       id: 5,
-      image: "",
       input: "15",
       type: "Any",
       backgroundImage: `url("/assets/template2.svg")`
     },
     {
       id: 6,
-      image: "",
       input: "15",
       type: "Any",
       backgroundImage: `url("/assets/template.svg")`
     },
     {
       id: 7,
-      image: "",
       input: "15",
       type: "Any",
       backgroundImage: `url("/assets/template.svg")`
     },
     {
       id: 8,
-      image: "",
       input: "15",
       type: "Any",
       backgroundImage: `url("/assets/template2.svg")`
@@ -72,7 +64,6 @@ const Dashboard = () => {
     },
     {
       id: 10,
-      image: "",
       input: "15",
       type: "Any",
       backgroundImage: `url("/assets/template.svg")`
@@ -101,6 +92,25 @@ const Dashboard = () => {
       templateimg : "/assets/rectangle1.svg"
     }
   ]
+
+  const ticketArray = [
+    {
+      id: 1,
+      ticketNo: "RATLMISHOP1_GAME_3_A BCFY123457",
+      price: "35000",
+    },
+    {
+      id: 2,
+      ticketNo: "RATLMISHOP1_GAME_3_A BCFY123457",
+      price: "25000",
+    },
+    {
+      id: 3,
+      ticketNo: "RATLMISHOP1_GAME_3_A BCFY123457",
+      price: "55000",
+    },
+  ];
+
   return (
       <Grid container columnGap={6}>
         <Grid lg={8.5} sm={12} md={12} xs={12}>
@@ -108,7 +118,7 @@ const Dashboard = () => {
         </Grid>
         <Grid lg={3} sm={12} md={12} xs={12}>
           <WinnerList winnerListData={winnerListData} />
-          <TicketCard />
+          <TicketCard ticketArray={ticketArray} />
           <LastOpenBook lastOpenBook={lastOpenBook} />
         </Grid>
       </Grid>
