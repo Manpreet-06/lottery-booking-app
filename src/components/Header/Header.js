@@ -57,7 +57,12 @@ const Header = () => {
           horizontal: "left",
         }}
       >
-        <Typography sx={{ p: 2 }}>The content of the Popover.</Typography>
+        <Typography sx={{ px: 2 }}>
+          Selling Price
+        </Typography>
+        <Typography sx={{ px: 2 }}>
+          Winning Price
+        </Typography>
       </Popover>
     </div>
   );
