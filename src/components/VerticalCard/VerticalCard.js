@@ -2,7 +2,25 @@ import { Button, Card, Grid, TextField, Typography } from "@mui/material";
 import React from "react";
 import "./VerticalCard.scss";
 
-const Cards = ({ cardData }) => {
+const Cards = ({ cardData, data, loading, error, fetchData  }) => {
+  const handleCardData =() =>{
+    const formData = {
+      name: "Book 3",
+      imageURL: "https://picsum.photos/200/300",
+      totalPage: "15",
+      number: "3",
+      bookSKU: "book3",
+    };
+    try {
+      const response = fetchData(cardData);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+    
+    console.log(data);
+  }
+
   return (
     <div>
       <Grid container m={1} className="cards-page">
@@ -54,7 +72,7 @@ const Cards = ({ cardData }) => {
                     <TextField className="text-input-1" defaultValue="15" />
                     <TextField className="text-input-2" defaultValue="ANY" />
                     <TextField className="text-input-3" defaultValue="7500" />
-                    <Button className="pre-book__btn">Pre Book</Button>
+                    <Button className="pre-book__btn" onClick={handleCardData}>Pre Book</Button>
                   </Grid>
                 </Grid>
               </Grid>
