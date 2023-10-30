@@ -1,9 +1,10 @@
+// actions/dataActions.js
 import axios from "axios";
 import {
   FETCH_DATA_REQUEST,
   FETCH_DATA_SUCCESS,
   FETCH_DATA_FAILURE,
-} from "../types";
+} from "./types";
 
 export const fetchDataRequest = () => {
   return {
@@ -25,19 +26,16 @@ export const fetchDataFailure = (error) => {
   };
 };
 
-export const fetchUserProfileData = () => {
-  const payload = {
-    email: "akshaychavda@gmail.com",
-    password: "Admin@123",
-  };
+export const fetchLoginData = (payload) => {
   return (dispatch) => {
     dispatch(fetchDataRequest());
+
     axios
-      .get(
-        "https://jsonplaceholder.typicode.com/todos",
+      .post(
+        "https://8330-2401-4900-1f3f-840f-4976-476c-fae5-9ff4.ngrok-free.app/api/login",
+        payload
       )
       .then((response) => {
-        console.log(response);
         const data = response.data;
         dispatch(fetchDataSuccess(data));
       })

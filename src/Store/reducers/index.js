@@ -1,9 +1,15 @@
-// reducers/index.js
 import { combineReducers } from 'redux';
-import dataReducer from '../reducers/dataReducers';
+import loginReducer from '../reducers/loginReducer';
+import userProfileReducer from "../reducers/userprofileReducer";
+import booklistReducer from "../reducers/booklistReducer";
+import walletReducer from "../reducers/walletReducer";
+
 
 const rootReducer = combineReducers({
-  data: dataReducer
+  loginReducer: loginReducer,
+  userProfileReducer: userProfileReducer,
+  booklistReducer: booklistReducer,
+  walletReducer:walletReducer
 });
 
 export default rootReducer;
