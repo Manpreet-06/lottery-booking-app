@@ -1,5 +1,4 @@
-// actions/dataActions.js
-import axios from "axios";
+import axios from "../../../src/utils/axios";
 import {
   FETCH_DATA_REQUEST,
   FETCH_DATA_SUCCESS,
@@ -32,7 +31,7 @@ export const fetchLoginData = (payload) => {
 
     axios
       .post(
-        "https://8330-2401-4900-1f3f-840f-4976-476c-fae5-9ff4.ngrok-free.app/api/login",
+        "https://8467-2401-4900-1f3f-840f-a945-df7b-5fd8-f68.ngrok-free.app/api/login",
         payload
       )
       .then((response) => {

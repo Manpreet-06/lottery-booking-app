@@ -1,4 +1,5 @@
-import axios from "axios";
+import axios from "../../../src/utils/axios";
+import { API_URL } from "../../utils/constants";
 import {
   FETCH_DATA_4_REQUEST,
   FETCH_DATA_4_SUCCESS,
@@ -15,17 +16,17 @@ export const fetchData4Failure = (error) => ({
   payload: error,
 });
 
-export const fetchWalletData = () => {
+export const fetchWalletData = (id) => {
   return (dispatch) => {
     dispatch(fetchData4Request());
     axios
       .get(
-        "https://8330-2401-4900-1f3f-840f-4976-476c-fae5-9ff4.ngrok-free.app/api/wallet/getBalance/653dec2f5068cfd79e725f9e", {headers: {
+        "https://8467-2401-4900-1f3f-840f-a945-df7b-5fd8-f68.ngrok-free.app" + API_URL.GET_BALANCE(id), {headers: {
             "Content-Type": "application/json"}
         }
       )
       .then((response) => {
-        console.log(response);
+      //  console.log(response);
       //  const data =response.data.headers['Content-Type'];
         const data = response.data;
         dispatch(fetchData4Success(data));

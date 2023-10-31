@@ -5,10 +5,9 @@ import WinnerList from "../../components/WinnerList/WinnerList";
 import LastOpenBook from "../../components/LastOpenBook/LastOpenBook";
 import VerticalCard from "../../components/VerticalCard/VerticalCard";
 import { connect } from "react-redux";
-import { fetchUserProfileData } from "../../Store/actions/userprofileAction";
 import { fetchWalletData } from "../../Store/actions/walletAction";
 
-const Dashboard = ({data, error , loading, fetchUserProfileData , fetchWalletData}) => {
+const Dashboard = ({ data, error, loading, fetchWalletData }) => {
   const cardData = [
     {
       id: 1,
@@ -114,12 +113,6 @@ const Dashboard = ({data, error , loading, fetchUserProfileData , fetchWalletDat
     },
   ];
 
-  useEffect(() => {
-    fetchUserProfileData();
-    fetchWalletData();
-    console.log(data);
-  }, [fetchUserProfileData, fetchWalletData])
-
   return (
     <Grid container columnGap={6}>
       <Grid lg={8.5} sm={12} md={12} xs={12}>
@@ -135,14 +128,13 @@ const Dashboard = ({data, error , loading, fetchUserProfileData , fetchWalletDat
 };
 
 const mapStateToProps = (state) => ({
-  data: state?.data?.data,
-  loading: state?.data?.loading,
-  error: state?.data?.error,
+  data: state,
+  loading: state?.userprofileReducer?.data?.loading,
+  error: state?.userprofileReducer?.data?.error,
 });
 
-const mapDispatchToProps = {
-  fetchUserProfileData,
-  fetchWalletData,
-};
+const mapDispatchToProps = (dispatch) => ({
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+//export default connect(mapStateToProps, {fetchUserProfileData})(Dashboard);
+export default Dashboard;

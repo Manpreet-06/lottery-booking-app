@@ -2,18 +2,17 @@ import { Button, Card, Grid, TextField } from "@mui/material";
 import React from "react";
 import { Form, Formik } from "formik";
 import { connect } from "react-redux";
-import {fetchLoginData} from "../../Store/actions/loginAction";
-import { useNavigate } from 'react-router-dom';
+import { fetchLoginData } from "../../Store/actions/loginAction";
+import { useNavigate } from "react-router-dom";
+import { setInLocalStorage } from "../../utils/localstorage";
 
-const LoginForm = ({ data, error, loading , fetchLoginData,}) => {
+const LoginForm = ({ data, error, loading, fetchLoginData }) => {
   const navigate = useNavigate();
-  const handleSubmit = async(values) => {
-    try {
-       await fetchLoginData(values);
-       console.log(data);
-       navigate("dashboard")
-    } catch (error) {
-    }
+  const handleSubmit = async (values) => {
+    fetchLoginData(values);
+    console.log(data._id);
+    setInLocalStorage("loginId", data._id);
+    navigate("dashboard");
   };
 
   return (
@@ -89,7 +88,7 @@ const LoginForm = ({ data, error, loading , fetchLoginData,}) => {
 };
 
 const mapStateToProps = (state) => ({
-  data: state?.data?.data,
+  data: state?.loginReducer?.data?.data,
   loading: state?.data?.loading,
   error: state?.data?.error,
 });

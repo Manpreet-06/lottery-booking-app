@@ -1,4 +1,5 @@
-import axios from "../../../src/utils/axios";
+import axios, { instance } from "../../../src/utils/axios";
+import { API_URL } from "../../utils/constants";
 import {
   FETCH_DATA_2_REQUEST,
   FETCH_DATA_2_SUCCESS,
@@ -15,22 +16,13 @@ export const fetchData2Failure = (error) => ({
   payload: error,
 });
 
-export const fetchUserProfileData = () => {
-  return (dispatch) => {
+export const fetchUserProfileData = (id) => {
+  return async (dispatch) => {
     dispatch(fetchData2Request());
     axios
-      .get(
-        "https://8330-2401-4900-1f3f-840f-4976-476c-fae5-9ff4.ngrok-free.app/api/profile/653dfb643f57fdebb69bcbff",
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .get("https://8467-2401-4900-1f3f-840f-a945-df7b-5fd8-f68.ngrok-free.app" + API_URL.GET_USER_PROFILE(id))
       .then((response) => {
-        console.log(response);
-        const data = response.data;
-        dispatch(fetchData2Success(data));
+        dispatch(fetchData2Success(response.data));
       })
       .catch((error) => {
         const errorMessage = error.message;

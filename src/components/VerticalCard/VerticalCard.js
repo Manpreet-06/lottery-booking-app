@@ -1,22 +1,28 @@
 import { Button, Card, Grid, TextField, Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import "./VerticalCard.scss";
-import { Form, Formik } from "formik";
-import { booklistData } from "../../Store/actions/booklistAction";
-import { connect } from "react-redux";
+import { bookListData } from "../../services";
 
-const Cards = ({ cardData, data, loading, error, booklistData }) => {
+const Cards = () => {
+  const [cardDataSet, setCardDataSet]= useState();
 
-  const handleBookListData = () =>{
-    booklistData();
-    console.log(data);
-  }
+  React.useEffect(() => {
+    (async() => {
+      try {
+        const response = await bookListData();
+        setCardDataSet(response.data);
+      } catch (error) {}
+       console.log(cardDataSet);
+    })()
+  }, [])
   
+
   return (
     <div>
       <Grid container m={1} className="cards-page">
-        {cardData?.map((data, index) => {
-          const isLastCard = index === cardData?.length - 1;
+        {cardDataSet?.map((data, index) => {
+          const isLastCard = index === cardDataSet?.length - 1;
+          const total = (data.totalPage * data.price);
           return (
             <Grid
               lg={6}
@@ -35,61 +41,50 @@ const Cards = ({ cardData, data, loading, error, booklistData }) => {
                 alignItems={"center"}
                 justifyContent={"start"}
               >
-                <Formik intitalValues={{}} handleSubmit={() => {}}>
-                  {(formikProps) => (
-                    <>
-                      <Grid
-                        lg={9}
-                        md={9}
-                        sm={9}
-                        xs={9}
-                        display={"flex"}
-                        alignItems={"center"}
+                <Grid
+                  lg={9}
+                  md={9}
+                  sm={9}
+                  xs={9}
+                  display={"flex"}
+                  alignItems={"center"}
+                >
+                  <Typography className="card-number">{data.number}</Typography>
+                  <Card
+                    className="cards"
+                    style={{
+                      backgroundImage: `url(${data.imageURL})`,
+                      backgroundSize: "100%",
+                      ...(isLastCard && { marginLeft: "-11px" }),
+                    }}
+                  ></Card>
+                </Grid>
+                <Grid lg={2} md={2} sm={2} xs={2}>
+                    <Grid
+                      display={"flex"}
+                      alignItems={"start"}
+                      justifyContent={"start"}
+                      flexDirection={"column"}
+                      style={{ height: "135px" }}
+                    >
+                      <TextField
+                        className="text-input-1"
+                        name="totalPage"
+                        value={data.totalPage}
+                      />
+                      <TextField
+                        className="text-input-2"
+                        name="name"
+                        value={data.name}
+                      />
+                      <TextField className="text-input-3" value={total} />
+                      <Button
+                        className="pre-book__btn"
                       >
-                        <Typography className="card-number">
-                          {data.id}
-                        </Typography>
-                        <Card
-                          className="cards"
-                          style={{
-                            backgroundImage: `${data.backgroundImage}`,
-                            ...(isLastCard && { marginLeft: "-11px" }),
-                          }}
-                        ></Card>
-                      </Grid>
-                      <Grid lg={2} md={2} sm={2} xs={2}>
-                      <Form>
-                        <Grid
-                          display={"flex"}
-                          alignItems={"start"}
-                          justifyContent={"start"}
-                          flexDirection={"column"}
-                          style={{ height: "135px" }}
-                        >
-                            <TextField
-                              className="text-input-1"
-                              defaultValue="15"
-                            />
-                            <TextField
-                              className="text-input-2"
-                              defaultValue="ANY"
-                            />
-                            <TextField
-                              className="text-input-3"
-                              defaultValue="7500"
-                            />
-                            <Button
-                              className="pre-book__btn"
-                              onClick={handleBookListData}
-                            >
-                              Pre Book
-                            </Button>
-                        </Grid>
-                        </Form>
-                      </Grid>
-                    </>
-                  )}
-                </Formik>
+                        Pre Book
+                      </Button>
+                    </Grid>
+                </Grid>
               </Grid>
             </Grid>
           );
@@ -99,10 +94,10 @@ const Cards = ({ cardData, data, loading, error, booklistData }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  data: state?.data?.data,
-  loading: state?.data?.loading,
-  error: state?.data?.error,
-});
+// const mapStateToProps = (state) => ({
+//   data: state?.data?.data,
+//   loading: state?.data?.loading,
+//   error: state?.data?.error,
+// });
 
-export default connect(mapStateToProps, { booklistData })(Cards);
+export default Cards;

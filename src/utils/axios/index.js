@@ -3,8 +3,8 @@
 import axios from 'axios';
 
 
-const instance = axios.create({
-  baseURL: "https://8330-2401-4900-1f3f-840f-4976-476c-fae5-9ff4.ngrok-free.app",
+ export const instance = axios.create({
+  baseURL: "https://e7be-2401-4900-1f3f-840f-4976-476c-fae5-9ff4.ngrok-free.app",
 });
 
 instance.interceptors.request.use(async (reqConfig) => {
@@ -16,7 +16,9 @@ instance.interceptors.request.use(async (reqConfig) => {
     headers = {
       ...headers,
       Authorization: `Bearer ${token}`,
-      "Content-Type": 'application/json'
+      Accept: 'application/json',
+      "Content-Type": 'application/json',
+      'ngrok-skip-browser-warning': 'true' 
     };
   }
   return {
