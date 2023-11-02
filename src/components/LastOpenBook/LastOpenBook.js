@@ -4,7 +4,7 @@ import "./LastOpenBook.scss";
 const LastOpenBook = ({ lastOpenBook }) => {
   return (
     <div className="lastopenbook-page">
-      <Box className="lastopenbook-title">
+      <Box className="lastopenbook-title" mb={2}>
         <Typography>LAST OPEN BOOK</Typography>
       </Box>
       {lastOpenBook?.map((data) => {
@@ -15,17 +15,15 @@ const LastOpenBook = ({ lastOpenBook }) => {
               justifyContent="space-around"
               className="total-imgs"
             >
-              <Box position={"relative"}>
+              <Box>
                 <img
                   src={data.rectangleimg}
                   alt=""
                   className="lastopenbook-img"
                 />
-                <Typography>5</Typography>
               </Box>
-              <Box position="relative">
+              <Box>
                 <img src={data.templateimg} alt="" className="template-img" />
-                <Typography>16</Typography>
               </Box>
             </Box>
           </>

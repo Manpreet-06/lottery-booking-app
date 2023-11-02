@@ -1,14 +1,50 @@
 import { Avatar, Box, Grid, Popover, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import "./Header.scss";
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import { getFromLocalStorage } from "../../utils/localstorage";
 import { deepPurple } from "@mui/material/colors";
 import { getUserProfile, getWalletBalance } from "../../services";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserProfileData } from "../../Store/actions/userprofileAction";
+
+
+function CustomTabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [userProfile, setUserProfile] = React.useState("");
+  const [anchorElAvatar, setAnchorElAvatar] = React.useState(null); 
   const [walletData, setWalletData] = React.useState();
+  const [value, setValue] = React.useState(0);
+  const state = useSelector((state) => state?.userProfileReducer?.data);
+  console.log(state);
+  const dispatch = useDispatch();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -18,26 +54,33 @@ const Header = () => {
     setAnchorEl(null);
   };
 
-  // React.useEffect(() => {
-  //  fetchUserProfileData("653dfb643f57fdebb69bcbff");
-  //   console.log(data);
-  //   console.log(data?.userProfileReducer?.data?.data);
-  //   setUserProfile(data?.userProfileReducer?.data?.data);
-  // }, []);
-  // console.log(userProfile?.first_name?.slice(0, 1));
+  const handleClickAvatar = (event) => {
+    setAnchorElAvatar(event.currentTarget); // Step 2
+  };
 
-  React.useEffect(() => {
-    const loginId = getFromLocalStorage("loginId");
-    console.log(loginId);
-    (async () => {
-      try {
-        const response = await getUserProfile(loginId);
-        setUserProfile(response?.data);
-        const walletData = await getWalletBalance("653dec2f5068cfd79e725f9e");
-        setWalletData(walletData?.data);
-      } catch (error) {}
-    })();
-  }, []);
+  const handleCloseAvatar = () => {
+    setAnchorElAvatar(null); // Step 3
+  };
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  useEffect(() => {
+    dispatch(fetchUserProfileData());
+  }, [dispatch, fetchUserProfileData]);
+
+  // React.useEffect(() => {
+  //   const loginId = getFromLocalStorage("loginId");
+  //   console.log(loginId);
+  //   (async () => {
+  //     try {
+  //       const response = await getUserProfile(loginId);
+  //       const walletData = await getWalletBalance("653dec2f5068cfd79e725f9e");
+  //       setWalletData(walletData?.data);
+  //     } catch (error) {}
+  //   })();
+  // }, []);
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
@@ -77,9 +120,11 @@ const Header = () => {
               height: 30,
               marginLeft: "10px",
               bgcolor: deepPurple[500],
+              cursor: "pointer"
             }}
+            onClick={handleClickAvatar} 
           >
-            {userProfile?.first_name?.toUpperCase().slice(0, 1)}
+            {state?.firstName?.toUpperCase().slice(0, 1)}
           </Avatar>
         </Grid>
       </Grid>
@@ -121,21 +166,46 @@ const Header = () => {
           <Typography>{walletData?.walletBalance}</Typography>
         </Box>
       </Popover>
+      <Popover
+        id="avatar-popover"
+        open={Boolean(anchorElAvatar)}
+        anchorEl={anchorElAvatar}
+        onClose={handleCloseAvatar}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+      >
+        
+      <Box sx={{padding: "10px"}} display="flex" alignItems={"center"} justifyContent={"space-between"}>
+        <Typography>First Name</Typography>
+        <Typography>Manpreet</Typography>
+      </Box>
+      <Box sx={{padding: "10px"}} display="flex" alignItems={"center"} justifyContent={"space-between"}>
+        <Typography>Last Name</Typography>
+        <Typography>Arora</Typography>
+      </Box>
+      <Box sx={{padding: "10px"}} display="flex" alignItems={"center"} justifyContent={"space-between"}>
+        <Typography>Email</Typography>
+        <Typography>aroramanpreet316@gmial.com</Typography>
+      </Box>
+      <Box sx={{ width: '100%', padding: "10px" }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+          <Tab label="Selling Balance History"  {...a11yProps(0)} />
+          <Tab label="Winning Balance History" {...a11yProps(1)} />
+        </Tabs>
+      </Box>
+      <CustomTabPanel value={value} index={0}>
+        Item One
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={1}>
+        Item Two
+      </CustomTabPanel>
+    </Box>
+      </Popover>
     </div>
   );
 };
-
-// const mapStateToProps = (state) => ({
-//   data: state,
-//   loading: state,
-//   error: state,
-// });
-
-// const mapDispatchToProps = (dispatch) => ({
-//   fetchUserProfileData,
-//   fetchWalletData,
-// });
-
-// export default connect(mapStateToProps, { fetchUserProfileData })(Header);
 
 export default Header;

@@ -6,12 +6,13 @@ import LastOpenBook from "../../components/LastOpenBook/LastOpenBook";
 import VerticalCard from "../../components/VerticalCard/VerticalCard";
 import { connect } from "react-redux";
 import { fetchWalletData } from "../../Store/actions/walletAction";
+import Booking from "../../components/Booking/Booking";
 
 const Dashboard = ({ data, error, loading, fetchWalletData }) => {
   const cardData = [
     {
       id: 1,
-      nmae: "15",
+      input: "15",
       type: "Any",
       backgroundImage: `url("/assets/template2.svg")`,
     },
@@ -75,6 +76,7 @@ const Dashboard = ({ data, error, loading, fetchWalletData }) => {
     {
       id: 1,
       image: "/assets/Rectangle.svg",
+      templateimg: "/assets/winning.svg"
     },
   ];
   const lastOpenBook = [
@@ -114,27 +116,24 @@ const Dashboard = ({ data, error, loading, fetchWalletData }) => {
   ];
 
   return (
-    <Grid container columnGap={6}>
-      <Grid lg={8.5} sm={12} md={12} xs={12}>
+    <Grid container columnGap={4}>
+      <Grid lg={12} sm={12} md={12} xs={12}>
         <VerticalCard cardData={cardData} />
       </Grid>
       <Grid lg={3} sm={12} md={12} xs={12}>
         <WinnerList winnerListData={winnerListData} />
-        <TicketCard ticketArray={ticketArray} />
+      </Grid>
+      <Grid lg={2.5} sm={12} md={12} xs={12}>
+         <TicketCard ticketArray={ticketArray} />
+      </Grid>
+      <Grid lg={2.5} sm={12} md={12} xs={12}>
         <LastOpenBook lastOpenBook={lastOpenBook} />
+      </Grid>
+      <Grid lg={3} sm={12} md={12} xs={12}>
+        <Booking />
       </Grid>
     </Grid>
   );
 };
 
-const mapStateToProps = (state) => ({
-  data: state,
-  loading: state?.userprofileReducer?.data?.loading,
-  error: state?.userprofileReducer?.data?.error,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-});
-
-//export default connect(mapStateToProps, {fetchUserProfileData})(Dashboard);
 export default Dashboard;
