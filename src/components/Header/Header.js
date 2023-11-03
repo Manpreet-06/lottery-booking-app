@@ -1,19 +1,8 @@
-import {
-  Avatar,
-  Box,
-  Grid,
-  Paper,
-  Popover,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, Grid, Paper, Popover, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import "./Header.scss";
-import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { getFromLocalStorage } from "../../utils/localstorage";
 import { deepPurple } from "@mui/material/colors";
-import { getUserProfile, getWalletBalance } from "../../services";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserProfileData } from "../../Store/actions/userprofileAction";
 import { walletHistoryData } from "../../Store/actions/wallethistoryAction";
@@ -60,7 +49,6 @@ const Header = () => {
 
   const formattedTimeDifference = `${timeDifference} minutes`;
 
-  // console.log(state);
   const dispatch = useDispatch();
 
   const handleClick = (event) => {
@@ -138,7 +126,9 @@ const Header = () => {
         </Grid>
         <Grid lg={2} md={2} sm={2} xs={2.5} className="timer">
           <img src="/assets/timer.png" alt="" className="timer__img" />
-          <Typography className="timer__title">{formattedTimeDifference}</Typography>
+          <Typography className="timer__title">
+            {formattedTimeDifference}
+          </Typography>
         </Grid>
         <Grid lg={2} md={2} sm={2} xs={9.5} className="wallet">
           <img
