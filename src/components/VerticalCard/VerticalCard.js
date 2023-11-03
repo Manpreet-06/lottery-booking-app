@@ -10,16 +10,15 @@ const Cards = ({ cardData }) => {
     (async () => {
       try {
         const response = await bookListData();
-        setCardDataSet(response.data);
+        setCardDataSet(response?.data);
       } catch (error) {}
-      console.log(cardDataSet);
     })();
   }, []);
 
   return (
     <div>
       <Grid container m={1} className="cards-page">
-        {cardData?.map((data, index) => {
+        {cardDataSet?.map((data, index) => {
           const isLastCard = index === cardDataSet?.length - 1;
           return (
             <Grid
@@ -36,7 +35,8 @@ const Cards = ({ cardData }) => {
               <Card
                 className="cards"
                 style={{
-                  backgroundImage: `${data?.backgroundImage}`,
+                  backgroundImage: `url(${data?.imageURL})`,
+                  backgroundSize: "100%",
                   ...(isLastCard && { marginLeft: "-11px" }),
                 }}
               ></Card>

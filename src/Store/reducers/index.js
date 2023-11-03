@@ -5,6 +5,8 @@ import booklistReducer from "../reducers/booklistReducer";
 import walletReducer from "../reducers/walletReducer";
 import gameReducer from "./gameReducer";
 import placeOrderReducer from "./placeorderReducer";
+import gameresultReducer from "./gameresultReducer";
+import walletHistoryReducer from "./walletHistoryReducer";
 
 const rootReducer = combineReducers({
   loginReducer: loginReducer,
@@ -14,6 +16,8 @@ const rootReducer = combineReducers({
   gameReducer: gameReducer,
   placeOrderReducer: placeOrderReducer,
   gameReducer: gameReducer,
+  gameresultReducer: gameresultReducer,
+  walletHistoryReducer: walletHistoryReducer
 });
 
 export default rootReducer;

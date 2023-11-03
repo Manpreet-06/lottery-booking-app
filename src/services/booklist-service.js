@@ -1,8 +1,7 @@
-import instance from "../utils/axios";
 import { API_URL } from "../utils/constants";
 
 export async function bookListData() {
-  const response = await fetch("https://8467-2401-4900-1f3f-840f-a945-df7b-5fd8-f68.ngrok-free.app" + API_URL.GET_BOOKLIST(),
+  const response = await fetch("https://df73-2401-4900-1f3f-840f-edcf-13dc-97d3-b8fb.ngrok-free.app" + API_URL.GET_BOOKLIST(),
     {
       method: "GET",
       headers: {

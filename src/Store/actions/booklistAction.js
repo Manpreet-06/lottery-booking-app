@@ -1,4 +1,4 @@
-import axios, { instance } from "../../../src/utils/axios";
+import axios from "../../../src/utils/axios";
 import { API_URL } from "../../utils/constants";
 import {
   FETCH_DATA_3_REQUEST,
@@ -20,7 +20,10 @@ export const booklistData = () => {
   return (dispatch) => {
     dispatch(fetchData3Request());
     axios
-      .get(instance.baseURL + API_URL.GET_BOOKLIST())
+      .get(
+        "https://dfb8-2401-4900-1f3f-840f-edcf-13dc-97d3-b8fb.ngrok-free.app" +
+          API_URL.GET_BOOKLIST()
+      )
       .then((response) => {
         // console.log(response);
         const data = response.data;

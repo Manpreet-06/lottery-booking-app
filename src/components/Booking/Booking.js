@@ -10,14 +10,14 @@ const Booking = () => {
           fontWeight: "700",
           color: "#003F63",
           marginRight: "30px",
-          marginBottom: "20px"
+          marginBottom: "20px",
         }}
       >
         BOOKING
       </Typography>
       <Box display="flex" justifyContent={"space-between"}>
         <TextField
-          defaultValue={"Book no"}
+          placeholder={"Book no"}
           style={{
             width: "150px",
             height: "56px",
@@ -28,7 +28,7 @@ const Booking = () => {
           }}
         />
         <TextField
-          defaultValue={"Quantity"}
+          placeholder={"Quantity"}
           style={{
             width: "150px",
             height: "56px",
@@ -40,7 +40,7 @@ const Booking = () => {
       </Box>
       <Box display="flex" justifyContent={"space-between"}>
         <TextField
-          defaultValue={"Any"}
+          placeholder={"Any"}
           style={{
             width: "150px",
             height: "56px",
@@ -50,7 +50,7 @@ const Booking = () => {
           }}
         />
         <TextField
-          defaultValue={"Total"}
+          placeholder={"Total"}
           style={{
             width: "150px",
             height: "56px",
@@ -67,7 +67,7 @@ const Booking = () => {
           height: "50px",
           background: "#003F63",
           borderRadius: "10px",
-          marginTop: "40px"
+          marginTop: "40px",
         }}
       >
         Pre Book

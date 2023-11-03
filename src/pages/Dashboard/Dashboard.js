@@ -4,11 +4,28 @@ import TicketCard from "../../components/TicketCard/TicketCard";
 import WinnerList from "../../components/WinnerList/WinnerList";
 import LastOpenBook from "../../components/LastOpenBook/LastOpenBook";
 import VerticalCard from "../../components/VerticalCard/VerticalCard";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchWalletData } from "../../Store/actions/walletAction";
 import Booking from "../../components/Booking/Booking";
+import { gameResultData } from "../../Store/actions/gameresultAction";
+import { fetchGamesData } from "../../Store/actions/gameAction";
+import { placeOrderData } from "../../Store/actions/placeorderAction";
+import { booklistData } from "../../Store/actions/booklistAction";
 
 const Dashboard = ({ data, error, loading, fetchWalletData }) => {
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+
+  useEffect(() => {
+   dispatch(gameResultData());
+   dispatch(placeOrderData());
+   dispatch(booklistData());
+   dispatch(placeOrderData());
+   console.log(state?.placeOrderReducer);
+    
+  }, [gameResultData, fetchGamesData, booklistData, placeOrderData])
+  
+ 
   const cardData = [
     {
       id: 1,
@@ -121,7 +138,7 @@ const Dashboard = ({ data, error, loading, fetchWalletData }) => {
         <VerticalCard cardData={cardData} />
       </Grid>
       <Grid lg={3} sm={12} md={12} xs={12}>
-        <WinnerList winnerListData={winnerListData} />
+        <WinnerList winnerListData={winnerListData} luckyDraw={state?.gameresultReducer?.data?.data} />
       </Grid>
       <Grid lg={2.5} sm={12} md={12} xs={12}>
          <TicketCard ticketArray={ticketArray} />

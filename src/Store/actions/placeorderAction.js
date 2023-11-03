@@ -16,15 +16,16 @@ export const placeOrderFailure = (error) => ({
   payload: error,
 });
 
-export const fetchUserProfileData = (id) => {
+export const placeOrderData = () => {
   return async (dispatch) => {
     dispatch(placeOrderRequest());
     axios
-      .get(
-        "https://1e9b-2401-4900-1f3f-840f-f8ce-a315-2985-3c26.ngrok-free.app" +
+      .post(
+        "https://df73-2401-4900-1f3f-840f-edcf-13dc-97d3-b8fb.ngrok-free.app" +
           API_URL.PLACE_ORDER()
       )
       .then((response) => {
+        console.log(response);
         dispatch(placeOrderSuccess(response.data));
       })
       .catch((error) => {
