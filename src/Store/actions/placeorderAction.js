@@ -1,35 +1,35 @@
 import axios from "../../../src/utils/axios";
 import { API_URL } from "../../utils/constants";
 import {
-  FETCH_DATA_2_REQUEST,
-  FETCH_DATA_2_SUCCESS,
-  FETCH_DATA_2_FAILURE,
+  PLACE_ORDER_REQUEST,
+  PLACE_ORDER_SUCCESS,
+  PLACE_ORDER_FAILURE,
 } from "./types";
 
-export const fetchData2Request = () => ({ type: FETCH_DATA_2_REQUEST });
-export const fetchData2Success = (data) => ({
-  type: FETCH_DATA_2_SUCCESS,
+export const placeOrderRequest = () => ({ type: PLACE_ORDER_REQUEST });
+export const placeOrderSuccess = (data) => ({
+  type: PLACE_ORDER_SUCCESS,
   payload: data,
 });
-export const fetchData2Failure = (error) => ({
-  type: FETCH_DATA_2_FAILURE,
+export const placeOrderFailure = (error) => ({
+  type: PLACE_ORDER_FAILURE,
   payload: error,
 });
 
 export const fetchUserProfileData = (id) => {
   return async (dispatch) => {
-    dispatch(fetchData2Request());
+    dispatch(placeOrderRequest());
     axios
       .get(
         "https://1e9b-2401-4900-1f3f-840f-f8ce-a315-2985-3c26.ngrok-free.app" +
-          API_URL.GET_USER_PROFILE(id)
+          API_URL.PLACE_ORDER()
       )
       .then((response) => {
-        dispatch(fetchData2Success(response.data));
+        dispatch(placeOrderSuccess(response.data));
       })
       .catch((error) => {
         const errorMessage = error.message;
-        dispatch(fetchData2Failure(errorMessage));
+        dispatch(placeOrderFailure(errorMessage));
       });
   };
 };
