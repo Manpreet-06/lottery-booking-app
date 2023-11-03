@@ -90,7 +90,7 @@ const Header = () => {
       setTimer((prevTimer) => {
         if (prevTimer === 1) {
           clearInterval(countdownInterval);
-          return 10 * 60;
+          return 0;
         } else {
           return prevTimer - 1;
         }
