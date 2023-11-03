@@ -20,7 +20,7 @@ export const fetchUserProfileData = (id) => {
   return async (dispatch) => {
     dispatch(fetchData2Request());
     axios
-      .get("https://dummyjson.com/users/1")
+      .get("https://1e9b-2401-4900-1f3f-840f-f8ce-a315-2985-3c26.ngrok-free.app" + API_URL.GET_USER_PROFILE(id))
       .then((response) => {
         dispatch(fetchData2Success(response.data));
       })

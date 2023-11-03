@@ -9,7 +9,7 @@ const WinnerList = ({ winnerListData }) => {
           fontSize: "20px",
           fontWeight: "700",
           color: "#003F63",
-          marginRight: "70px",
+          marginRight: "80px",
         }}
       >
         LUCKY DRAW
@@ -20,7 +20,7 @@ const WinnerList = ({ winnerListData }) => {
             <img
               src={data.templateimg}
               alt=""
-              style={{ width: "196px", height: "240px" }}
+              style={{ width: "196px", height: "350px" }}
             />
             <img
               src={data.image}

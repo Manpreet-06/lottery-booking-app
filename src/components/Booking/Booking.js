@@ -9,20 +9,69 @@ const Booking = () => {
           fontSize: "20px",
           fontWeight: "700",
           color: "#003F63",
-          marginRight: "70px",
+          marginRight: "30px",
+          marginBottom: "20px"
         }}
       >
         BOOKING
       </Typography>
       <Box display="flex" justifyContent={"space-between"}>
-        <TextField defaultValue={"Book no"} />
-        <TextField defaultValue={"Quantity"} />
+        <TextField
+          defaultValue={"Book no"}
+          style={{
+            width: "150px",
+            height: "56px",
+            borderRadius: "10px",
+            border: "1px solid #003F63",
+            color: "#C4C4C4",
+            marginBottom: "40px",
+          }}
+        />
+        <TextField
+          defaultValue={"Quantity"}
+          style={{
+            width: "150px",
+            height: "56px",
+            borderRadius: "10px",
+            border: "1px solid #003F63",
+            color: "#C4C4C4",
+          }}
+        />
       </Box>
-      <Box display="flex" justifyContent={""}>
-        <TextField defaultValue={"Any"} />
-        <TextField defaultValue={"Total"} />
+      <Box display="flex" justifyContent={"space-between"}>
+        <TextField
+          defaultValue={"Any"}
+          style={{
+            width: "150px",
+            height: "56px",
+            borderRadius: "10px",
+            border: "1px solid #003F63",
+            color: "#C4C4C4",
+          }}
+        />
+        <TextField
+          defaultValue={"Total"}
+          style={{
+            width: "150px",
+            height: "56px",
+            borderRadius: "10px",
+            border: "1px solid #003F63",
+            color: "#C4C4C4",
+          }}
+        />
       </Box>
-      <Button variant="contained">Pre Book</Button>
+      <Button
+        variant="contained"
+        style={{
+          width: "280px",
+          height: "50px",
+          background: "#003F63",
+          borderRadius: "10px",
+          marginTop: "40px"
+        }}
+      >
+        Pre Book
+      </Button>
     </Box>
   );
 };
