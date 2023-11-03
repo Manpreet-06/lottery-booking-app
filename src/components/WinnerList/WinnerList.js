@@ -1,29 +1,36 @@
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import React from "react";
 
 const WinnerList = ({ winnerListData }) => {
   return (
-    <div>
-      {winnerListData?.map((data) => {
-        return (
-          <img
-            src={data.image}
-            alt=""
-            style={{ width: "244px", height: "150px" }}
-          />
-        );
-      })}
+    <Box pl={3}>
       <Typography
         style={{
-          color: "#003F63",
-          fontWeight: "700",
           fontSize: "20px",
-          fontFamily: "Roboto Condensed",
+          fontWeight: "700",
+          color: "#003F63",
+          marginRight: "80px",
         }}
       >
-        WINNER LIST
+        LUCKY DRAW
       </Typography>
-    </div>
+      {winnerListData?.map((data) => {
+        return (
+          <Box display={"flex"} justifyContent={"left"} alignItems="center">
+            <img
+              src={data.templateimg}
+              alt=""
+              style={{ width: "196px", height: "350px" }}
+            />
+            <img
+              src={data.image}
+              alt=""
+              style={{ width: "150px", height: "200px" }}
+            />
+          </Box>
+        );
+      })}
+    </Box>
   );
 };
 

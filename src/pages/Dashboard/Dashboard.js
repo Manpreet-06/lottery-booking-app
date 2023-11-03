@@ -5,14 +5,14 @@ import WinnerList from "../../components/WinnerList/WinnerList";
 import LastOpenBook from "../../components/LastOpenBook/LastOpenBook";
 import VerticalCard from "../../components/VerticalCard/VerticalCard";
 import { connect } from "react-redux";
-import { fetchData } from "../../Store/actions/DataAction/dataactions";
-import { fetchUserProfileData } from "../../Store/actions/UserProfile/userprofile";
+import { fetchWalletData } from "../../Store/actions/walletAction";
+import Booking from "../../components/Booking/Booking";
 
-const Dashboard = ({ data, loading, error, fetchData }) => {
+const Dashboard = ({ data, error, loading, fetchWalletData }) => {
   const cardData = [
     {
       id: 1,
-      nmae: "15",
+      input: "15",
       type: "Any",
       backgroundImage: `url("/assets/template2.svg")`,
     },
@@ -76,6 +76,7 @@ const Dashboard = ({ data, loading, error, fetchData }) => {
     {
       id: 1,
       image: "/assets/Rectangle.svg",
+      templateimg: "/assets/winning.svg"
     },
   ];
   const lastOpenBook = [
@@ -114,35 +115,25 @@ const Dashboard = ({ data, loading, error, fetchData }) => {
     },
   ];
 
-  useEffect(() => {
-  //   const payload= {   
-  //     "email":"akshaychavda@gmail.com",   
-  //     "password":"Admin@123"
-  // }
-  //  fetchUserProfileData();
-  fetchData();
-    console.log(data);
-  }, [fetchUserProfileData])
-  
-
   return (
-    <Grid container columnGap={6}>
-      <Grid lg={8.5} sm={12} md={12} xs={12}>
+    <Grid container columnGap={4}>
+      <Grid lg={12} sm={12} md={12} xs={12}>
         <VerticalCard cardData={cardData} />
       </Grid>
       <Grid lg={3} sm={12} md={12} xs={12}>
         <WinnerList winnerListData={winnerListData} />
-        <TicketCard ticketArray={ticketArray} />
+      </Grid>
+      <Grid lg={2.5} sm={12} md={12} xs={12}>
+         <TicketCard ticketArray={ticketArray} />
+      </Grid>
+      <Grid lg={2.5} sm={12} md={12} xs={12}>
         <LastOpenBook lastOpenBook={lastOpenBook} />
+      </Grid>
+      <Grid lg={3} sm={12} md={12} xs={12}>
+        <Booking />
       </Grid>
     </Grid>
   );
 };
 
-const mapStateToProps = (state) => ({
-  data: state.data.data,
-  loading: state.data.loading,
-  error: state.data.error,
-});
-
-export default connect(mapStateToProps, { fetchData })(Dashboard);
+export default Dashboard;

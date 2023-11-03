@@ -1,9 +1,9 @@
-import axios from "axios";
+import axios from "../../../src/utils/axios";
 import {
   FETCH_DATA_REQUEST,
   FETCH_DATA_SUCCESS,
   FETCH_DATA_FAILURE,
-} from "../types";
+} from "./types";
 
 export const fetchDataRequest = () => {
   return {
@@ -25,19 +25,16 @@ export const fetchDataFailure = (error) => {
   };
 };
 
-export const fetchUserProfileData = () => {
-  const payload = {
-    email: "akshaychavda@gmail.com",
-    password: "Admin@123",
-  };
+export const fetchLoginData = (payload) => {
   return (dispatch) => {
     dispatch(fetchDataRequest());
+
     axios
-      .get(
-        "https://jsonplaceholder.typicode.com/todos",
+      .post(
+        "https://8467-2401-4900-1f3f-840f-a945-df7b-5fd8-f68.ngrok-free.app/api/login",
+        payload
       )
       .then((response) => {
-        console.log(response);
         const data = response.data;
         dispatch(fetchDataSuccess(data));
       })
