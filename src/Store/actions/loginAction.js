@@ -1,4 +1,5 @@
 import axios from "../../../src/utils/axios";
+import { API_URL } from "../../utils/constants";
 import {
   FETCH_DATA_REQUEST,
   FETCH_DATA_SUCCESS,
@@ -31,7 +32,7 @@ export const fetchLoginData = (payload) => {
 
     axios
       .post(
-        "https://8467-2401-4900-1f3f-840f-a945-df7b-5fd8-f68.ngrok-free.app/api/login",
+        "https://1e3e-103-250-137-113.ngrok-free.app/api/login",
         payload
       )
       .then((response) => {

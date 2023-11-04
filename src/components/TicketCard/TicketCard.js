@@ -3,7 +3,7 @@ import React from "react";
 
 import "./Ticket.scss";
 
-const TicketCard = ({ ticketArray }) => {
+const TicketCard = ({ ticketArray , ticketData}) => {
   return (
     <Box>
       <Typography
@@ -17,7 +17,7 @@ const TicketCard = ({ ticketArray }) => {
         WINNER LIST
       </Typography>
       <Box className="ticket-box">
-        {ticketArray?.map((item) => {
+        {ticketData?.data?.map((item) => {
           return (
             <Card className="ticket-card">
               <Typography className="ticket-number-text">
@@ -29,11 +29,11 @@ const TicketCard = ({ ticketArray }) => {
                 justifyContent={"space-between"}
               >
                 <Typography className="ticket-card__number">
-                  {item.ticketNo}
+                  {item?.ticketNo}
                 </Typography>
-                {/* <Typography className="ticket-card__price">
+                <Typography className="ticket-card__price">
                 {item.price}
-              </Typography> */}
+              </Typography>
               </Box>
             </Card>
           );

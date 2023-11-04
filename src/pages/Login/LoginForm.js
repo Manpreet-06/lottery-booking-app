@@ -9,9 +9,10 @@ import { setInLocalStorage } from "../../utils/localstorage";
 const LoginForm = ({ data, error, loading, fetchLoginData }) => {
   const navigate = useNavigate();
   const handleSubmit = async (values) => {
+    console.log("line 12", values);
     fetchLoginData(values);
-    console.log(data._id);
-    setInLocalStorage("loginId", data._id);
+    console.log("line 14" ,data?.data);
+    setInLocalStorage("loginData", data?.data);
     navigate("dashboard");
   };
 
@@ -88,7 +89,7 @@ const LoginForm = ({ data, error, loading, fetchLoginData }) => {
 };
 
 const mapStateToProps = (state) => ({
-  data: state?.loginReducer?.data?.data,
+  data: state?.loginReducer?.data,
   loading: state?.data?.loading,
   error: state?.data?.error,
 });

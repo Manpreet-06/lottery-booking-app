@@ -1,50 +1,49 @@
-import { Avatar, Box, Grid, Popover, Typography } from "@mui/material";
+import { Avatar, Box, Grid,Popover, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import "./Header.scss";
-import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { getFromLocalStorage } from "../../utils/localstorage";
 import { deepPurple } from "@mui/material/colors";
-import { getUserProfile, getWalletBalance } from "../../services";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserProfileData } from "../../Store/actions/userprofileAction";
-
-function CustomTabPanel(props) {
-  const { children, value, index, ...other } = props;
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
+import { walletHistoryData } from "../../Store/actions/wallethistoryAction";
+import TabPanel from "@mui/lab/TabPanel";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import { fetchGamesData } from "../../Store/actions/gameAction";
+import { fetchWalletData } from "../../Store/actions/walletAction";
+import { getFromLocalStorage } from "../../utils/localstorage";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorElAvatar, setAnchorElAvatar] = React.useState(null);
-  const [walletData, setWalletData] = React.useState();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState("1");
   const [timer, setTimer] = useState(10 * 60);
+  const [userDetail, setUserDetails] = useState();
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
-  const state = useSelector((state) => state?.userProfileReducer?.data);
-  // console.log(state);
+  const state = useSelector((state) => state);
+  const mainHistory = state?.walletHistoryReducer?.data?.data?.mainHistory;
+  const walletHistory = state?.walletHistoryReducer?.data?.data?.walletHistory;
+  const userProfile = state?.userProfileReducer?.data?.data;
+  const startTimeString = state?.gameReducer?.data?.data?.startTime || "";
+  const endTimeString = state?.gameReducer?.data?.data?.endTime || "";
+  const sellingBalance = state?.walletReducer?.data?.data?.mainBalance;
+  const winningBalance = state?.walletReducer?.data?.data?.walletBalance;
+
+  const startTimeParts = startTimeString?.split(":");
+  const endTimeParts = endTimeString?.split(":");
+
+  const startHour = parseInt(startTimeParts[0], 10);
+  const startMinute = parseInt(startTimeParts[1], 10);
+  const endHour = parseInt(endTimeParts[0], 10);
+  const endMinute = parseInt(endTimeParts[1], 10);
+
+  const totalStartMinutes = startHour * 60 + startMinute;
+  const totalEndMinutes = endHour * 60 + endMinute;
+  const timeDifference = totalEndMinutes - totalStartMinutes;
+
+  const formattedTimeDifference = `${timeDifference} minutes`;
+
   const dispatch = useDispatch();
 
   const handleClick = (event) => {
@@ -68,25 +67,23 @@ const Header = () => {
   };
 
   useEffect(() => {
-    const loginId = getFromLocalStorage("loginId");
-    console.log(loginId);
-    dispatch(fetchUserProfileData(loginId));
-  }, [dispatch, fetchUserProfileData]);
-
-  // React.useEffect(() => {
-  //   const loginId = getFromLocalStorage("loginId");
-  //   console.log(loginId);
-  //   (async () => {
-  //     try {
-  //       const response = await getUserProfile(loginId);
-  //       const walletData = await getWalletBalance("653dec2f5068cfd79e725f9e");
-  //       setWalletData(walletData?.data);
-  //     } catch (error) {}
-  //   })();
-  // }, []);
+    const userData = getFromLocalStorage("loginData");
+    setUserDetails(userData);
+    dispatch(fetchUserProfileData(userData?._id));
+    dispatch(walletHistoryData("653dec2f5068cfd79e725f9e"));
+    dispatch(fetchGamesData());
+    dispatch(fetchWalletData("653dec2f5068cfd79e725f9e"));
+    console.log(state?.walletHistoryReducer);
+  }, [
+    dispatch,
+    fetchUserProfileData,
+    walletHistoryData,
+    fetchGamesData,
+    fetchWalletData,
+  ]);
 
   useEffect(() => {
-   const countdownInterval = setInterval(() => {
+    const countdownInterval = setInterval(() => {
       setTimer((prevTimer) => {
         if (prevTimer === 1) {
           clearInterval(countdownInterval);
@@ -104,10 +101,12 @@ const Header = () => {
   const formatTime = (timer) => {
     const minutes = Math.floor(timer / 60);
     const seconds = timer % 60;
-  
-    const formattedTime = new Date(0, 0, 0, 0, minutes, seconds)
-      .toLocaleString([], { minute: '2-digit', second: '2-digit' });
-  
+
+    const formattedTime = new Date(0, 0, 0, 0, minutes, seconds).toLocaleString(
+      [],
+      { minute: "2-digit", second: "2-digit" }
+    );
+
     return formattedTime;
   };
 
@@ -122,15 +121,23 @@ const Header = () => {
           <img src="/assets/Dashboard.svg" alt="" className="header-logo" />
           <Typography className="header-logo__title">Shop1</Typography>
         </Grid>
-        <Grid lg={5.5} md={5.5} sm={5.5} xs={9.5} className="clock">
+        <Grid lg={3.5} md={5.5} sm={5.5} xs={9.5} className="clock">
           <img src="/assets/clock.png" alt="" className="clock__img" />
           <Typography ml={1} className="clock__title">
             Booking Close in {formatTime(timer)} Minute
           </Typography>
         </Grid>
-        <Grid lg={2} md={2} sm={2} xs={2.5} className="timer">
+        <Grid lg={3.5} md={5.5} sm={5.5} xs={9.5} className="clock">
+          <img src="/assets/clock.png" alt="" className="clock__img" />
+          <Typography ml={1} className="clock__title">
+            Booking Close in {formatTime(timer)} Minute
+          </Typography>
+        </Grid>
+        <Grid lg={1.5} md={2} sm={2} xs={2.5} className="timer">
           <img src="/assets/timer.png" alt="" className="timer__img" />
-          <Typography className="timer__title">10:00</Typography>
+          <Typography className="timer__title">
+            {formattedTimeDifference ? formattedTimeDifference : "10:00"}
+          </Typography>
         </Grid>
         <Grid lg={2} md={2} sm={2} xs={9.5} className="wallet">
           <img
@@ -151,7 +158,7 @@ const Header = () => {
             }}
             onClick={handleClickAvatar}
           >
-            {state?.firstName?.toUpperCase().slice(0, 1)}
+            {userProfile?.first_name?.toUpperCase().slice(0, 1)}
           </Avatar>
         </Grid>
       </Grid>
@@ -176,7 +183,7 @@ const Header = () => {
           }}
         >
           <Typography>Selling Balance:</Typography>
-          <Typography>{walletData?.mainBalance}</Typography>
+          <Typography>{sellingBalance}</Typography>
         </Box>
         <Box
           display="flex"
@@ -190,7 +197,7 @@ const Header = () => {
           }}
         >
           <Typography>Winning Balance:</Typography>
-          <Typography>{walletData?.walletBalance}</Typography>
+          <Typography>{winningBalance}</Typography>
         </Box>
       </Popover>
       <Popover
@@ -209,8 +216,10 @@ const Header = () => {
           alignItems={"center"}
           justifyContent={"space-between"}
         >
-          <Typography>First Name</Typography>
-          <Typography>Manpreet</Typography>
+          <Typography style={{ fontSize: "14px" }}>First Name</Typography>
+          <Typography style={{ fontSize: "14px", color: "#0c3b5e" }}>
+            {userDetail?.first_name}
+          </Typography>
         </Box>
         <Box
           sx={{ padding: "10px" }}
@@ -218,8 +227,10 @@ const Header = () => {
           alignItems={"center"}
           justifyContent={"space-between"}
         >
-          <Typography>Last Name</Typography>
-          <Typography>Arora</Typography>
+          <Typography style={{ fontSize: "14px" }}>Last Name</Typography>
+          <Typography style={{ fontSize: "14px", color: "#0c3b5e" }}>
+            {userDetail?.last_name}
+          </Typography>
         </Box>
         <Box
           sx={{ padding: "10px" }}
@@ -227,26 +238,162 @@ const Header = () => {
           alignItems={"center"}
           justifyContent={"space-between"}
         >
-          <Typography>Email</Typography>
-          <Typography>aroramanpreet316@gmial.com</Typography>
+          <Typography style={{ fontSize: "14px" }}>Email</Typography>
+          <Typography style={{ fontSize: "14px", color: "#0c3b5e" }}>
+            {userDetail?.email}
+          </Typography>
         </Box>
         <Box sx={{ width: "100%", padding: "10px" }}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              aria-label="basic tabs example"
-            >
-              <Tab label="Selling Balance History" {...a11yProps(0)} />
-              <Tab label="Winning Balance History" {...a11yProps(1)} />
-            </Tabs>
+            <TabContext value={value}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <TabList
+                  onChange={handleChange}
+                  aria-label="lab API tabs example"
+                >
+                  <Tab label="Selling Balance History" value="1" />
+                  <Tab label="Winning Balance History" value="2" />
+                </TabList>
+              </Box>
+              {mainHistory?.map((data) => {
+                return (
+                  <TabPanel value="1" style={{ padding: "0px 25px 10px 0px" }}>
+                    <Box
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography style={{ fontSize: "14px" }}>
+                        Amount
+                      </Typography>
+                      <Typography
+                        style={{ fontSize: "14px", color: "#0c3b5e" }}
+                      >
+                        {data?.amount}
+                      </Typography>
+                    </Box>
+                    <Box
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography style={{ fontSize: "14px" }}>
+                        Balance Type
+                      </Typography>
+                      <Typography
+                        style={{ fontSize: "14px", color: "#0c3b5e" }}
+                      >
+                        {data?.balanceType}
+                      </Typography>
+                    </Box>
+                    <Box
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography style={{ fontSize: "14px" }}>Mode</Typography>
+                      <Typography
+                        style={{ fontSize: "14px", color: "#0c3b5e" }}
+                      >
+                        {data?.mode}
+                      </Typography>
+                    </Box>
+                    <Box
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography style={{ fontSize: "14px" }}>
+                        Transaction Type
+                      </Typography>
+                      <Typography
+                        style={{ fontSize: "14px", color: "#0c3b5e" }}
+                      >
+                        {data?.transactionType}
+                      </Typography>
+                    </Box>
+                  </TabPanel>
+                );
+              })}
+              {walletHistory?.map((data) => {
+                return (
+                  <TabPanel value="2">
+                    <Box
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography style={{ fontSize: "14px" }}>
+                        Amount
+                      </Typography>
+                      <Typography
+                        style={{ fontSize: "14px", color: "#0c3b5e" }}
+                      >
+                        {" "}
+                        {data?.amount}
+                      </Typography>
+                    </Box>
+                    <Box
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography style={{ fontSize: "14px" }}>
+                        Balance Type
+                      </Typography>
+                      <Typography
+                        style={{ fontSize: "14px", color: "#0c3b5e" }}
+                      >
+                        {data?.balanceType}
+                      </Typography>
+                    </Box>
+                    <Box
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography style={{ fontSize: "14px" }}>Mode</Typography>
+                      <Typography
+                        style={{ fontSize: "14px", color: "#0c3b5e" }}
+                      >
+                        {data?.mode}
+                      </Typography>
+                    </Box>
+                    <Box
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography style={{ fontSize: "14px" }}>
+                        Transaction Type
+                      </Typography>
+                      <Typography
+                        style={{ fontSize: "14px", color: "#0c3b5e" }}
+                      >
+                        {data?.transactionType}
+                      </Typography>
+                    </Box>
+                  </TabPanel>
+                );
+              })}
+            </TabContext>
           </Box>
-          <CustomTabPanel value={value} index={0}>
-            Item One
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={1}>
-            Item Two
-          </CustomTabPanel>
         </Box>
       </Popover>
     </div>
