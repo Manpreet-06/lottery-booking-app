@@ -1,4 +1,4 @@
-import { Avatar, Box, Grid, Paper, Popover, Typography } from "@mui/material";
+import { Avatar, Box, Grid,Popover, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import "./Header.scss";
 import Tab from "@mui/material/Tab";
@@ -16,7 +16,6 @@ import { getFromLocalStorage } from "../../utils/localstorage";
 const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorElAvatar, setAnchorElAvatar] = React.useState(null);
-  const [walletData, setWalletData] = React.useState();
   const [value, setValue] = React.useState("1");
   const [timer, setTimer] = useState(10 * 60);
   const [userDetail, setUserDetails] = useState();
