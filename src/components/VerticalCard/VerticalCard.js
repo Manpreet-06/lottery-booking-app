@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import "./VerticalCard.scss";
 import { bookListData } from "../../services";
 
-const Cards = ({ cardData }) => {
+const Cards = ({ cardData, booklist }) => {
   const [cardDataSet, setCardDataSet] = useState();
 
   React.useEffect(() => {
@@ -29,7 +29,8 @@ const Cards = ({ cardData }) => {
               mb={1}
               display="flex"
               alignItems="center"
-              style={{ width: "100%" }}
+              flexDirection={"column"}
+              style={{ width: "100%", minHeight: "370px" }}
             >
               <Typography className="card-number">{data?.number}</Typography>
               <Card

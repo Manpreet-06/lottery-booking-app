@@ -21,7 +21,7 @@ export const gameResultData = () => {
     dispatch(gameResultRequest());
     axios
       .get(
-        "https://dfb8-2401-4900-1f3f-840f-edcf-13dc-97d3-b8fb.ngrok-free.app" +
+        "https://1e3e-103-250-137-113.ngrok-free.app" +
           API_URL.GAME_RESULT()
       )
       .then((response) => {

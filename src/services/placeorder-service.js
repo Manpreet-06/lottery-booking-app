@@ -1,14 +1,17 @@
 import { API_URL } from "../utils/constants";
 
-export async function bookListData() {
-  const response = await fetch("https://1e3e-103-250-137-113.ngrok-free.app" + API_URL.GET_BOOKLIST(),
+export async function placeOrderService(payload) {
+  const data = payload;
+  const response = await fetch(
+    "https://1e3e-103-250-137-113.ngrok-free.app" + API_URL.PLACE_ORDER,
     {
-      method: "GET",
+      method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        'ngrok-skip-browser-warning': 'true' 
+        "ngrok-skip-browser-warning": "true",
       },
+      body: JSON.stringify(data),
     }
   );
   if (response.ok) {
@@ -18,5 +21,3 @@ export async function bookListData() {
     return response.json();
   }
 }
-
-  

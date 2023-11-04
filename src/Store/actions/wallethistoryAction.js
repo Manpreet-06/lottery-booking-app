@@ -16,12 +16,12 @@ export const walletHistoryFailure = (error) => ({
   payload: error,
 });
 
-export const walletHistoryData = () => {
+export const walletHistoryData = (id) => {
   return (dispatch) => {
     dispatch(walletHistoryRequest());
     axios
       .get(
-        "https://f1ee-2401-4900-1f3f-840f-edcf-13dc-97d3-b8fb.ngrok-free.app/api/wallet/walletHistory/653dec2f5068cfd79e725f9e"
+        "https://1e3e-103-250-137-113.ngrok-free.app" + API_URL.GET_WALLETHISTORY(id)
       )
       .then((response) => {
         // console.log(response);

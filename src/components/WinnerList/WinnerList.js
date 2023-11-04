@@ -1,8 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
 
-const WinnerList = ({ winnerListData, luckyDraw }) => {
-  // console.log(luckyDraw);
+const WinnerList = ({ winnerListData, winnerList }) => {
   return (
     <Box pl={3}>
       <Typography
@@ -15,7 +14,7 @@ const WinnerList = ({ winnerListData, luckyDraw }) => {
       >
         LUCKY DRAW
       </Typography>
-      {winnerListData?.map((data) => {
+      {Array(winnerList?.data)?.map((data) => {
         return (
           <>
             <Box
@@ -26,22 +25,22 @@ const WinnerList = ({ winnerListData, luckyDraw }) => {
               <Typography
                 style={{ fontSize: "30px", fontWeight: 500, marginTop: "5px" }}
               >
-                4
+                {data?.bookNumber}
               </Typography>
               <Typography
                 style={{ fontSize: "30px", fontWeight: 500, marginTop: "5px" }}
               >
-                8
+                {data?.pageNumber}
               </Typography>
             </Box>
             <Box display={"flex"} justifyContent={"left"} alignItems="center">
               <img
-                src={data.templateimg}
+                src={data?.bookUrl}
                 alt=""
                 style={{ width: "196px", height: "233px" }}
               />
               <img
-                src={data.image}
+                src={data?.pageUrl}
                 alt=""
                 style={{ width: "150px", height: "200px" }}
               />

@@ -16,13 +16,13 @@ export const placeOrderFailure = (error) => ({
   payload: error,
 });
 
-export const placeOrderData = () => {
+export const placeOrderData = (payload) => {
   return async (dispatch) => {
     dispatch(placeOrderRequest());
     axios
       .post(
-        "https://df73-2401-4900-1f3f-840f-edcf-13dc-97d3-b8fb.ngrok-free.app" +
-          API_URL.PLACE_ORDER()
+        "https://1e3e-103-250-137-113.ngrok-free.app" +
+          API_URL.PLACE_ORDER(), payload
       )
       .then((response) => {
         console.log(response);
