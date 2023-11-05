@@ -17,7 +17,7 @@ const Cards = ({ cardData, booklist }) => {
 
   return (
     <div>
-      <Grid container m={1} className="cards-page">
+      <Grid container m={1} className="cards-page" style={{minHeight: "300px"}}>
         {cardDataSet?.map((data, index) => {
           const isLastCard = index === cardDataSet?.length - 1;
           return (
@@ -30,7 +30,7 @@ const Cards = ({ cardData, booklist }) => {
               display="flex"
               alignItems="center"
               flexDirection={"column"}
-              style={{ width: "100%", minHeight: "370px" }}
+              style={{ width: "100%" }}
             >
               <Typography className="card-number">{data?.number}</Typography>
               <Card

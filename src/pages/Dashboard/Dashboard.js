@@ -7,7 +7,6 @@ import VerticalCard from "../../components/VerticalCard/VerticalCard";
 import { useDispatch, useSelector } from "react-redux";
 import Booking from "../../components/Booking/Booking";
 import { gameResultData } from "../../Store/actions/gameresultAction";
-import { fetchGamesData } from "../../Store/actions/gameAction";
 import { placeOrderData } from "../../Store/actions/placeorderAction";
 import { booklistData } from "../../Store/actions/booklistAction";
 import { winnerListData } from "../../Store/actions/winnerlistAction";
@@ -22,13 +21,13 @@ const Dashboard = () => {
 
 
   useEffect(() => {
-    const userData = getFromLocalStorage("loginData");
+    // const userData = getFromLocalStorage("loginData");
     dispatch(gameResultData());
     dispatch(placeOrderData());
     dispatch(booklistData());
     dispatch(winnerListData());
     dispatch(booklistData());
-  }, [gameResultData, fetchGamesData, booklistData, winnerListData, booklistData]);
+  }, [gameResultData, booklistData, winnerListData, booklistData]);
 
   const cardData = [
     {

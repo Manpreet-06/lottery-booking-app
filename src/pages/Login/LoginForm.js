@@ -9,10 +9,9 @@ import { setInLocalStorage } from "../../utils/localstorage";
 const LoginForm = ({ data, error, loading, fetchLoginData }) => {
   const navigate = useNavigate();
   const handleSubmit = async (values) => {
-    console.log("line 12", values);
     fetchLoginData(values);
-    console.log("line 14" ,data?.data);
-    setInLocalStorage("loginData", data?.data);
+    // console.log(data?.data);
+    // setInLocalStorage("loginData", data?.data);
     navigate("dashboard");
   };
 
