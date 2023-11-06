@@ -10,12 +10,11 @@ const LoginForm = ({ data, error, loading, fetchLoginData }) => {
   const navigate = useNavigate();
   const handleSubmit = async (values) => {
     fetchLoginData(values);
-    // console.log(data?.data);
-    // setInLocalStorage("loginData", data?.data);
+    setInLocalStorage("loginData", data?.data);
     navigate("dashboard");
   };
 
-  return (
+return (
     <div>
       <Grid conatiner>
         <Grid

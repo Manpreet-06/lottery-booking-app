@@ -13,7 +13,8 @@ import { fetchGamesData } from "../../Store/actions/gameAction";
 import { fetchWalletData } from "../../Store/actions/walletAction";
 import { getFromLocalStorage } from "../../utils/localstorage";
 import Nodata from "../NoData/Nodata";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
+import { gameResultData } from "../../Store/actions/gameresultAction";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -78,20 +79,30 @@ const Header = () => {
     setValue(newValue);
   };
 
+ useEffect(() => {
+  try {
+    const userData = getFromLocalStorage("loginData");
+    console.log("85 line" ,userData);
+  } catch (error) {
+    console.error("Error fetching userData:", error);
+  }
+ }, [])
+ 
+
   useEffect(() => {
-    // const userData = getFromLocalStorage("loginData");
     // setUserDetails(userData);
     dispatch(fetchUserProfileData("653dec2f5068cfd79e725f9e"));
     dispatch(walletHistoryData("653dec2f5068cfd79e725f9e"));
     dispatch(fetchGamesData());
     dispatch(fetchWalletData("653dec2f5068cfd79e725f9e"));
-    console.log(state?.walletHistoryReducer);
+    dispatch(gameResultData());
   }, [
     dispatch,
     fetchUserProfileData,
     walletHistoryData,
     fetchGamesData,
     fetchWalletData,
+    gameResultData
   ]);
 
   useEffect(() => {
@@ -133,21 +144,15 @@ const Header = () => {
         style={{ backgroundColor: "#0c3b5e", color: "#fff", padding: "5px" }}
         className="header"
       >
-        <Grid lg={1.5} md={1.5} sm={1.5} xs={2.5} className="header">
+        <Grid lg={2.5} md={1.5} sm={1.5} xs={2.5} className="header">
           <img src="/assets/Dashboard.svg" alt="" className="header-logo" />
-          <Typography className="header-logo__title">Shop1</Typography>
+          <Typography className="header-logo__title">{userProfile?.username}</Typography>
         </Grid>
         <Grid lg={3.5} md={5.5} sm={5.5} xs={9.5} className="clock">
           <img src="/assets/clock.png" alt="" className="clock__img" />
           <Typography ml={1} className="clock__title">
             Booking Close in{" "}
             {timeDifference.length > 0 ? formatTime(timer) : "00"} Minute
-          </Typography>
-        </Grid>
-        <Grid lg={3.5} md={5.5} sm={5.5} xs={9.5} className="clock">
-          <img src="/assets/clock.png" alt="" className="clock__img" />
-          <Typography ml={1} className="clock__title">
-            Next Game start in
           </Typography>
         </Grid>
         <Grid lg={1.5} md={2} sm={2} xs={2.5} className="timer">

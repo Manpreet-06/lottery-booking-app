@@ -1,13 +1,13 @@
 import { Box, Typography } from "@mui/material";
 import "./LastOpenBook.scss";
 
-const LastOpenBook = ({ lastOpenBook }) => {
+const LastOpenBook = ({ lastOpenBook, winnerList }) => {
   return (
     <div className="lastopenbook-page">
       <Box className="lastopenbook-title" mb={2}>
         <Typography>LAST OPEN BOOK</Typography>
       </Box>
-      {lastOpenBook?.map((data) => {
+      {winnerList?.bookHistory?.map((data) => {
         return (
           <>
             <Box
@@ -15,15 +15,13 @@ const LastOpenBook = ({ lastOpenBook }) => {
               justifyContent="space-around"
               className="total-imgs"
             >
-              <Box>
-                <img
-                  src={data.rectangleimg}
-                  alt=""
-                  className="lastopenbook-img"
-                />
+              <Box style={{position: "relative"}}>
+                <img src={data?.bookUrl} alt="" className="lastopenbook-img" />
+                <Typography position={"absolute"}>{data?.bookNumber}</Typography>
               </Box>
-              <Box>
-                <img src={data.templateimg} alt="" className="template-img" />
+              <Box style={{position: "relative"}}>
+                <img src={data?.pageUrl} alt="" className="template-img" />
+                <Typography position={"absolute"}>{data?.pageNumber}</Typography>
               </Box>
             </Box>
           </>

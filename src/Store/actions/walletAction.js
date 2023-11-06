@@ -21,7 +21,7 @@ export const fetchWalletData = (id) => {
     dispatch(fetchData4Request());
     axios
       .get(
-        "https://1e3e-103-250-137-113.ngrok-free.app" + API_URL.GET_BALANCE(id), {headers: {
+        "https://a94d-103-250-137-113.ngrok-free.app" + API_URL.GET_BALANCE(id), {headers: {
             "Content-Type": "application/json"}
         }
       )

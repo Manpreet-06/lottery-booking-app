@@ -7,23 +7,18 @@ import VerticalCard from "../../components/VerticalCard/VerticalCard";
 import { useDispatch, useSelector } from "react-redux";
 import Booking from "../../components/Booking/Booking";
 import { gameResultData } from "../../Store/actions/gameresultAction";
-import { placeOrderData } from "../../Store/actions/placeorderAction";
 import { booklistData } from "../../Store/actions/booklistAction";
 import { winnerListData } from "../../Store/actions/winnerlistAction";
-import { getFromLocalStorage } from "../../utils/localstorage";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
-  const gameResult = state?.gameresultReducer?.data;
+  const gameResult = state?.gameresultReducer?.data?.data?.data;
   const ticketData = state?.winnerlistReducer?.data;
   const bookList = state?.booklistReducer?.data;
 
-
   useEffect(() => {
-    // const userData = getFromLocalStorage("loginData");
     dispatch(gameResultData());
-    dispatch(placeOrderData());
     dispatch(booklistData());
     dispatch(winnerListData());
     dispatch(booklistData());
@@ -142,7 +137,6 @@ const Dashboard = () => {
       </Grid>
       <Grid lg={3} sm={12} md={12} xs={12}>
         <WinnerList
-          //winnerListData={winnerListData1}
           winnerList={gameResult}
         />
       </Grid>
@@ -150,7 +144,7 @@ const Dashboard = () => {
         <TicketCard ticketArray={ticketArray} ticketData={ticketData} />
       </Grid>
       <Grid lg={2.5} sm={12} md={12} xs={12}>
-        <LastOpenBook lastOpenBook={lastOpenBook} />
+        <LastOpenBook winnerList={gameResult} />
       </Grid>
       <Grid lg={3} sm={12} md={12} xs={12}>
         <Booking />

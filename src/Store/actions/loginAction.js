@@ -32,11 +32,10 @@ export const fetchLoginData = (payload) => {
 
     axios
       .post(
-        "https://4ebe-103-250-137-113.ngrok-free.app" + API_URL.LOGIN(),
+        "https://a94d-103-250-137-113.ngrok-free.app" + API_URL.LOGIN(),
         payload
       )
       .then((response) => {
-        console.log(response);
         const data = response.data;
         dispatch(fetchDataSuccess(data));
       })

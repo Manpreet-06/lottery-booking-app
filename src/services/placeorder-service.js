@@ -3,7 +3,7 @@ import { API_URL } from "../utils/constants";
 export async function placeOrderService(payload) {
   const data = payload;
   const response = await fetch(
-    "https://1e3e-103-250-137-113.ngrok-free.app" + API_URL.PLACE_ORDER,
+    "https://a94d-103-250-137-113.ngrok-free.app/api/order/placeOrder",
     {
       method: "POST",
       headers: {
@@ -14,6 +14,7 @@ export async function placeOrderService(payload) {
       body: JSON.stringify(data),
     }
   );
+  console.log(response);
   if (response.ok) {
     const jsonData = await response.json();
     return jsonData;

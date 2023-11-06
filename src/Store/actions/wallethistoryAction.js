@@ -21,7 +21,7 @@ export const walletHistoryData = (id) => {
     dispatch(walletHistoryRequest());
     axios
       .get(
-        "https://1e3e-103-250-137-113.ngrok-free.app" + API_URL.GET_WALLETHISTORY(id)
+        "https://a94d-103-250-137-113.ngrok-free.app" + API_URL.GET_WALLETHISTORY(id)
       )
       .then((response) => {
         // console.log(response);

@@ -21,11 +21,11 @@ export const gameResultData = () => {
     dispatch(gameResultRequest());
     axios
       .get(
-        "https://1e3e-103-250-137-113.ngrok-free.app" +
+        "https://a94d-103-250-137-113.ngrok-free.app" +
           API_URL.GAME_RESULT()
       )
       .then((response) => {
-        dispatch(gameResultSuccess(response.data));
+        dispatch(gameResultSuccess(response));
       })
       .catch((error) => {
         const errorMessage = error.message;

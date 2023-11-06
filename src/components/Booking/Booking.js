@@ -1,15 +1,24 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import React from "react";
+import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { placeOrderService } from "../../services";
 import { Form, Formik } from "formik";
+import PrintPdf from "../PrintPdf/PrintPdf";
+import { useReactToPrint } from "react-to-print";
 
 const Booking = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
+  const componentPDF = useRef();
+  const [shouldPrint, setShouldPrint] = useState(false);
+  const [placeOrderData, setPlaceOrderData] = useState(false);
+
+  const generatePDF = useReactToPrint({
+    content: () => componentPDF.current,
+    documentTitle: "userdata",
+  });
 
   const handleOrder = async (values) => {
-    console.log(values);
     try {
       const payload = {
         bookId: "653e870b81351a820868588d",
@@ -17,12 +26,23 @@ const Booking = () => {
         bookNumber: values?.bookNumber,
         pageNumber: values?.pageNumber,
         amount: values?.amount,
-        quantity: values?.quantity,
+        quantity: "",
+        gameId: "65410a00d585c95d89a26ccb",
       };
       const response = await placeOrderService(payload);
-      console.loe(response);
+      if (response.status === 200) {
+        const data = {
+          ...payload,
+          orderId: response?.orderId,
+        };
+        console.log(data);
+        setPlaceOrderData(data);
+        setShouldPrint(true);
+        generatePDF();
+      }
     } catch (error) {}
   };
+
   return (
     <Box>
       <Typography
@@ -37,7 +57,12 @@ const Booking = () => {
         BOOKING
       </Typography>
       <Formik
-        initialValues={{ bookNumber: "", pageNumber:"" , amount: "", quantity:"" }}
+        initialValues={{
+          bookNumber: "",
+          pageNumber: "",
+          amount: "",
+          quantity: "",
+        }}
         onSubmit={(values) => {
           handleOrder(values);
         }}
@@ -114,6 +139,11 @@ const Booking = () => {
             >
               Pre Book
             </Button>
+            {shouldPrint === true && (
+              <div ref={componentPDF} style={{ width: "100%" }}>
+                <PrintPdf placeOrderData={placeOrderData} />
+              </div>
+            )}
           </Form>
         )}
       </Formik>

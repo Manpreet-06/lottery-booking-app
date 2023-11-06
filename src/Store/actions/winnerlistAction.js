@@ -21,7 +21,7 @@ export const winnerListData = () => {
     dispatch(winnerListRequest());
     axios
       .get(
-       "https://1e3e-103-250-137-113.ngrok-free.app" + API_URL.WINNER_LIST()
+       "https://a94d-103-250-137-113.ngrok-free.app" + API_URL.WINNER_LIST()
       )
       .then((response) => {
         // console.log(response);
