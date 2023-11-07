@@ -1,25 +1,13 @@
 import { Card, Grid, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import "./VerticalCard.scss";
-import { bookListData } from "../../services";
 
-const Cards = ({ cardData, booklist }) => {
-  const [cardDataSet, setCardDataSet] = useState();
-
-  React.useEffect(() => {
-    (async () => {
-      try {
-        const response = await bookListData();
-        setCardDataSet(response?.data);
-      } catch (error) {}
-    })();
-  }, []);
-
+const Cards = ({ bookList }) => {
   return (
     <div>
       <Grid container m={1} className="cards-page" style={{minHeight: "300px"}}>
-        {cardDataSet?.map((data, index) => {
-          const isLastCard = index === cardDataSet?.length - 1;
+        {bookList?.map((data, index) => {
+          const isLastCard = index === bookList?.length - 1;
           return (
             <Grid
               lg={2.4}

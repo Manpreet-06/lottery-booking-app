@@ -1,4 +1,4 @@
-import axios from "../../../src/utils/axios";
+import instance from "../../../src/utils/axios";
 import { API_URL } from "../../utils/constants";
 import {
   WALLET_HISTORY_REQUEST,
@@ -19,10 +19,8 @@ export const walletHistoryFailure = (error) => ({
 export const walletHistoryData = (id) => {
   return (dispatch) => {
     dispatch(walletHistoryRequest());
-    axios
-      .get(
-        "https://a94d-103-250-137-113.ngrok-free.app" + API_URL.GET_WALLETHISTORY(id)
-      )
+    instance
+      .get(API_URL.GET_WALLETHISTORY(id))
       .then((response) => {
         // console.log(response);
         const data = response.data;

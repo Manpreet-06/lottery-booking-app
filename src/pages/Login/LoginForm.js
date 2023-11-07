@@ -10,7 +10,8 @@ const LoginForm = ({ data, error, loading, fetchLoginData }) => {
   const navigate = useNavigate();
   const handleSubmit = async (values) => {
     fetchLoginData(values);
-    setInLocalStorage("loginData", data?.data);
+    console.log(data);
+    setInLocalStorage("loginData", data?.data);    
     navigate("dashboard");
   };
 

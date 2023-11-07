@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import "./LastOpenBook.scss";
+import Nodata from "../NoData/Nodata";
 
 const LastOpenBook = ({ lastOpenBook, winnerList }) => {
   return (
@@ -7,7 +8,7 @@ const LastOpenBook = ({ lastOpenBook, winnerList }) => {
       <Box className="lastopenbook-title" mb={2}>
         <Typography>LAST OPEN BOOK</Typography>
       </Box>
-      {winnerList?.bookHistory?.map((data) => {
+      {winnerList?.bookHistory?.length> 0 ?winnerList?.bookHistory?.map((data) => {
         return (
           <>
             <Box
@@ -26,7 +27,7 @@ const LastOpenBook = ({ lastOpenBook, winnerList }) => {
             </Box>
           </>
         );
-      })}
+      }): <Nodata />}
     </div>
   );
 };

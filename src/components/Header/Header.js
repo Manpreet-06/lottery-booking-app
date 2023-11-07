@@ -12,9 +12,9 @@ import TabList from "@mui/lab/TabList";
 import { fetchGamesData } from "../../Store/actions/gameAction";
 import { fetchWalletData } from "../../Store/actions/walletAction";
 import { getFromLocalStorage } from "../../utils/localstorage";
-import Nodata from "../NoData/Nodata";
 import { useNavigate } from "react-router";
 import { gameResultData } from "../../Store/actions/gameresultAction";
+import { logout } from "../../Store/actions/authAction";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -28,34 +28,86 @@ const Header = () => {
   const mainHistory = state?.walletHistoryReducer?.data?.data?.mainHistory;
   const walletHistory = state?.walletHistoryReducer?.data?.data?.walletHistory;
   const userProfile = state?.userProfileReducer?.data?.data;
-  const startTimeString = state?.gameReducer?.data?.data?.startTime || "";
-  const endTimeString = state?.gameReducer?.data?.data?.endTime || "";
   const sellingBalance = state?.walletReducer?.data?.data?.mainBalance;
   const winningBalance = state?.walletReducer?.data?.data?.walletBalance;
+  const [startDateTime, setStartDateTime] = useState();
+  const [endDateTime, setEndDateTime] = useState();
 
-  const startTimeParts = startTimeString?.split(":");
-  const endTimeParts = endTimeString?.split(":");
+  const [currentTime, setCurrentTime] = useState(new Date());
+   const startDateString = state?.gameReducer?.data?.data?.startTime;
+  const endTimeString = state?.gameReducer?.data?.data?.startTime;
 
-  const startHour = parseInt(startTimeParts[0], 10);
-  const startMinute = parseInt(startTimeParts[1], 10);
-  const endHour = parseInt(endTimeParts[0], 10);
-  const endMinute = parseInt(endTimeParts[1], 10);
+  // const startTime = new Date("2023-11-08T00:27:31");
+  // const endTime = new Date("2023-11-08T00:45:00");
+  useEffect(() => {
+    if(startDateString && endTimeString){
+    const startDateString = state?.gameReducer?.data?.data?.startTime;
+    const [startHours, startMinutes] = startDateString.split(":").map(Number);
 
-  const totalStartMinutes = startHour * 60 + startMinute;
-  const totalEndMinutes = endHour * 60 + endMinute;
-  const timeDifference = totalEndMinutes - totalStartMinutes;
-  const [timer, setTimer] = useState(timeDifference * 60);
+    const startDate = new Date();
+    startDate.setHours(startHours);
+    startDate.setMinutes(startMinutes);
+    startDate.setSeconds(0);
 
-  const currentTime = new Date();
+    const formattedStartDate = startDate.toISOString();
 
-  const istOptions = {
-    timeZone: "Asia/Kolkata",
-    hour12: true,
-    hour: "numeric",
-    minute: "numeric",
-  };
+    const endTimeString = state?.gameReducer?.data?.data?.endTime;
+    const [endHours, endMinutes] = endTimeString.split(":").map(Number);
 
-  const formattedTime = currentTime.toLocaleTimeString("en-IN", istOptions);
+    const endDate = new Date();
+    endDate.setHours(endHours);
+    endDate.setMinutes(endMinutes);
+    endDate.setSeconds(0);
+
+    const formattedEndTime = endDate.toISOString();
+
+    const startTime = new Date(formattedStartDate);
+    const endTime = new Date(formattedEndTime);
+    console.log(startTime);
+    setStartDateTime(startTime);
+    setEndDateTime(endTime);
+    console.log(endTime);
+    }else {
+     // console.log();
+    }
+
+  }, [startDateString, endTimeString]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  function formatTime(date) {
+    const hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const seconds = date.getSeconds().toString().padStart(2, "0");
+    return `${hours}:${minutes}:${seconds}`;
+  }
+
+  function calculateTimeRemaining() {
+    let remainingTime;
+
+    if (currentTime > startDateTime && currentTime < endDateTime) {
+      remainingTime = endDateTime - currentTime;
+    } else if (currentTime < startDateTime) {
+      remainingTime = startDateTime - currentTime;
+    } else if (currentTime === startDateTime) {
+      remainingTime = 0;
+    } else {
+      remainingTime = 0;
+    }
+
+    const seconds = Math.floor((remainingTime / 1000) % 60);
+    const minutes = Math.floor((remainingTime / 1000 / 60) % 60);
+    const hours = Math.floor((remainingTime / (1000 * 60 * 60)) % 24);
+    return `${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+  }
 
   const dispatch = useDispatch();
 
@@ -79,62 +131,35 @@ const Header = () => {
     setValue(newValue);
   };
 
- useEffect(() => {
-  try {
-    const userData = getFromLocalStorage("loginData");
-    console.log("85 line" ,userData);
-  } catch (error) {
-    console.error("Error fetching userData:", error);
-  }
- }, [])
- 
+  useEffect(() => {
+    try {
+      const userData = getFromLocalStorage("loginData");
+      console.log("85 line", userData);
+    } catch (error) {
+      console.error("Error fetching userData:", error);
+    }
+  }, []);
 
   useEffect(() => {
-    // setUserDetails(userData);
+    // const storedToken = localStorage.getItem('authToken');
     dispatch(fetchUserProfileData("653dec2f5068cfd79e725f9e"));
     dispatch(walletHistoryData("653dec2f5068cfd79e725f9e"));
     dispatch(fetchGamesData());
     dispatch(fetchWalletData("653dec2f5068cfd79e725f9e"));
     dispatch(gameResultData());
+    console.log(state?.gameReducer?.data?.data);
   }, [
     dispatch,
     fetchUserProfileData,
     walletHistoryData,
     fetchGamesData,
     fetchWalletData,
-    gameResultData
+    gameResultData,
   ]);
 
-  useEffect(() => {
-    const countdownInterval = setInterval(() => {
-      setTimer((prevTimer) => {
-        if (prevTimer === 1) {
-          clearInterval(countdownInterval);
-          return 0;
-        } else {
-          return prevTimer - 1;
-        }
-      });
-    }, 1000);
-    return () => {
-      clearInterval(countdownInterval);
-    };
-  }, []);
-
-  const formatTime = (timer) => {
-    const minutes = Math.floor(timer / 60);
-    const seconds = timer % 60;
-
-    const bookingTime = new Date(0, 0, 0, 0, minutes, seconds).toLocaleString(
-      [],
-      { minute: "2-digit", second: "2-digit" }
-    );
-
-    return bookingTime;
-  };
-
   const handleLogout = () => {
-    navigate("/");
+    dispatch(logout());
+    localStorage.removeItem("authToken");
   };
 
   return (
@@ -146,18 +171,22 @@ const Header = () => {
       >
         <Grid lg={2.5} md={1.5} sm={1.5} xs={2.5} className="header">
           <img src="/assets/Dashboard.svg" alt="" className="header-logo" />
-          <Typography className="header-logo__title">{userProfile?.username}</Typography>
+          <Typography className="header-logo__title">
+            {userProfile?.username}
+          </Typography>
         </Grid>
         <Grid lg={3.5} md={5.5} sm={5.5} xs={9.5} className="clock">
           <img src="/assets/clock.png" alt="" className="clock__img" />
           <Typography ml={1} className="clock__title">
-            Booking Close in{" "}
-            {timeDifference.length > 0 ? formatTime(timer) : "00"} Minute
+            Next Game start In {calculateTimeRemaining()}
+            Minute
           </Typography>
         </Grid>
         <Grid lg={1.5} md={2} sm={2} xs={2.5} className="timer">
           <img src="/assets/timer.png" alt="" className="timer__img" />
-          <Typography className="timer__title">{formattedTime}</Typography>
+          <Typography className="timer__title">
+            {formatTime(currentTime)}
+          </Typography>
         </Grid>
         <Grid lg={2} md={2} sm={2} xs={9.5} className="wallet">
           <img
@@ -275,84 +304,83 @@ const Header = () => {
                   <Tab label="Winning Balance History" value="2" />
                 </TabList>
               </Box>
-              {mainHistory?.length > 0 ? (
+              {mainHistory?.length > 0 &&
                 mainHistory?.map((data) => {
                   return (
                     <TabPanel
                       value="1"
                       style={{ padding: "0px 25px 10px 0px" }}
                     >
-                      <Box
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Typography style={{ fontSize: "14px" }}>
-                          Amount
-                        </Typography>
-                        <Typography
-                          style={{ fontSize: "14px", color: "#0c3b5e" }}
+                      <>
+                        <Box
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
                         >
-                          {data?.amount}
-                        </Typography>
-                      </Box>
-                      <Box
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Typography style={{ fontSize: "14px" }}>
-                          Balance Type
-                        </Typography>
-                        <Typography
-                          style={{ fontSize: "14px", color: "#0c3b5e" }}
+                          <Typography style={{ fontSize: "14px" }}>
+                            Amount
+                          </Typography>
+                          <Typography
+                            style={{ fontSize: "14px", color: "#0c3b5e" }}
+                          >
+                            {data?.amount}
+                          </Typography>
+                        </Box>
+                        <Box
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
                         >
-                          {data?.balanceType}
-                        </Typography>
-                      </Box>
-                      <Box
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Typography style={{ fontSize: "14px" }}>
-                          Mode
-                        </Typography>
-                        <Typography
-                          style={{ fontSize: "14px", color: "#0c3b5e" }}
+                          <Typography style={{ fontSize: "14px" }}>
+                            Balance Type
+                          </Typography>
+                          <Typography
+                            style={{ fontSize: "14px", color: "#0c3b5e" }}
+                          >
+                            {data?.balanceType}
+                          </Typography>
+                        </Box>
+                        <Box
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
                         >
-                          {data?.mode}
-                        </Typography>
-                      </Box>
-                      <Box
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Typography style={{ fontSize: "14px" }}>
-                          Transaction Type
-                        </Typography>
-                        <Typography
-                          style={{ fontSize: "14px", color: "#0c3b5e" }}
+                          <Typography style={{ fontSize: "14px" }}>
+                            Mode
+                          </Typography>
+                          <Typography
+                            style={{ fontSize: "14px", color: "#0c3b5e" }}
+                          >
+                            {data?.mode}
+                          </Typography>
+                        </Box>
+                        <Box
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
                         >
-                          {data?.transactionType}
-                        </Typography>
-                      </Box>
+                          <Typography style={{ fontSize: "14px" }}>
+                            Transaction Type
+                          </Typography>
+                          <Typography
+                            style={{ fontSize: "14px", color: "#0c3b5e" }}
+                          >
+                            {data?.transactionType}
+                          </Typography>
+                        </Box>
+                      </>
                     </TabPanel>
                   );
-                })
-              ) : (
-                <Nodata />
-              )}
-              {walletHistory?.length > 0 ? (
+                })}
+              {walletHistory?.length > 0 &&
                 walletHistory?.map((data) => {
                   return (
                     <TabPanel value="2">
@@ -423,10 +451,7 @@ const Header = () => {
                       </Box>
                     </TabPanel>
                   );
-                })
-              ) : (
-                <Nodata />
-              )}
+                })}
             </TabContext>
           </Box>
         </Box>

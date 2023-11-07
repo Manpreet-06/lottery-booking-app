@@ -1,8 +1,8 @@
 import { Box, Card, Typography } from "@mui/material";
 import React from "react";
+import Nodata from "../NoData/Nodata";
 
 import "./Ticket.scss";
-import Nodata from "../NoData/Nodata";
 
 const TicketCard = ({ ticketArray, ticketData }) => {
   return (
@@ -19,7 +19,7 @@ const TicketCard = ({ ticketArray, ticketData }) => {
           WINNER LIST
         </Typography>
         <Box className="ticket-box">
-          {ticketData?.data?.map((item) => {
+          {ticketData?.data?.length> 0 ? ticketData?.data?.map((item) => {
             return (
               <Card className="ticket-card">
                 <Typography className="ticket-number-text">
@@ -39,7 +39,7 @@ const TicketCard = ({ ticketArray, ticketData }) => {
                 </Box>
               </Card>
             );
-          })}
+          }): <Nodata />}
         </Box>
       </>
     </Box>

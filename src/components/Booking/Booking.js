@@ -6,12 +6,17 @@ import { Form, Formik } from "formik";
 import PrintPdf from "../PrintPdf/PrintPdf";
 import { useReactToPrint } from "react-to-print";
 
-const Booking = () => {
+const Booking = ({ bookList }) => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const componentPDF = useRef();
-  const [shouldPrint, setShouldPrint] = useState(false);
+  const [setShouldPrint] = useState(false);
   const [placeOrderData, setPlaceOrderData] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => setOpen(false);
 
   const generatePDF = useReactToPrint({
     content: () => componentPDF.current,
@@ -19,9 +24,15 @@ const Booking = () => {
   });
 
   const handleOrder = async (values) => {
+    const bookId = bookList?.find((data) => {
+      if (values?.bookNumber === data?.number) {
+        return data?._id;
+      }
+    });
+    console.log(bookId?._id);
     try {
       const payload = {
-        bookId: "653e870b81351a820868588d",
+        bookId: bookId?._id,
         userId: "653dec2f5068cfd79e725f9e",
         bookNumber: values?.bookNumber,
         pageNumber: values?.pageNumber,
@@ -31,14 +42,15 @@ const Booking = () => {
       };
       const response = await placeOrderService(payload);
       if (response.status === 200) {
-        const data = {
-          ...payload,
-          orderId: response?.orderId,
+        const combinedData = {
+          ...response.data,
+          bookNumber: values.bookNumber,
+          pageNumber: values.pageNumber,
         };
-        console.log(data);
-        setPlaceOrderData(data);
+        setPlaceOrderData(combinedData);
         setShouldPrint(true);
         generatePDF();
+
       }
     } catch (error) {}
   };
@@ -82,7 +94,7 @@ const Booking = () => {
                 }}
                 name="bookNumber"
                 value={formikProps?.values?.bookNumber}
-                onChange={formikProps.handleChange}
+                onChange={formikProps?.handleChange}
               />
               <TextField
                 placeholder={"Quantity"}
@@ -95,7 +107,7 @@ const Booking = () => {
                 }}
                 name="pageNumber"
                 value={formikProps?.values?.pageNumber}
-                onChange={formikProps.handleChange}
+                onChange={formikProps?.handleChange}
               />
             </Box>
             <Box display="flex" justifyContent={"space-between"}>
@@ -110,7 +122,7 @@ const Booking = () => {
                 }}
                 name="quantity"
                 value={formikProps?.values?.quantity}
-                onChange={formikProps.handleChange}
+                onChange={formikProps?.handleChange}
               />
               <TextField
                 placeholder={"Total"}
@@ -123,7 +135,7 @@ const Booking = () => {
                 }}
                 name="amount"
                 value={formikProps?.values?.amount}
-                onChange={formikProps.handleChange}
+                onChange={formikProps?.handleChange}
               />
             </Box>
             <Button
@@ -136,14 +148,20 @@ const Booking = () => {
                 marginTop: "40px",
               }}
               type="submit"
+              onClick={handleOpen}
             >
               Pre Book
             </Button>
-            {shouldPrint === true && (
+            {/* {shouldPrint === true && (
               <div ref={componentPDF} style={{ width: "100%" }}>
                 <PrintPdf placeOrderData={placeOrderData} />
               </div>
-            )}
+            )} */}
+            <PrintPdf
+              placeOrderData={placeOrderData}
+              open={open}
+              handleClose={handleClose}
+            />
           </Form>
         )}
       </Formik>

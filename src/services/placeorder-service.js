@@ -3,7 +3,7 @@ import { API_URL } from "../utils/constants";
 export async function placeOrderService(payload) {
   const data = payload;
   const response = await fetch(
-    "https://a94d-103-250-137-113.ngrok-free.app/api/order/placeOrder",
+    "https://ba08-103-250-137-113.ngrok-free.app/api/order/placeOrder",
     {
       method: "POST",
       headers: {

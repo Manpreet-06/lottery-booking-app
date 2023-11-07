@@ -1,4 +1,4 @@
-import axios from "../../../src/utils/axios";
+import instance from "../../../src/utils/axios";
 import { API_URL } from "../../utils/constants";
 import {
   PLACE_ORDER_REQUEST,
@@ -19,11 +19,8 @@ export const placeOrderFailure = (error) => ({
 export const placeOrderData = (payload) => {
   return async (dispatch) => {
     dispatch(placeOrderRequest());
-    axios
-      .post(
-        "https://a94d-103-250-137-113.ngrok-free.app" +
-          API_URL.PLACE_ORDER(), payload
-      )
+    instance
+      .post(API_URL.PLACE_ORDER(), payload)
       .then((response) => {
         console.log(response);
         dispatch(placeOrderSuccess(response.data));

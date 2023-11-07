@@ -15,7 +15,7 @@ const Dashboard = () => {
   const state = useSelector((state) => state);
   const gameResult = state?.gameresultReducer?.data?.data?.data;
   const ticketData = state?.winnerlistReducer?.data;
-  const bookList = state?.booklistReducer?.data;
+  const bookList = state.booklistReducer?.data?.data;
 
   useEffect(() => {
     dispatch(gameResultData());
@@ -87,30 +87,6 @@ const Dashboard = () => {
       backgroundImage: `url("/assets/template.svg")`,
     },
   ];
-  const winnerListData1 = [
-    {
-      id: 1,
-      image: "/assets/Rectangle.svg",
-      templateimg: "/assets/winning.svg",
-    },
-  ];
-  const lastOpenBook = [
-    {
-      id: 1,
-      rectangleimg: "/assets/image1.svg",
-      templateimg: "/assets/rectangle1.svg",
-    },
-    {
-      id: 2,
-      rectangleimg: "/assets/image2.svg",
-      templateimg: "/assets/rectangle1.svg",
-    },
-    {
-      id: 3,
-      rectangleimg: "/assets/image1.svg",
-      templateimg: "/assets/rectangle1.svg",
-    },
-  ];
 
   const ticketArray = [
     {
@@ -133,7 +109,7 @@ const Dashboard = () => {
   return (
     <Grid container columnGap={4}>
       <Grid lg={12} sm={12} md={12} xs={12}>
-        <VerticalCard cardData={cardData} bookList={bookList?.data} />
+        <VerticalCard bookList={bookList} />
       </Grid>
       <Grid lg={3} sm={12} md={12} xs={12}>
         <WinnerList
@@ -147,7 +123,7 @@ const Dashboard = () => {
         <LastOpenBook winnerList={gameResult} />
       </Grid>
       <Grid lg={3} sm={12} md={12} xs={12}>
-        <Booking />
+        <Booking bookList={bookList} />
       </Grid>
     </Grid>
   );

@@ -1,3 +1,4 @@
+import instance from "../../../src/utils/axios";
 import axios from "../../../src/utils/axios";
 import { API_URL } from "../../utils/constants";
 import {
@@ -19,11 +20,8 @@ export const fetchData2Failure = (error) => ({
 export const fetchUserProfileData = (id) => {
   return async (dispatch) => {
     dispatch(fetchData2Request());
-    axios
-      .get(
-        "https://a94d-103-250-137-113.ngrok-free.app" +
-          API_URL.GET_USER_PROFILE(id)
-      )
+    instance
+      .get(API_URL.GET_USER_PROFILE(id))
       .then((response) => {
         dispatch(fetchData2Success(response.data));
       })

@@ -1,4 +1,4 @@
-import axios from "../../../src/utils/axios";
+import instance from "../../../src/utils/axios";
 import { API_URL } from "../../utils/constants";
 import {
   FETCH_DATA_4_REQUEST,
@@ -19,9 +19,8 @@ export const fetchData4Failure = (error) => ({
 export const fetchWalletData = (id) => {
   return (dispatch) => {
     dispatch(fetchData4Request());
-    axios
-      .get(
-        "https://a94d-103-250-137-113.ngrok-free.app" + API_URL.GET_BALANCE(id), {headers: {
+    instance
+      .get(API_URL.GET_BALANCE(id), {headers: {
             "Content-Type": "application/json"}
         }
       )

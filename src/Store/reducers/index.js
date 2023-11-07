@@ -8,6 +8,7 @@ import placeOrderReducer from "./placeorderReducer";
 import gameresultReducer from "./gameresultReducer";
 import walletHistoryReducer from "./walletHistoryReducer";
 import winnerlistReducer from "./winnerlistReducer";
+import authReducer from "./authReducer";
 
 const rootReducer = combineReducers({
   loginReducer: loginReducer,
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
   gameReducer: gameReducer,
   gameresultReducer: gameresultReducer,
   walletHistoryReducer: walletHistoryReducer,
-  winnerlistReducer: winnerlistReducer
+  winnerlistReducer: winnerlistReducer,
+  authReducer: authReducer
 });
 
 export default rootReducer;

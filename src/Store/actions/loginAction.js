@@ -1,3 +1,4 @@
+import instance from "../../../src/utils/axios";
 import axios from "../../../src/utils/axios";
 import { API_URL } from "../../utils/constants";
 import {
@@ -29,12 +30,8 @@ export const fetchDataFailure = (error) => {
 export const fetchLoginData = (payload) => {
   return (dispatch) => {
     dispatch(fetchDataRequest());
-
-    axios
-      .post(
-        "https://a94d-103-250-137-113.ngrok-free.app" + API_URL.LOGIN(),
-        payload
-      )
+    instance
+      .post(API_URL.LOGIN(), payload)
       .then((response) => {
         const data = response.data;
         dispatch(fetchDataSuccess(data));

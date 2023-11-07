@@ -3,8 +3,8 @@
 import axios from 'axios';
 
 
- export const instance = axios.create({
-  baseURL: "https://e7be-2401-4900-1f3f-840f-4976-476c-fae5-9ff4.ngrok-free.app",
+ const instance = axios.create({
+  baseURL: "https://f94a-103-250-137-113.ngrok-free.app",
 });
 
 instance.interceptors.request.use(async (reqConfig) => {

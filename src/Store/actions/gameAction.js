@@ -1,4 +1,4 @@
-import axios from "../../../src/utils/axios";
+import instance from "../../../src/utils/axios";
 import { API_URL } from "../../utils/constants";
 import {
   GAMES_DATA_REQUEST,
@@ -19,11 +19,8 @@ export const fetchGameDataFailure = (error) => ({
 export const fetchGamesData = () => {
   return (dispatch) => {
     dispatch(fetchGameDataRequest());
-    axios
-      .get(
-        "https://a94d-103-250-137-113.ngrok-free.app" +
-          API_URL.GET_GAMES()
-      )
+    instance
+      .get(API_URL.GET_GAMES())
       .then((response) => {
         // console.log(response);
         const data = response.data;

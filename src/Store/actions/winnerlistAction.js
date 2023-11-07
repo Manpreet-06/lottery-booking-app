@@ -1,4 +1,4 @@
-import axios from "../../../src/utils/axios";
+import instance from "../../../src/utils/axios";
 import { API_URL } from "../../utils/constants";
 import {
   WINNER_LIST_REQUEST,
@@ -19,10 +19,8 @@ export const winnerListFailure = (error) => ({
 export const winnerListData = () => {
   return (dispatch) => {
     dispatch(winnerListRequest());
-    axios
-      .get(
-       "https://a94d-103-250-137-113.ngrok-free.app" + API_URL.WINNER_LIST()
-      )
+    instance
+      .get(API_URL.WINNER_LIST())
       .then((response) => {
         // console.log(response);
         const data = response.data;
