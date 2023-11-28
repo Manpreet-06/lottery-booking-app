@@ -22,7 +22,6 @@ export const fetchGamesData = () => {
     instance
       .get(API_URL.GET_GAMES())
       .then((response) => {
-        // console.log(response);
         const data = response.data;
         dispatch(fetchGameDataSuccess(data));
       })

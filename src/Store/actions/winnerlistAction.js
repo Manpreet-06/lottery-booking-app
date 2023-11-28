@@ -16,13 +16,12 @@ export const winnerListFailure = (error) => ({
   payload: error,
 });
 
-export const winnerListData = () => {
+export const winnerListData = (id) => {
   return (dispatch) => {
-    dispatch(winnerListRequest());
+    dispatch(winnerListRequest(id));
     instance
       .get(API_URL.WINNER_LIST())
       .then((response) => {
-        // console.log(response);
         const data = response.data;
         dispatch(winnerListSuccess(data));
       })

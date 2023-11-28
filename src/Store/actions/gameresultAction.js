@@ -16,11 +16,11 @@ export const gameResultFailure = (error) => ({
   payload: error,
 });
 
-export const gameResultData = () => {
+export const gameResultData = (id) => {
   return async (dispatch) => {
     dispatch(gameResultRequest());
     instance
-      .get(API_URL.GAME_RESULT())
+      .get(API_URL.GAME_RESULT(id))
       .then((response) => {
         dispatch(gameResultSuccess(response));
       })

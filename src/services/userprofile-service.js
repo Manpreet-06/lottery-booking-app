@@ -16,7 +16,6 @@ export async function getUserProfile(id) {
   );
   if (response.ok) {
     const jsonData = await response.json();
-    console.log(jsonData);
     return jsonData;
   } else {
     return response.json();

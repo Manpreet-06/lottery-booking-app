@@ -25,7 +25,6 @@ export const fetchWalletData = (id) => {
         }
       )
       .then((response) => {
-      //  console.log(response);
       //  const data =response.data.headers['Content-Type'];
         const data = response.data;
         dispatch(fetchData4Success(data));

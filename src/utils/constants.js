@@ -6,8 +6,7 @@ export const API_URL = {
   GET_WALLETHISTORY: (_id) => `/api/wallet/walletHistory/${_id}`,
   GET_GAMES: () => `/api/game/getGame`,
   PLACE_ORDER: () => `/api/order/placeOrder`,
-  GAME_RESULT: () =>
-    `/api/order/gameResult/2e1fb857-3d2f-4adb-8096-2ac032143a04`,
+  GAME_RESULT: (_id) => `/api/order/gameResult/${_id}`,
   PLACE_ORDER: () => `/api/order/placeOrder`,
-  WINNER_LIST:() => `/api/order/winnerList/653dec2f5068cfd79e725f9e`
+  WINNER_LIST: (_id) => `/api/order/winnerList/${_id}`,
 };

@@ -7,96 +7,89 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { placeOrderService } from "../../services";
 import { Form, Formik } from "formik";
-import PrintPdf from "../PrintPdf/PrintPdf";
-import { useReactToPrint } from "react-to-print";
-import "../Booking/Booking.scss";
+import React, { useState } from "react";
+import "../PlaceOrder/PlaceOrder.scss";
 import AddIcon from "@mui/icons-material/Add";
+import { placeOrderService } from "../../services";
+import { getFromLocalStorage } from "../../utils/localstorage";
 
-const Booking = ({ bookList }) => {
-  const dispatch = useDispatch();
-  const state = useSelector((state) => state);
-  const componentPDF = useRef();
-  const [setShouldPrint] = useState(false);
-  const [placeOrderData, setPlaceOrderData] = useState(false);
-  const [open, setOpen] = React.useState(false);
-  const [pageNumber, setPageNumber] = React.useState("");
+const PlaceOrder = ({ bookList, gameId }) => {
   const [total, setTotal] = useState(0);
+  const [updatedValue, setUpdatedValue] = useState(0);
 
-  const handleChange = (event) => {
-    setPageNumber(event.target.value);
-  };
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => setOpen(false);
+  const calculateTotal = (values) => {
+    const bookId = bookList?.find((data) => {
+      if (values?.bookNumber === data?.number) {
+        return data?.price;
+      }
+    });
+    const bookNumberQuantity = parseInt(values?.bookQuantity, 10) || 0;
+    const bookNumberSubtotal = bookNumberQuantity * bookId?.price;
 
-  const generatePDF = useReactToPrint({
-    content: () => componentPDF.current,
-    documentTitle: "userdata",
-  });
-  
-  const calculateTotal =(values) =>{
-    const price = 200;
-    const bookNumberQuantity = parseInt(values?.quantity, 10) || 0;
-    const bookNumberSubtotal = bookNumberQuantity * price;
+    const pageNumberQuantity = parseInt(values?.pageQuantity, 10) || 0;
+    const pageNumberSubtotal = pageNumberQuantity * bookId?.price;
 
-    const pageNumberQuantity = parseInt(values?.quantity, 10) || 0;
-    const pageNumberSubtotal = pageNumberQuantity * price;
+    const selectedRangeTotal = parseInt(values?.dropdownQuantity, 10) || 0;
+    const selectedSubTotal = selectedRangeTotal * bookId?.price;
 
-    const selectedRangeTotal = parseInt(values?.quantity, 10) ||0;
-    const selectedSubTotal =   selectedRangeTotal * price;
-
-    const totalAmount = bookNumberSubtotal + pageNumberSubtotal + selectedSubTotal;
+    const totalAmount =
+      bookNumberSubtotal + pageNumberSubtotal + selectedSubTotal;
     setTotal(totalAmount);
-  }
+  };
 
-  const handleOrder = async (values) => {
+  const handleOrder = async (values, gameId) => {
+    const user = getFromLocalStorage("loginData");
+    // const gameId = getFromLocalStorage("gameId");
     const bookId = bookList?.find((data) => {
       if (values?.bookNumber === data?.number) {
         return data?._id;
       }
     });
-    const pagesData = [];
-    values.pageNumber.forEach((page, index) => {
-      pagesData.push({
-        pageNumber: page,
-        pageQuantity: values.quantity[index],
-      });
-    });
-    try {
-      const payload = [
-        {
-          bookId: bookId?._id,
-          userId: "653dec2f5068cfd79e725f9e",
-          bookNumber: values?.bookNumber,
-          pageNumber: values?.pageNumber,
-          amount: values?.amount,
-          quantity: "",
-          gameId: "65410a00d585c95d89a26ccb",
-          pages: pagesData,
-        },
-      ];
-      const response = await placeOrderService(payload);
-      if (response.status === 200) {
-        const combinedData = {
-          ...response.data,
-          bookNumber: values.bookNumber,
-          pageNumber: values.pageNumber,
-        };
-        setPlaceOrderData(combinedData);
-        setShouldPrint(true);
-        generatePDF();
+    const { pageNumberDropdown, dropdownQuantity } = values;
+    if (pageNumberDropdown?.length > 0 && dropdownQuantity?.length > 0) {
+      const [start, end] = pageNumberDropdown.split(" - ").map(Number);
+      const pagesData = [];
+      for (let i = start; i <= end; i++) {
+        pagesData.push({
+          pageNumber: i.toString(),
+          quantity: dropdownQuantity,
+        });
       }
-      calculateTotal(values);
-    } catch (error) {}
+      const data = {
+        pageNumber: values.pageNumber,
+        quantity: values.pageQuantity,
+      };
+      pagesData.push(data);
+      try {
+        const newOrder = {
+          orderData: [
+            {
+              bookId: bookId._id,
+              userId: user?._id,
+              bookNumber: values.bookNumber,
+              quantity: values.bookQuantity,
+              gameId: gameId,
+              pages: pagesData,
+            },
+          ],
+        };
+        const response = await placeOrderService(newOrder);
+      } catch (error) {}
+    }
   };
-  
   const handleAdd = () => {
-    
+    setUpdatedValue(updatedValue + total);
+  };
+
+  const handleQuantity = (formikProps, fieldName, value) => {
+    formikProps.handleChange({
+      target: {
+        name: fieldName,
+        value: value,
+      },
+    });
+    calculateTotal(formikProps.values);
   };
 
   return (
@@ -115,19 +108,20 @@ const Booking = ({ bookList }) => {
       <Formik
         initialValues={{
           bookNumber: "",
-          quantity: "",
+          bookQuantity: "",
           pageNumber: "",
-          quantity: "",
+          pageQuantity: "",
+          pageNumberDropdown: "",
+          dropdownQuantity: "",
         }}
         onSubmit={(values) => {
-          handleOrder(values);
+          handleOrder(values, gameId);
         }}
       >
         {(formikProps) => (
           <Form className="booking-page">
             <Box display="flex" justifyContent={"space-between"} mb={2}>
               <TextField
-                placeholder={"Book no"}
                 style={{
                   width: "150px",
                   height: "56px",
@@ -135,12 +129,13 @@ const Booking = ({ bookList }) => {
                   border: "1px solid #003F63",
                   color: "#C4C4C4",
                 }}
+                placeholder="Book no"
+                className="book-number"
                 name="bookNumber"
                 value={formikProps?.values?.bookNumber}
                 onChange={formikProps?.handleChange}
               />
               <TextField
-                placeholder={"Quantity"}
                 style={{
                   width: "150px",
                   height: "56px",
@@ -148,14 +143,15 @@ const Booking = ({ bookList }) => {
                   border: "1px solid #003F63",
                   color: "#C4C4C4",
                 }}
-                name="quantity"
-                value={formikProps?.values?.pageNumber}
+                placeholder="Quantity"
+                className="book-number"
+                name="bookQuantity"
+                value={formikProps?.values?.quantity}
                 onChange={formikProps?.handleChange}
               />
             </Box>
             <Box display="flex" justifyContent={"space-between"} mb={2}>
               <TextField
-                placeholder={"Page no"}
                 style={{
                   width: "150px",
                   height: "56px",
@@ -163,38 +159,42 @@ const Booking = ({ bookList }) => {
                   border: "1px solid #003F63",
                   color: "#C4C4C4",
                 }}
+                placeholder="Page no"
+                className="book-number"
                 name="pageNumber"
-                value={formikProps?.values?.quantity}
-                onChange={formikProps?.handleChange}
-              />
-              <TextField
-                placeholder={"Quantity"}
-                style={{
-                  width: "150px",
-                  height: "56px",
-                  borderRadius: "10px",
-                  border: "1px solid #003F63",
-                  color: "#C4C4C4",
-                }}
-                name="quantity"
                 value={formikProps?.values?.pageNumber}
                 onChange={formikProps?.handleChange}
               />
+              <TextField
+                style={{
+                  width: "150px",
+                  height: "56px",
+                  borderRadius: "10px",
+                  border: "1px solid #003F63",
+                  color: "#C4C4C4",
+                }}
+                placeholder="Quantity"
+                className="book-number"
+                name="pageQuantity"
+                value={formikProps?.values?.pageQuantity}
+                onChange={formikProps?.handleChange}
+              />
             </Box>
-            <Box
-              display="flex"
-              justifyContent={"space-between"}
-              mb={2}
-              className="menu-items"
-            >
+            <Box display="flex" justifyContent={"space-between"} mb={2}>
               <FormControl fullWidth>
                 <Select
+                  style={{
+                    width: "150px",
+                    height: "56px",
+                    borderRadius: "10px",
+                    border: "1px solid #003F63",
+                  }}
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={pageNumber}
+                  value={formikProps?.values?.pageNumberDropdown}
                   label=""
-                  name="pageNumber"
-                  onChange={handleChange}
+                  name="pageNumberDropdown"
+                  onChange={formikProps?.handleChange}
                   renderValue={(selected) => {
                     if (!selected || selected.length === 0) {
                       return <em>Placeholder</em>;
@@ -204,12 +204,11 @@ const Booking = ({ bookList }) => {
                   }}
                 >
                   <MenuItem value={"1 - 10"}>1-10</MenuItem>
-                  <MenuItem value={"11 - 21"}>11-20</MenuItem>
+                  <MenuItem value={"11 - 20"}>11-20</MenuItem>
                   <MenuItem value={"21 - 30"}>21-30</MenuItem>
                 </Select>
               </FormControl>
               <TextField
-                placeholder={"Quantity"}
                 style={{
                   width: "150px",
                   height: "56px",
@@ -217,9 +216,17 @@ const Booking = ({ bookList }) => {
                   border: "1px solid #003F63",
                   color: "#C4C4C4",
                 }}
-                name="quantity"
-                value={formikProps?.values?.quantity}
-                onChange={formikProps?.handleChange}
+                placeholder="Quantity"
+                className="book-number"
+                name="dropdownQuantity"
+                value={formikProps?.values?.dropdownQuantity}
+                onChange={(e) =>
+                  handleQuantity(
+                    formikProps,
+                    "dropdownQuantity",
+                    e.target.value
+                  )
+                }
               />
             </Box>
             <Box
@@ -231,7 +238,7 @@ const Booking = ({ bookList }) => {
                 Total
               </Typography>
               <Typography fontSize={16} fontWeight={600} color="#003F63">
-                {total}
+                {updatedValue ? updatedValue : total}
               </Typography>
             </Box>
             <Box
@@ -263,16 +270,10 @@ const Booking = ({ bookList }) => {
                   marginTop: "40px",
                 }}
                 type="submit"
-                onClick={handleOpen}
               >
                 Order
               </Button>
             </Box>
-            <PrintPdf
-              placeOrderData={placeOrderData}
-              open={open}
-              handleClose={handleClose}
-            />
           </Form>
         )}
       </Formik>
@@ -280,4 +281,4 @@ const Booking = ({ bookList }) => {
   );
 };
 
-export default Booking;
+export default PlaceOrder;

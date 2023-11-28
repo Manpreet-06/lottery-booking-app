@@ -22,7 +22,6 @@ export const placeOrderData = (payload) => {
     instance
       .post(API_URL.PLACE_ORDER(), payload)
       .then((response) => {
-        console.log(response);
         dispatch(placeOrderSuccess(response.data));
       })
       .catch((error) => {

@@ -8,12 +8,18 @@ import { setInLocalStorage } from "../../utils/localstorage";
 
 const LoginForm = ({ data, error, loading, fetchLoginData }) => {
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (data && data.data) {
+      setInLocalStorage("loginData", data.data);
+      navigate("/dashboard");
+    }
+  }, [data, navigate]);
+
   const handleSubmit = async (values) => {
     fetchLoginData(values);
-    console.log(data);
-    setInLocalStorage("loginData", data?.data);    
-    navigate("dashboard");
   };
+
 
 return (
     <div>

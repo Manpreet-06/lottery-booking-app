@@ -22,7 +22,6 @@ export const booklistData = () => {
     instance
       .get(API_URL.GET_BOOKLIST())
       .then((response) => {
-        // console.log(response);
         const data = response.data;
         dispatch(fetchData3Success(data));
       })

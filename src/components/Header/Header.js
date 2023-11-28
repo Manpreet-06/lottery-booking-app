@@ -11,17 +11,22 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import { fetchGamesData } from "../../Store/actions/gameAction";
 import { fetchWalletData } from "../../Store/actions/walletAction";
-import { getFromLocalStorage } from "../../utils/localstorage";
+import {
+  getFromLocalStorage,
+  removeFromLocalStorage,
+  setInLocalStorage,
+} from "../../utils/localstorage";
 import { useNavigate } from "react-router";
 import { gameResultData } from "../../Store/actions/gameresultAction";
 import { logout } from "../../Store/actions/authAction";
+import { winnerListData } from "../../Store/actions/winnerlistAction";
+import TicketCard from "../TicketCard/TicketCard";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorElAvatar, setAnchorElAvatar] = React.useState(null);
   const [value, setValue] = React.useState("1");
   const navigate = useNavigate();
-  const [userDetail, setUserDetails] = useState();
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
   const state = useSelector((state) => state);
@@ -30,47 +35,44 @@ const Header = () => {
   const userProfile = state?.userProfileReducer?.data?.data;
   const sellingBalance = state?.walletReducer?.data?.data?.mainBalance;
   const winningBalance = state?.walletReducer?.data?.data?.walletBalance;
+  const ticketData = state?.winnerlistReducer?.data;
   const [startDateTime, setStartDateTime] = useState();
   const [endDateTime, setEndDateTime] = useState();
 
   const [currentTime, setCurrentTime] = useState(new Date());
-   const startDateString = state?.gameReducer?.data?.data?.startTime;
+  const startDateString = state?.gameReducer?.data?.data?.startTime;
   const endTimeString = state?.gameReducer?.data?.data?.startTime;
 
   // const startTime = new Date("2023-11-08T00:27:31");
   // const endTime = new Date("2023-11-08T00:45:00");
   useEffect(() => {
-    if(startDateString && endTimeString){
-    const startDateString = state?.gameReducer?.data?.data?.startTime;
-    const [startHours, startMinutes] = startDateString.split(":").map(Number);
+    if (startDateString && endTimeString) {
+      const startDateString = state?.gameReducer?.data?.data?.startTime;
+      const [startHours, startMinutes] = startDateString.split(":").map(Number);
 
-    const startDate = new Date();
-    startDate.setHours(startHours);
-    startDate.setMinutes(startMinutes);
-    startDate.setSeconds(0);
+      const startDate = new Date();
+      startDate.setHours(startHours);
+      startDate.setMinutes(startMinutes);
+      startDate.setSeconds(0);
 
-    const formattedStartDate = startDate.toISOString();
+      const formattedStartDate = startDate.toISOString();
 
-    const endTimeString = state?.gameReducer?.data?.data?.endTime;
-    const [endHours, endMinutes] = endTimeString.split(":").map(Number);
+      const endTimeString = state?.gameReducer?.data?.data?.endTime;
+      const [endHours, endMinutes] = endTimeString.split(":").map(Number);
 
-    const endDate = new Date();
-    endDate.setHours(endHours);
-    endDate.setMinutes(endMinutes);
-    endDate.setSeconds(0);
+      const endDate = new Date();
+      endDate.setHours(endHours);
+      endDate.setMinutes(endMinutes);
+      endDate.setSeconds(0);
 
-    const formattedEndTime = endDate.toISOString();
+      const formattedEndTime = endDate.toISOString();
 
-    const startTime = new Date(formattedStartDate);
-    const endTime = new Date(formattedEndTime);
-    console.log(startTime);
-    setStartDateTime(startTime);
-    setEndDateTime(endTime);
-    console.log(endTime);
-    }else {
-     // console.log();
+      const startTime = new Date(formattedStartDate);
+      const endTime = new Date(formattedEndTime);
+      setStartDateTime(startTime);
+      setEndDateTime(endTime);
+    } else {
     }
-
   }, [startDateString, endTimeString]);
 
   useEffect(() => {
@@ -134,20 +136,24 @@ const Header = () => {
   useEffect(() => {
     try {
       const userData = getFromLocalStorage("loginData");
-      console.log("85 line", userData);
     } catch (error) {
       console.error("Error fetching userData:", error);
     }
   }, []);
 
   useEffect(() => {
-    // const storedToken = localStorage.getItem('authToken');
-    dispatch(fetchUserProfileData("653dec2f5068cfd79e725f9e"));
-    dispatch(walletHistoryData("653dec2f5068cfd79e725f9e"));
+    const data = getFromLocalStorage("loginData");
+    dispatch(fetchUserProfileData(data?._id));
+    dispatch(walletHistoryData(data?._id));
     dispatch(fetchGamesData());
-    dispatch(fetchWalletData("653dec2f5068cfd79e725f9e"));
+    dispatch(fetchWalletData(data?._id));
     dispatch(gameResultData());
-    console.log(state?.gameReducer?.data?.data);
+    dispatch(winnerListData());
+    const gameId = state?.gameReducer?.data?.data?.gameId;
+    console.log(state);
+    if (gameId) {
+      setInLocalStorage("gameId", gameId);
+    }
   }, [
     dispatch,
     fetchUserProfileData,
@@ -155,11 +161,13 @@ const Header = () => {
     fetchGamesData,
     fetchWalletData,
     gameResultData,
+    winnerListData,
   ]);
 
   const handleLogout = () => {
     dispatch(logout());
-    localStorage.removeItem("authToken");
+    removeFromLocalStorage("loginData");
+    navigate("/");
   };
 
   return (
@@ -267,7 +275,7 @@ const Header = () => {
         >
           <Typography style={{ fontSize: "14px" }}>First Name</Typography>
           <Typography style={{ fontSize: "14px", color: "#0c3b5e" }}>
-            {userDetail?.first_name}
+            {userProfile?.first_name}
           </Typography>
         </Box>
         <Box
@@ -278,7 +286,7 @@ const Header = () => {
         >
           <Typography style={{ fontSize: "14px" }}>Last Name</Typography>
           <Typography style={{ fontSize: "14px", color: "#0c3b5e" }}>
-            {userDetail?.last_name}
+            {userProfile?.last_name}
           </Typography>
         </Box>
         <Box
@@ -289,7 +297,7 @@ const Header = () => {
         >
           <Typography style={{ fontSize: "14px" }}>Email</Typography>
           <Typography style={{ fontSize: "14px", color: "#0c3b5e" }}>
-            {userDetail?.email}
+            {userProfile?.email}
           </Typography>
         </Box>
         <Box sx={{ width: "100%", padding: "10px" }}>
@@ -454,13 +462,16 @@ const Header = () => {
                 })}
             </TabContext>
           </Box>
+          <TicketCard ticketData={ticketData} />
         </Box>
-        <Button
-          onClick={handleLogout}
-          style={{ fontSize: "14px", padding: "0px 0px 10px 10px" }}
-        >
-          Log Out
-        </Button>
+        <Box mt={3}>
+          <Button
+            onClick={handleLogout}
+            style={{ fontSize: "14px", padding: "0px 0px 10px 10px" }}
+          >
+            Log Out
+          </Button>
+        </Box>
       </Popover>
     </div>
   );
