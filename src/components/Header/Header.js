@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Grid, Popover, Typography } from "@mui/material";
+import { Avatar, Box, Grid, Popover, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import "./Header.scss";
 import Tab from "@mui/material/Tab";
@@ -11,6 +11,7 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import { fetchGamesData } from "../../Store/actions/gameAction";
 import { fetchWalletData } from "../../Store/actions/walletAction";
+import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import {
   getFromLocalStorage,
   removeFromLocalStorage,
@@ -21,6 +22,7 @@ import { gameResultData } from "../../Store/actions/gameresultAction";
 import { logout } from "../../Store/actions/authAction";
 import { winnerListData } from "../../Store/actions/winnerlistAction";
 import TicketCard from "../TicketCard/TicketCard";
+import ModalComponent from "../Modal/Modal";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -38,13 +40,12 @@ const Header = () => {
   const ticketData = state?.winnerlistReducer?.data;
   const [startDateTime, setStartDateTime] = useState();
   const [endDateTime, setEndDateTime] = useState();
+  const [showModal, setShowModal] = useState(false);
 
   const [currentTime, setCurrentTime] = useState(new Date());
   const startDateString = state?.gameReducer?.data?.data?.startTime;
   const endTimeString = state?.gameReducer?.data?.data?.startTime;
 
-  // const startTime = new Date("2023-11-08T00:27:31");
-  // const endTime = new Date("2023-11-08T00:45:00");
   useEffect(() => {
     if (startDateString && endTimeString) {
       const startDateString = state?.gameReducer?.data?.data?.startTime;
@@ -84,10 +85,11 @@ const Header = () => {
   }, []);
 
   function formatTime(date) {
+    const formattedDate = date.toLocaleDateString();
     const hours = date.getHours();
     const minutes = date.getMinutes().toString().padStart(2, "0");
     const seconds = date.getSeconds().toString().padStart(2, "0");
-    return `${hours}:${minutes}:${seconds}`;
+    return `${formattedDate} ${hours}:${minutes}:${seconds}`;
   }
 
   function calculateTimeRemaining() {
@@ -101,6 +103,14 @@ const Header = () => {
       remainingTime = 0;
     } else {
       remainingTime = 0;
+    }
+    
+    if (remainingTime === 0 && !showModal) {
+      setShowModal(true);
+
+      setTimeout(() => {
+        setShowModal(false);
+      }, 100);
     }
 
     const seconds = Math.floor((remainingTime / 1000) % 60);
@@ -134,14 +144,6 @@ const Header = () => {
   };
 
   useEffect(() => {
-    try {
-      const userData = getFromLocalStorage("loginData");
-    } catch (error) {
-      console.error("Error fetching userData:", error);
-    }
-  }, []);
-
-  useEffect(() => {
     const data = getFromLocalStorage("loginData");
     dispatch(fetchUserProfileData(data?._id));
     dispatch(walletHistoryData(data?._id));
@@ -150,7 +152,6 @@ const Header = () => {
     dispatch(gameResultData());
     dispatch(winnerListData());
     const gameId = state?.gameReducer?.data?.data?.gameId;
-    console.log(state);
     if (gameId) {
       setInLocalStorage("gameId", gameId);
     }
@@ -186,11 +187,10 @@ const Header = () => {
         <Grid lg={3.5} md={5.5} sm={5.5} xs={9.5} className="clock">
           <img src="/assets/clock.png" alt="" className="clock__img" />
           <Typography ml={1} className="clock__title">
-            Next Game start In {calculateTimeRemaining()}
-            Minute
+            Next Game start In {calculateTimeRemaining()} Minute
           </Typography>
         </Grid>
-        <Grid lg={1.5} md={2} sm={2} xs={2.5} className="timer">
+        <Grid lg={2} md={2} sm={2} xs={2.5} className="timer">
           <img src="/assets/timer.png" alt="" className="timer__img" />
           <Typography className="timer__title">
             {formatTime(currentTime)}
@@ -217,6 +217,9 @@ const Header = () => {
           >
             {userProfile?.first_name?.toUpperCase().slice(0, 1)}
           </Avatar>
+          <Box ml={1.5} mt={1}>
+            <PowerSettingsNewIcon onClick={handleLogout} />
+          </Box>
         </Grid>
       </Grid>
       <Popover
@@ -228,6 +231,7 @@ const Header = () => {
           vertical: "bottom",
           horizontal: "left",
         }}
+        style={{padding: '10px'}}
       >
         <Box
           display="flex"
@@ -464,15 +468,8 @@ const Header = () => {
           </Box>
           <TicketCard ticketData={ticketData} />
         </Box>
-        <Box mt={3}>
-          <Button
-            onClick={handleLogout}
-            style={{ fontSize: "14px", padding: "0px 0px 10px 10px" }}
-          >
-            Log Out
-          </Button>
-        </Box>
       </Popover>
+      {showModal === true && <ModalComponent showModal={false} />}
     </div>
   );
 };

@@ -4,7 +4,7 @@ import Nodata from "../NoData/Nodata";
 
 import "./Ticket.scss";
 
-const TicketCard = ({ ticketArray, ticketData }) => {
+const TicketCard = ({ticketData }) => {
   return (
     <Box>
       <>

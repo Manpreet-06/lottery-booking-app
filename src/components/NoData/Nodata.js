@@ -10,7 +10,7 @@ const Nodata = () => {
         color: "#0c3b5e",
         border: "1px solid #0c3b5e",
         borderRadius:"5px",
-        height: "270px",
+        height: "269px",
         display: "flex",
         alignItems: "center",
         justifyContent:"center"

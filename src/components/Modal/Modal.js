@@ -17,24 +17,20 @@ const style = {
 };
 
 const ModalComponent = (props) => {
-  const { gameResult, ticketData } = props;
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const { gameResult, ticketData , showModal} = props;
   return (
     <>
-      <Button onClick={handleOpen} style={{backgroundColor: "rgb(0, 63, 99)", color: "#fff"}}>Winner List</Button>
       <Modal
-        open={open}
-        onClose={handleClose}
+        open={showModal}
+        onClose={false}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+        <Box sx={style} display="flex" justifyContent={"space-between"}>
+          <Typography id="modal-modal-title" variant="h6" component="h2" width="100%">
             <WinnerList winnerList={gameResult} />
           </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          <Typography id="modal-modal-description" width="100%">
             <TicketCard ticketData={ticketData} />
           </Typography>
         </Box>

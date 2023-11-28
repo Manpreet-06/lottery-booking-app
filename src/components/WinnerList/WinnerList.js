@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
+import Nodata from "../NoData/Nodata";
 
 const WinnerList = ({ winnerList }) => {
   return (
@@ -15,7 +16,7 @@ const WinnerList = ({ winnerList }) => {
         >
           LUCKY DRAW
         </Typography>
-        {winnerList?.drawResult &&
+        {winnerList?.drawResult ?
           <>
             <Box
               display={"flex"}
@@ -54,7 +55,7 @@ const WinnerList = ({ winnerList }) => {
               />
             </Box>
           </>
-        }
+        : <Nodata />}
       </>
     </Box>
   );

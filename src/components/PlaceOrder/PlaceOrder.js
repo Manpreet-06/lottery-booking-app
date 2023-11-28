@@ -40,7 +40,6 @@ const PlaceOrder = ({ bookList, gameId }) => {
 
   const handleOrder = async (values, gameId) => {
     const user = getFromLocalStorage("loginData");
-    // const gameId = getFromLocalStorage("gameId");
     const bookId = bookList?.find((data) => {
       if (values?.bookNumber === data?.number) {
         return data?._id;
@@ -78,8 +77,23 @@ const PlaceOrder = ({ bookList, gameId }) => {
       } catch (error) {}
     }
   };
-  const handleAdd = () => {
+
+  const handleReset = (formikProps) => {
+    formikProps.resetForm({
+      values: {
+        bookQuantity: "",
+        pageNumber: "",
+        pageQuantity: "",
+        pageNumberDropdown: "",
+        dropdownQuantity: "",
+      },
+    });
+    setTotal(0);
+  }
+
+  const handleAdd = (formikProps) => {
     setUpdatedValue(updatedValue + total);
+    formikProps && handleReset(formikProps); 
   };
 
   const handleQuantity = (formikProps, fieldName, value) => {
@@ -111,7 +125,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
           bookQuantity: "",
           pageNumber: "",
           pageQuantity: "",
-          pageNumberDropdown: "",
+          pageNumberDropdown: "1-10",
           dropdownQuantity: "",
         }}
         onSubmit={(values) => {
@@ -123,7 +137,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
             <Box display="flex" justifyContent={"space-between"} mb={2}>
               <TextField
                 style={{
-                  width: "150px",
+                  width: "170px",
                   height: "56px",
                   borderRadius: "10px",
                   border: "1px solid #003F63",
@@ -137,7 +151,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
               />
               <TextField
                 style={{
-                  width: "150px",
+                  width: "170px",
                   height: "56px",
                   borderRadius: "10px",
                   border: "1px solid #003F63",
@@ -153,7 +167,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
             <Box display="flex" justifyContent={"space-between"} mb={2}>
               <TextField
                 style={{
-                  width: "150px",
+                  width: "170px",
                   height: "56px",
                   borderRadius: "10px",
                   border: "1px solid #003F63",
@@ -167,7 +181,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
               />
               <TextField
                 style={{
-                  width: "150px",
+                  width: "170px",
                   height: "56px",
                   borderRadius: "10px",
                   border: "1px solid #003F63",
@@ -184,7 +198,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
               <FormControl fullWidth>
                 <Select
                   style={{
-                    width: "150px",
+                    width: "170px",
                     height: "56px",
                     borderRadius: "10px",
                     border: "1px solid #003F63",
@@ -210,7 +224,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
               </FormControl>
               <TextField
                 style={{
-                  width: "150px",
+                  width: "170px",
                   height: "56px",
                   borderRadius: "10px",
                   border: "1px solid #003F63",
@@ -253,10 +267,10 @@ const PlaceOrder = ({ bookList, gameId }) => {
                   height: "50px",
                   background: "#003F63",
                   borderRadius: "10px",
-                  marginTop: "40px",
+                  marginTop: "10px",
                 }}
                 type="submit"
-                onClick={handleAdd}
+                onClick={() =>handleAdd(formikProps)}
               >
                 <AddIcon />
               </Button>
@@ -267,7 +281,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
                   height: "50px",
                   background: "#003F63",
                   borderRadius: "10px",
-                  marginTop: "40px",
+                  marginTop: "10px",
                 }}
                 type="submit"
               >
