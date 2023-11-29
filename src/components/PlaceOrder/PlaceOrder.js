@@ -84,8 +84,8 @@ const PlaceOrder = ({ bookList, gameId }) => {
         bookQuantity: "",
         pageNumber: "",
         pageQuantity: "",
-        pageNumberDropdown: "",
-        dropdownQuantity: "",
+        pageNumberDropdown: "1-10",
+        dropdownQuantity: '',
       },
     });
     setTotal(0);
@@ -160,7 +160,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
                 placeholder="Quantity"
                 className="book-number"
                 name="bookQuantity"
-                value={formikProps?.values?.quantity}
+                value={formikProps?.values?.bookQuantity}
                 onChange={formikProps?.handleChange}
               />
             </Box>
@@ -220,6 +220,9 @@ const PlaceOrder = ({ bookList, gameId }) => {
                   <MenuItem value={"1 - 10"}>1-10</MenuItem>
                   <MenuItem value={"11 - 20"}>11-20</MenuItem>
                   <MenuItem value={"21 - 30"}>21-30</MenuItem>
+                  <MenuItem value={"31 - 40"}>31-40</MenuItem>
+                  <MenuItem value={"41 - 50"}>41-50</MenuItem>
+
                 </Select>
               </FormControl>
               <TextField

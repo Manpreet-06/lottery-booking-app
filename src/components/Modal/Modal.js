@@ -1,7 +1,9 @@
-import { Box, Button, Modal, Typography } from "@mui/material";
+import { Box, Modal, Typography } from "@mui/material";
 import React from "react";
 import WinnerList from "../WinnerList/WinnerList";
 import TicketCard from "../TicketCard/TicketCard";
+import useWindowSize from "react-use/lib/useWindowSize";
+import Confetti from "react-confetti";
 
 const style = {
   position: "absolute",
@@ -17,17 +19,24 @@ const style = {
 };
 
 const ModalComponent = (props) => {
-  const { gameResult, ticketData , showModal} = props;
+  const { gameResult, ticketData, open, handleCloseModal } = props;
+  const { width, height } = useWindowSize();
   return (
     <>
+      <Confetti width={width} height={height} />
       <Modal
-        open={showModal}
-        onClose={false}
+        open={open}
+        onClose={handleCloseModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={style} display="flex" justifyContent={"space-between"}>
-          <Typography id="modal-modal-title" variant="h6" component="h2" width="100%">
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            width="100%"
+          >
             <WinnerList winnerList={gameResult} />
           </Typography>
           <Typography id="modal-modal-description" width="100%">

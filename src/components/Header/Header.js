@@ -32,11 +32,13 @@ const Header = () => {
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
   const state = useSelector((state) => state);
-  const mainHistory = state?.walletHistoryReducer?.data?.data?.mainHistory;
-  const walletHistory = state?.walletHistoryReducer?.data?.data?.walletHistory;
+  const mainHistory = state?.walletHistoryReducer?.data?.data?.walletHistory;
+  const walletHistory = state?.walletHistoryReducer?.data?.data?.mainHistory;
   const userProfile = state?.userProfileReducer?.data?.data;
-  const sellingBalance = state?.walletReducer?.data?.data?.mainBalance;
-  const winningBalance = state?.walletReducer?.data?.data?.walletBalance;
+  const sellingBalance = state?.userProfileReducer?.data?.data?.walletBalance;
+  const winningBalance = state?.userProfileReducer?.data?.data?.mainBalance;
+  // const sellingBalance = state?.walletReducer?.data?.data?.mainBalance;
+  // const winningBalance = state?.walletReducer?.data?.data?.walletBalance;
   const ticketData = state?.winnerlistReducer?.data;
   const [startDateTime, setStartDateTime] = useState();
   const [endDateTime, setEndDateTime] = useState();
@@ -101,17 +103,14 @@ const Header = () => {
       remainingTime = startDateTime - currentTime;
     } else if (currentTime === startDateTime) {
       remainingTime = 0;
+      setShowModal(true);
     } else {
       remainingTime = 0;
     }
-    
-    if (remainingTime === 0 && !showModal) {
-      setShowModal(true);
 
-      setTimeout(() => {
-        setShowModal(false);
-      }, 100);
-    }
+    setTimeout(() => {
+      setShowModal(false);
+    }, 2000);
 
     const seconds = Math.floor((remainingTime / 1000) % 60);
     const minutes = Math.floor((remainingTime / 1000 / 60) % 60);
@@ -120,6 +119,10 @@ const Header = () => {
       .toString()
       .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   }
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
   const dispatch = useDispatch();
 
@@ -217,8 +220,17 @@ const Header = () => {
           >
             {userProfile?.first_name?.toUpperCase().slice(0, 1)}
           </Avatar>
-          <Box ml={1.5} mt={1}>
+          <Box
+            ml={1.5}
+            mt={0.5}
+            display="flex"
+            alignItems="center"
+            justifyContent={"end"}
+          >
             <PowerSettingsNewIcon onClick={handleLogout} />
+            <Typography fontSize={14} ml={0.5} fontWeight={600}>
+              Logout
+            </Typography>
           </Box>
         </Grid>
       </Grid>
@@ -231,7 +243,7 @@ const Header = () => {
           vertical: "bottom",
           horizontal: "left",
         }}
-        style={{padding: '10px'}}
+        style={{ padding: "10px" }}
       >
         <Box
           display="flex"
@@ -243,7 +255,7 @@ const Header = () => {
             color: "#0c3b5e",
           }}
         >
-          <Typography>Selling Balance:</Typography>
+          <Typography>Selling Balance: </Typography>
           <Typography>{sellingBalance}</Typography>
         </Box>
         <Box
@@ -257,7 +269,7 @@ const Header = () => {
             color: "#0c3b5e",
           }}
         >
-          <Typography>Winning Balance:</Typography>
+          <Typography>Winning Balance: </Typography>
           <Typography>{winningBalance}</Typography>
         </Box>
       </Popover>
@@ -469,7 +481,9 @@ const Header = () => {
           <TicketCard ticketData={ticketData} />
         </Box>
       </Popover>
-      {showModal === true && <ModalComponent showModal={false} />}
+      {showModal === true && (
+        <ModalComponent open={showModal} handleClose={handleCloseModal} />
+      )}
     </div>
   );
 };
