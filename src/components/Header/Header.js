@@ -42,15 +42,20 @@ const Header = () => {
   const ticketData = state?.winnerlistReducer?.data;
   const [startDateTime, setStartDateTime] = useState();
   const [endDateTime, setEndDateTime] = useState();
+  const [message, setMessage] = useState();
   const [showModal, setShowModal] = useState(false);
 
   const [currentTime, setCurrentTime] = useState(new Date());
-  const startDateString = state?.gameReducer?.data?.data?.startTime;
-  const endTimeString = state?.gameReducer?.data?.data?.startTime;
+  // const startDateString = state?.gameReducer?.data?.data?.startTime;
+  // const endTimeString = state?.gameReducer?.data?.data?.startTime;
+  const startDateString = "17:52:00";
+  const endTimeString = "17:53:00";
 
   useEffect(() => {
     if (startDateString && endTimeString) {
-      const startDateString = state?.gameReducer?.data?.data?.startTime;
+      // const startDateString = state?.gameReducer?.data?.data?.startTime;
+      const startDateString = "17:52:00";
+
       const [startHours, startMinutes] = startDateString.split(":").map(Number);
 
       const startDate = new Date();
@@ -60,7 +65,9 @@ const Header = () => {
 
       const formattedStartDate = startDate.toISOString();
 
-      const endTimeString = state?.gameReducer?.data?.data?.endTime;
+      //const endTimeString = state?.gameReducer?.data?.data?.endTime;
+      const endTimeString = "17:53:00";
+
       const [endHours, endMinutes] = endTimeString.split(":").map(Number);
 
       const endDate = new Date();
@@ -86,6 +93,24 @@ const Header = () => {
     return () => clearInterval(interval);
   }, []);
 
+
+  useEffect(() => {
+    const remainingTime = calculateTimeRemaining();
+  
+    if (remainingTime === "00:00:00") {
+      setShowModal(true);
+    } else {
+      setShowModal(false);
+    }
+  
+    const modalTimer = setTimeout(() => {
+      setShowModal(false);
+    }, 6000);
+  
+    return () => clearTimeout(modalTimer);
+  }, [endTimeString, currentTime]);
+
+
   function formatTime(date) {
     const formattedDate = date.toLocaleDateString();
     const hours = date.getHours();
@@ -99,19 +124,18 @@ const Header = () => {
 
     if (currentTime > startDateTime && currentTime < endDateTime) {
       remainingTime = endDateTime - currentTime;
+      //  setMessage("Booking Closed In Minutes");
     } else if (currentTime < startDateTime) {
       remainingTime = startDateTime - currentTime;
+      // setMessage("Next Game Starts In Minutes");
+      // return `Next Game Starts In Minutes`;
     } else if (currentTime === startDateTime) {
       remainingTime = 0;
       setShowModal(true);
     } else {
       remainingTime = 0;
+      return "Booking Closed";
     }
-
-    setTimeout(() => {
-      setShowModal(false);
-    }, 2000);
-
     const seconds = Math.floor((remainingTime / 1000) % 60);
     const minutes = Math.floor((remainingTime / 1000 / 60) % 60);
     const hours = Math.floor((remainingTime / (1000 * 60 * 60)) % 24);
@@ -122,6 +146,7 @@ const Header = () => {
 
   const handleCloseModal = () => {
     setShowModal(false);
+    localStorage.setItem("isModalshown", "false");
   };
 
   const dispatch = useDispatch();
@@ -152,9 +177,9 @@ const Header = () => {
     dispatch(walletHistoryData(data?._id));
     dispatch(fetchGamesData());
     dispatch(fetchWalletData(data?._id));
-    dispatch(gameResultData());
-    dispatch(winnerListData());
     const gameId = state?.gameReducer?.data?.data?.gameId;
+    dispatch(winnerListData(gameId));
+    dispatch(gameResultData(gameId));
     if (gameId) {
       setInLocalStorage("gameId", gameId);
     }
@@ -171,6 +196,7 @@ const Header = () => {
   const handleLogout = () => {
     dispatch(logout());
     removeFromLocalStorage("loginData");
+    removeFromLocalStorage("gameId");
     navigate("/");
   };
 
@@ -190,7 +216,7 @@ const Header = () => {
         <Grid lg={3.5} md={5.5} sm={5.5} xs={9.5} className="clock">
           <img src="/assets/clock.png" alt="" className="clock__img" />
           <Typography ml={1} className="clock__title">
-            Next Game start In {calculateTimeRemaining()} Minute
+            {calculateTimeRemaining()}
           </Typography>
         </Grid>
         <Grid lg={2} md={2} sm={2} xs={2.5} className="timer">

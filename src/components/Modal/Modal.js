@@ -21,6 +21,7 @@ const style = {
 const ModalComponent = (props) => {
   const { gameResult, ticketData, open, handleCloseModal } = props;
   const { width, height } = useWindowSize();
+  console.log(open);
   return (
     <>
       <Confetti width={width} height={height} />

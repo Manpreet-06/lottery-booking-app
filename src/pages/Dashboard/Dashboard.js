@@ -6,9 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { gameResultData } from "../../Store/actions/gameresultAction";
 import { booklistData } from "../../Store/actions/booklistAction";
 import { winnerListData } from "../../Store/actions/winnerlistAction";
-import { getFromLocalStorage } from "../../utils/localstorage";
 import PlaceOrder from "../../components/PlaceOrder/PlaceOrder";
 import { fetchGamesData } from "../../Store/actions/gameAction";
+import { getFromLocalStorage } from "../../utils/localstorage";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -18,13 +18,12 @@ const Dashboard = () => {
   const bookList = state.booklistReducer?.data?.data;
 
   useEffect(() => {
-    const gameId = state?.gameReducer?.data?.data?.gameID;
-    dispatch(gameResultData(gameId));
-    dispatch(booklistData());
+    const gameId = getFromLocalStorage("gameId")
     dispatch(fetchGamesData());
-    dispatch(winnerListData(gameId));
     dispatch(booklistData());
-
+    dispatch(booklistData());
+    dispatch(gameResultData(gameId));
+    dispatch(winnerListData(gameId));
   }, [gameResultData, booklistData, winnerListData, booklistData, fetchGamesData]);
 
   return (
