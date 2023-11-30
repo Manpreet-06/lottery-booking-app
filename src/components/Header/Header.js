@@ -48,13 +48,13 @@ const Header = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   // const startDateString = state?.gameReducer?.data?.data?.startTime;
   // const endTimeString = state?.gameReducer?.data?.data?.startTime;
-  const startDateString = "17:52:00";
-  const endTimeString = "17:53:00";
+  const startDateString = "18:16:00";
+  const endTimeString = "18:27:00";
 
   useEffect(() => {
     if (startDateString && endTimeString) {
       // const startDateString = state?.gameReducer?.data?.data?.startTime;
-      const startDateString = "17:52:00";
+      const startDateString = "18:16:00";
 
       const [startHours, startMinutes] = startDateString.split(":").map(Number);
 
@@ -66,7 +66,7 @@ const Header = () => {
       const formattedStartDate = startDate.toISOString();
 
       //const endTimeString = state?.gameReducer?.data?.data?.endTime;
-      const endTimeString = "17:53:00";
+      const endTimeString = "18:27:00";
 
       const [endHours, endMinutes] = endTimeString.split(":").map(Number);
 
