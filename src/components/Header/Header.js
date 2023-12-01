@@ -1,5 +1,5 @@
-import { Avatar, Box, Grid, Popover, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { Avatar, Box, Divider, Grid, Popover, Typography } from "@mui/material";
+import React, { useCallback, useEffect, useState } from "react";
 import "./Header.scss";
 import Tab from "@mui/material/Tab";
 import { deepPurple } from "@mui/material/colors";
@@ -39,25 +39,20 @@ const Header = () => {
   const winningBalance = state?.userProfileReducer?.data?.data?.mainBalance;
   // const sellingBalance = state?.walletReducer?.data?.data?.mainBalance;
   // const winningBalance = state?.walletReducer?.data?.data?.walletBalance;
-  const ticketData = state?.winnerlistReducer?.data;
+  const ticketData = state?.winnerlistReducer?.data?.data;
   const [startDateTime, setStartDateTime] = useState();
   const [endDateTime, setEndDateTime] = useState();
   const [message, setMessage] = useState();
   const [showModal, setShowModal] = useState(false);
 
   const [currentTime, setCurrentTime] = useState(new Date());
-  // const startDateString = state?.gameReducer?.data?.data?.startTime;
-  // const endTimeString = state?.gameReducer?.data?.data?.startTime;
-  const startDateString = "18:16:00";
-  const endTimeString = "18:27:00";
+  const startDateString = state?.gameReducer?.data?.data?.startTime;
+  const endTimeString = state?.gameReducer?.data?.data?.startTime;
 
   useEffect(() => {
     if (startDateString && endTimeString) {
-      // const startDateString = state?.gameReducer?.data?.data?.startTime;
-      const startDateString = "18:16:00";
-
+      const startDateString = state?.gameReducer?.data?.data?.startTime;
       const [startHours, startMinutes] = startDateString.split(":").map(Number);
-
       const startDate = new Date();
       startDate.setHours(startHours);
       startDate.setMinutes(startMinutes);
@@ -65,9 +60,7 @@ const Header = () => {
 
       const formattedStartDate = startDate.toISOString();
 
-      //const endTimeString = state?.gameReducer?.data?.data?.endTime;
-      const endTimeString = "18:27:00";
-
+      const endTimeString = state?.gameReducer?.data?.data?.endTime;
       const [endHours, endMinutes] = endTimeString.split(":").map(Number);
 
       const endDate = new Date();
@@ -93,23 +86,18 @@ const Header = () => {
     return () => clearInterval(interval);
   }, []);
 
-
   useEffect(() => {
     const remainingTime = calculateTimeRemaining();
-  
+
     if (remainingTime === "00:00:00") {
       setShowModal(true);
-    } else {
-      setShowModal(false);
     }
-  
     const modalTimer = setTimeout(() => {
       setShowModal(false);
-    }, 6000);
-  
+    }, 1000);
+
     return () => clearTimeout(modalTimer);
   }, [endTimeString, currentTime]);
-
 
   function formatTime(date) {
     const formattedDate = date.toLocaleDateString();
@@ -119,16 +107,12 @@ const Header = () => {
     return `${formattedDate} ${hours}:${minutes}:${seconds}`;
   }
 
-  function calculateTimeRemaining() {
+  const calculateTimeRemaining = () => {
     let remainingTime;
-
     if (currentTime > startDateTime && currentTime < endDateTime) {
       remainingTime = endDateTime - currentTime;
-      //  setMessage("Booking Closed In Minutes");
     } else if (currentTime < startDateTime) {
       remainingTime = startDateTime - currentTime;
-      // setMessage("Next Game Starts In Minutes");
-      // return `Next Game Starts In Minutes`;
     } else if (currentTime === startDateTime) {
       remainingTime = 0;
       setShowModal(true);
@@ -142,7 +126,7 @@ const Header = () => {
     return `${hours.toString().padStart(2, "0")}:${minutes
       .toString()
       .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-  }
+  };
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -177,9 +161,11 @@ const Header = () => {
     dispatch(walletHistoryData(data?._id));
     dispatch(fetchGamesData());
     dispatch(fetchWalletData(data?._id));
-    const gameId = state?.gameReducer?.data?.data?.gameId;
+    const gameId = state?.gameReducer?.data?.data?.gameID;
+    console.log(state?.gameReducer?.data?.data?.gameID);
     dispatch(winnerListData(gameId));
     dispatch(gameResultData(gameId));
+    console.log(state?.winnerlistReducer?.data?.data);
     if (gameId) {
       setInLocalStorage("gameId", gameId);
     }
@@ -343,7 +329,7 @@ const Header = () => {
           </Typography>
         </Box>
         <Box sx={{ width: "100%", padding: "10px" }}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <Box>
             <TabContext value={value}>
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                 <TabList
@@ -426,6 +412,7 @@ const Header = () => {
                             {data?.transactionType}
                           </Typography>
                         </Box>
+                        <Divider />
                       </>
                     </TabPanel>
                   );
@@ -447,7 +434,6 @@ const Header = () => {
                         <Typography
                           style={{ fontSize: "14px", color: "#0c3b5e" }}
                         >
-                          {" "}
                           {data?.amount}
                         </Typography>
                       </Box>
@@ -499,6 +485,7 @@ const Header = () => {
                           {data?.transactionType}
                         </Typography>
                       </Box>
+                      <Divider variant="miidle" />
                     </TabPanel>
                   );
                 })}

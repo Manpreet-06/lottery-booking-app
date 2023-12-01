@@ -92,8 +92,8 @@ const PlaceOrder = ({ bookList, gameId }) => {
   }
 
   const handleAdd = (formikProps) => {
-    setUpdatedValue(updatedValue + total);
     formikProps && handleReset(formikProps); 
+    setUpdatedValue(updatedValue + total);
   };
 
   const handleQuantity = (formikProps, fieldName, value) => {

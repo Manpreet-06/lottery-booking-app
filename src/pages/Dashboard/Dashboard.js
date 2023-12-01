@@ -13,18 +13,26 @@ import { getFromLocalStorage } from "../../utils/localstorage";
 const Dashboard = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
-  const gameResult = state?.gameresultReducer?.data?.data?.data;
-  const ticketData = state?.winnerlistReducer?.data;
+  const gameResult = state?.gameresultReducer?.data?.data;
+  const ticketData = state?.winnerlistReducer?.data?.data;
   const bookList = state.booklistReducer?.data?.data;
+  const gameId = getFromLocalStorage("gameId");
 
   useEffect(() => {
-    const gameId = getFromLocalStorage("gameId")
     dispatch(fetchGamesData());
     dispatch(booklistData());
     dispatch(booklistData());
     dispatch(gameResultData(gameId));
     dispatch(winnerListData(gameId));
-  }, [gameResultData, booklistData, winnerListData, booklistData, fetchGamesData]);
+    console.log(state?.gameresultReducer?.data?.data);
+  }, [
+    gameResultData,
+    booklistData,
+    winnerListData,
+    booklistData,
+    fetchGamesData,
+    gameId,
+  ]);
 
   return (
     <Grid container columnGap={4}>
@@ -35,7 +43,10 @@ const Dashboard = () => {
         <LastOpenBook winnerList={gameResult} />
       </Grid>
       <Grid lg={3} sm={12} md={12} xs={12}>
-        <PlaceOrder bookList={bookList} gameId={state?.gameReducer?.data?.data?.gameID} />
+        <PlaceOrder
+          bookList={bookList}
+          gameId={state?.gameReducer?.data?.data?.gameID}
+        />
       </Grid>
     </Grid>
   );

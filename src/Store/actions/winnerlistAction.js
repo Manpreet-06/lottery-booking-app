@@ -17,10 +17,11 @@ export const winnerListFailure = (error) => ({
 });
 
 export const winnerListData = (id) => {
+  console.log(id);
   return (dispatch) => {
     dispatch(winnerListRequest(id));
     instance
-      .get(API_URL.WINNER_LIST())
+      .get(API_URL.WINNER_LIST(id))
       .then((response) => {
         const data = response.data;
         dispatch(winnerListSuccess(data));
