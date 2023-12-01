@@ -58,7 +58,9 @@ const PlaceOrder = ({ bookList, gameId }) => {
         parseInt(formikProps?.values?.bookQuantity, 10) || 0;
       const bookNumberSubtotal = bookNumberQuantity * bookId?.price;
       setBookNumberSubTotal(bookNumberSubtotal);
+      if(bookNumberSubtotal){
       setTotal(bookNumberSubtotal);
+      }
     }
   };
 
@@ -84,9 +86,10 @@ const PlaceOrder = ({ bookList, gameId }) => {
       parseInt(formikProps?.values?.pageQuantity, 10) || 0;
     const pageNumberSubtotal = pageNumberQuantity * bookId?.price;
     const total = pageNumberSubtotal + bookNumberSubtotal;
-    console.log(total);
     setPageNumberSubtotal(total);
+    if(total){
     setTotal(total);
+    }
   };
 
   const handleQuantity = (
@@ -118,7 +121,6 @@ const PlaceOrder = ({ bookList, gameId }) => {
   };
 
   const handleOrder = async (values, gameId) => {
-    console.log(gameId);
     const user = getFromLocalStorage("loginData");
     const bookId = bookList?.find((data) => {
       if (values?.bookNumber === data?.number) {
@@ -126,20 +128,19 @@ const PlaceOrder = ({ bookList, gameId }) => {
       }
     });
     const { pageNumberDropdown, dropdownQuantity } = values;
-    if (pageNumberDropdown?.length > 0 && dropdownQuantity?.length > 0) {
       const [start, end] = pageNumberDropdown.split(" - ").map(Number);
       const pagesData = [];
+      const data = {
+        pageNumber: values.pageNumber,
+        quantity: values.pageQuantity,
+      };
+      pagesData?.push(data);
       for (let i = start; i <= end; i++) {
         pagesData.push({
           pageNumber: i.toString(),
           quantity: dropdownQuantity,
         });
       }
-      const data = {
-        pageNumber: values.pageNumber,
-        quantity: values.pageQuantity,
-      };
-      pagesData?.push(data);
       try {
         const newOrder = {
           orderData: [
@@ -155,7 +156,6 @@ const PlaceOrder = ({ bookList, gameId }) => {
         };
         const response = await placeOrderService(newOrder);
       } catch (error) {}
-    }
   };
 
   const handleReset = (formikProps) => {
