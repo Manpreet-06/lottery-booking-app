@@ -38,21 +38,22 @@ const Header = () => {
   const sellingBalance = state?.userProfileReducer?.data?.data?.walletBalance;
   const winningBalance = state?.userProfileReducer?.data?.data?.mainBalance;
   const winnerList = state?.winnerlistReducer?.data?.data?.winnerList;
+  const gameResult = state?.gameresultReducer?.data?.data;
   const [startDateTime, setStartDateTime] = useState();
   const [endDateTime, setEndDateTime] = useState();
   const [showModal, setShowModal] = useState(false);
+  const [bookingMessage, setBookingMessage] = useState("");
+  const [nextGameMessage, setNextGameMessage] = useState("");
+  const [bookingCloseMessage, setBookingCloseMessage] = useState("");
 
   const [currentTime, setCurrentTime] = useState(new Date());
-  // const startDateString = state?.gameReducer?.data?.data?.startTime;
-  // const endTimeString = state?.gameReducer?.data?.data?.startTime;
+  const startDateString = state?.gameReducer?.data?.data?.startTime;
+  const endTimeString = state?.gameReducer?.data?.data?.startTime;
 
-  const startDateString = "18:31";
-  const endTimeString = "18:32";
 
   useEffect(() => {
     if (startDateString && endTimeString) {
-      // const startDateString = state?.gameReducer?.data?.data?.startTime;
-      const startDateString = "18:31";
+      const startDateString = state?.gameReducer?.data?.data?.startTime;
       const [startHours, startMinutes] = startDateString.split(":").map(Number);
       const startDate = new Date();
       startDate.setHours(startHours);
@@ -61,8 +62,7 @@ const Header = () => {
 
       const formattedStartDate = startDate.toISOString();
 
-      // const endTimeString = state?.gameReducer?.data?.data?.endTime;
-      const endTimeString = "18:32";
+      const endTimeString = state?.gameReducer?.data?.data?.endTime;
       const [endHours, endMinutes] = endTimeString.split(":").map(Number);
 
       const endDate = new Date();
@@ -89,17 +89,28 @@ const Header = () => {
   }, []);
 
   useEffect(() => {
+
+    const calculateMessages = () => {
+      if (currentTime > startDateTime && currentTime < endDateTime) {
+        setBookingMessage(`Booking closes in`);
+      } else if (currentTime < startDateTime) {
+        setNextGameMessage(`Next game starts in`);
+      } else if (currentTime?.getTime() === endDateTime?.getTime()) {
+        setBookingCloseMessage("Booking Closed");
+      }
+    };
+    calculateMessages();
     const remainingTime = calculateTimeRemaining();
 
-    if (remainingTime === "00:00:00") {
+    if (remainingTime === "00:00:00" && bookingMessage === "Booking closes in") {
       setShowModal(true);
     }
     const modalTimer = setTimeout(() => {
       setShowModal(false);
     }, 1000);
-    
+
     return () => clearTimeout(modalTimer);
-  }, [endTimeString, currentTime, startDateTime]);
+  }, [endTimeString, currentTime, startDateTime, showModal]);
 
   function formatTime(date) {
     const formattedDate = date.toLocaleDateString();
@@ -116,7 +127,7 @@ const Header = () => {
     } else if (currentTime < startDateTime) {
       remainingTime = startDateTime - currentTime;
     } else if (currentTime === startDateTime) {
-      remainingTime = 0;
+      remainingTime = '';
     } else {
       remainingTime = 0;
       return "Booking Closed";
@@ -163,7 +174,6 @@ const Header = () => {
     dispatch(fetchGamesData());
     dispatch(fetchWalletData(data?._id));
     const gameId = state?.gameReducer?.data?.data?.gameID;
-    console.log(state?.gameReducer?.data?.data?.gameID);
     dispatch(winnerListData(data?._id));
     if (gameId) {
       dispatch(gameResultData(gameId));
@@ -201,6 +211,9 @@ const Header = () => {
         </Grid>
         <Grid lg={3.5} md={5.5} sm={5.5} xs={9.5} className="clock">
           <img src="/assets/clock.png" alt="" className="clock__img" />
+          {bookingMessage && <Typography>{bookingMessage}</Typography>}
+          {nextGameMessage && <Typography>{nextGameMessage}</Typography>}
+          {bookingCloseMessage && <Typography>{bookingCloseMessage}</Typography>}
           <Typography ml={1} className="clock__title">
             {calculateTimeRemaining()}
           </Typography>
@@ -495,8 +508,8 @@ const Header = () => {
         </Box>
       </Popover>
       {showModal === true && (
-        <ModalComponent open={showModal} handleClose={handleCloseModal} />
-      )}
+        <ModalComponent open={showModal} handleClose={handleCloseModal} ticketData={winnerList} gameResult={gameResult} />
+       )}
     </div>
   );
 };

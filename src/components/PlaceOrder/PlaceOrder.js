@@ -168,12 +168,11 @@ const PlaceOrder = ({ bookList, gameId }) => {
         dropdownQuantity: "",
       },
     });
-    setTotal(0);
   };
 
   const handleAdd = (formikProps) => {
-    formikProps && handleReset(formikProps);
     setUpdatedValue(updatedValue + total);
+    formikProps && handleReset(formikProps);
   };
 
   return (

@@ -13,7 +13,6 @@ import { getFromLocalStorage } from "../../utils/localstorage";
 const Dashboard = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
-  const gameResult = state?.gameresultReducer?.data?.data;
   const ticketData = state?.winnerlistReducer?.data?.data;
   const bookList = state.booklistReducer?.data?.data;
   const gameId = getFromLocalStorage("gameId");
