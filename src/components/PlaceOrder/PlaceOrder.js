@@ -17,6 +17,8 @@ import { getFromLocalStorage } from "../../utils/localstorage";
 const PlaceOrder = ({ bookList, gameId }) => {
   const [total, setTotal] = useState(0);
   const [updatedValue, setUpdatedValue] = useState(0);
+  const [bookNumberSubtotal, setBookNumberSubTotal] = useState(0);
+  const [pageNumberSubtotal, setPageNumberSubtotal] = useState(0);
 
   const calculateTotal = (values) => {
     const bookId = bookList?.find((data) => {
@@ -26,10 +28,11 @@ const PlaceOrder = ({ bookList, gameId }) => {
     });
     const bookNumberQuantity = parseInt(values?.bookQuantity, 10) || 0;
     const bookNumberSubtotal = bookNumberQuantity * bookId?.price;
-
+    setTotal(bookNumberQuantity);
     const pageNumberQuantity = parseInt(values?.pageQuantity, 10) || 0;
     const pageNumberSubtotal = pageNumberQuantity * bookId?.price;
-
+    const total = pageNumberSubtotal + bookNumberQuantity;
+    setTotal(total);
     const selectedRangeTotal = parseInt(values?.dropdownQuantity, 10) || 0;
     const selectedSubTotal = selectedRangeTotal * bookId?.price;
 
@@ -38,7 +41,84 @@ const PlaceOrder = ({ bookList, gameId }) => {
     setTotal(totalAmount);
   };
 
+  const handleBookQuantity = (formikProps, fieldName, value, bookList) => {
+    formikProps.handleChange({
+      target: {
+        name: fieldName,
+        value: value,
+      },
+    });
+    if (value) {
+      const bookId = bookList?.find((data) => {
+        if (formikProps?.values?.bookNumber === data?.number) {
+          return data?.price;
+        }
+      });
+      const bookNumberQuantity =
+        parseInt(formikProps?.values?.bookQuantity, 10) || 0;
+      const bookNumberSubtotal = bookNumberQuantity * bookId?.price;
+      setBookNumberSubTotal(bookNumberSubtotal);
+      setTotal(bookNumberSubtotal);
+    }
+  };
+
+  const handlePageQuantity = (
+    formikProps,
+    fieldName,
+    value,
+    bookList,
+    bookNumberSubtotal
+  ) => {
+    formikProps.handleChange({
+      target: {
+        name: fieldName,
+        value: value,
+      },
+    });
+    const bookId = bookList?.find((data) => {
+      if (formikProps?.values?.bookNumber === data?.number) {
+        return data?.price;
+      }
+    });
+    const pageNumberQuantity =
+      parseInt(formikProps?.values?.pageQuantity, 10) || 0;
+    const pageNumberSubtotal = pageNumberQuantity * bookId?.price;
+    const total = pageNumberSubtotal + bookNumberSubtotal;
+    console.log(total);
+    setPageNumberSubtotal(total);
+    setTotal(total);
+  };
+
+  const handleQuantity = (
+    formikProps,
+    fieldName,
+    value,
+    bookList,
+    bookNumberSubtotal,
+    pageNumberSubtotal
+  ) => {
+    formikProps.handleChange({
+      target: {
+        name: fieldName,
+        value: value,
+      },
+    });
+    const bookId = bookList?.find((data) => {
+      if (formikProps?.values?.bookNumber === data?.number) {
+        return data?.price;
+      }
+    });
+    const selectedRangeTotal =
+      parseInt(formikProps?.values?.dropdownQuantity, 10) || 0;
+    const selectedSubTotal = selectedRangeTotal * bookId?.price;
+    const total = bookNumberSubtotal + pageNumberSubtotal + selectedSubTotal;
+    if (total) {
+      setTotal(total);
+    }
+  };
+
   const handleOrder = async (values, gameId) => {
+    console.log(gameId);
     const user = getFromLocalStorage("loginData");
     const bookId = bookList?.find((data) => {
       if (values?.bookNumber === data?.number) {
@@ -59,7 +139,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
         pageNumber: values.pageNumber,
         quantity: values.pageQuantity,
       };
-      pagesData.push(data);
+      pagesData?.push(data);
       try {
         const newOrder = {
           orderData: [
@@ -84,26 +164,16 @@ const PlaceOrder = ({ bookList, gameId }) => {
         bookQuantity: "",
         pageNumber: "",
         pageQuantity: "",
-        pageNumberDropdown: "1-10",
-        dropdownQuantity: '',
+        pageNumberDropdown: "",
+        dropdownQuantity: "",
       },
     });
     setTotal(0);
-  }
-
-  const handleAdd = (formikProps) => {
-    formikProps && handleReset(formikProps); 
-    setUpdatedValue(updatedValue + total);
   };
 
-  const handleQuantity = (formikProps, fieldName, value) => {
-    formikProps.handleChange({
-      target: {
-        name: fieldName,
-        value: value,
-      },
-    });
-    calculateTotal(formikProps.values);
+  const handleAdd = (formikProps) => {
+    formikProps && handleReset(formikProps);
+    setUpdatedValue(updatedValue + total);
   };
 
   return (
@@ -125,7 +195,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
           bookQuantity: "",
           pageNumber: "",
           pageQuantity: "",
-          pageNumberDropdown: "1-10",
+          pageNumberDropdown: "",
           dropdownQuantity: "",
         }}
         onSubmit={(values) => {
@@ -139,9 +209,6 @@ const PlaceOrder = ({ bookList, gameId }) => {
                 style={{
                   width: "170px",
                   height: "56px",
-                  borderRadius: "10px",
-                  border: "1px solid #003F63",
-                  color: "#C4C4C4",
                 }}
                 placeholder="Book no"
                 className="book-number"
@@ -153,15 +220,19 @@ const PlaceOrder = ({ bookList, gameId }) => {
                 style={{
                   width: "170px",
                   height: "56px",
-                  borderRadius: "10px",
-                  border: "1px solid #003F63",
-                  color: "#C4C4C4",
                 }}
                 placeholder="Quantity"
                 className="book-number"
                 name="bookQuantity"
                 value={formikProps?.values?.bookQuantity}
-                onChange={formikProps?.handleChange}
+                onChange={(e) =>
+                  handleBookQuantity(
+                    formikProps,
+                    "bookQuantity",
+                    e?.target?.value,
+                    bookList
+                  )
+                }
               />
             </Box>
             <Box display="flex" justifyContent={"space-between"} mb={2}>
@@ -169,9 +240,6 @@ const PlaceOrder = ({ bookList, gameId }) => {
                 style={{
                   width: "170px",
                   height: "56px",
-                  borderRadius: "10px",
-                  border: "1px solid #003F63",
-                  color: "#C4C4C4",
                 }}
                 placeholder="Page no"
                 className="book-number"
@@ -183,15 +251,20 @@ const PlaceOrder = ({ bookList, gameId }) => {
                 style={{
                   width: "170px",
                   height: "56px",
-                  borderRadius: "10px",
-                  border: "1px solid #003F63",
-                  color: "#C4C4C4",
                 }}
                 placeholder="Quantity"
                 className="book-number"
                 name="pageQuantity"
                 value={formikProps?.values?.pageQuantity}
-                onChange={formikProps?.handleChange}
+                onChange={(e) =>
+                  handlePageQuantity(
+                    formikProps,
+                    "pageQuantity",
+                    e.target.value,
+                    bookList,
+                    bookNumberSubtotal
+                  )
+                }
               />
             </Box>
             <Box display="flex" justifyContent={"space-between"} mb={2}>
@@ -213,7 +286,6 @@ const PlaceOrder = ({ bookList, gameId }) => {
                     if (!selected || selected.length === 0) {
                       return <em>Placeholder</em>;
                     }
-
                     return selected;
                   }}
                 >
@@ -222,16 +294,12 @@ const PlaceOrder = ({ bookList, gameId }) => {
                   <MenuItem value={"21 - 30"}>21-30</MenuItem>
                   <MenuItem value={"31 - 40"}>31-40</MenuItem>
                   <MenuItem value={"41 - 50"}>41-50</MenuItem>
-
                 </Select>
               </FormControl>
               <TextField
                 style={{
                   width: "170px",
                   height: "56px",
-                  borderRadius: "10px",
-                  border: "1px solid #003F63",
-                  color: "#C4C4C4",
                 }}
                 placeholder="Quantity"
                 className="book-number"
@@ -241,7 +309,10 @@ const PlaceOrder = ({ bookList, gameId }) => {
                   handleQuantity(
                     formikProps,
                     "dropdownQuantity",
-                    e.target.value
+                    e.target.value,
+                    bookList,
+                    pageNumberSubtotal,
+                    bookNumberSubtotal
                   )
                 }
               />
@@ -273,7 +344,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
                   marginTop: "10px",
                 }}
                 type="submit"
-                onClick={() =>handleAdd(formikProps)}
+                onClick={() => handleAdd(formikProps)}
               >
                 <AddIcon />
               </Button>

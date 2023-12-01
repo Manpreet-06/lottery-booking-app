@@ -2,16 +2,23 @@
 .book-number {
   width: 170px;
   height: 56px;
-  border-radius: 10px;
-  border: "1px solid #003F63";
-  color: "#C4C4C4";
+  // border-radius: 10px;
+  // border: "1px solid #003F63";
+  // color: "#C4C4C4";
 }
 .css-q8hpuo-MuiFormControl-root{
   width: 170px;
 }
+// .css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root{
+//   border-radius: 10px;
+//   border-color: #003F63;
+//   height: 56px;
+// }
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input{
+  border: 1px solid #003F63;
+  border-radius: 10px;
+}
 .css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root{
   border-radius: 10px;
-  border-color: #003F63;
-  height: 56px;
 }
 }

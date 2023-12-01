@@ -19,7 +19,7 @@ const TicketCard = ({ticketData }) => {
           WINNER LIST
         </Typography>
         <Box className="ticket-box">
-          {ticketData?.data?.length> 0 ? ticketData?.data?.map((item) => {
+          {ticketData?.length> 0 ? ticketData?.map((item) => {
             return (
               <Card className="ticket-card">
                 <Typography className="ticket-number-text">
@@ -31,10 +31,10 @@ const TicketCard = ({ticketData }) => {
                   justifyContent={"space-between"}
                 >
                   <Typography className="ticket-card__number">
-                    {item?.ticketNo}
+                    {item?.orderId}
                   </Typography>
                   <Typography className="ticket-card__price">
-                    {item.price}
+                    {item?.amount}
                   </Typography>
                 </Box>
               </Card>

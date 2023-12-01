@@ -17,14 +17,17 @@ const Dashboard = () => {
   const ticketData = state?.winnerlistReducer?.data?.data;
   const bookList = state.booklistReducer?.data?.data;
   const gameId = getFromLocalStorage("gameId");
+  const data = getFromLocalStorage("loginData");
+
 
   useEffect(() => {
     dispatch(fetchGamesData());
     dispatch(booklistData());
     dispatch(booklistData());
+    dispatch(winnerListData(data?._id));
+    if(gameId){
     dispatch(gameResultData(gameId));
-    dispatch(winnerListData(gameId));
-    console.log(state?.gameresultReducer?.data?.data);
+    }
   }, [
     gameResultData,
     booklistData,
@@ -40,12 +43,12 @@ const Dashboard = () => {
         <VerticalCard bookList={bookList} />
       </Grid>
       <Grid lg={8} sm={12} md={12} xs={12} ml={2}>
-        <LastOpenBook winnerList={gameResult} />
+        <LastOpenBook winnerList={ticketData} />
       </Grid>
       <Grid lg={3} sm={12} md={12} xs={12}>
         <PlaceOrder
           bookList={bookList}
-          gameId={state?.gameReducer?.data?.data?.gameID}
+          gameId={gameId}
         />
       </Grid>
     </Grid>

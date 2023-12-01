@@ -17,6 +17,7 @@ export const gameResultFailure = (error) => ({
 });
 
 export const gameResultData = (id) => {
+  console.log(id);
   return async (dispatch) => {
     dispatch(gameResultRequest());
     instance
