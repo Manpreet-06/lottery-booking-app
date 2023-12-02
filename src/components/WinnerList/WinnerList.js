@@ -16,7 +16,7 @@ const WinnerList = ({ winnerList }) => {
         >
           LUCKY DRAW
         </Typography>
-        {winnerList?.drawResult ?
+        {winnerList?.drawResult ? (
           <>
             <Box
               display={"flex"}
@@ -55,7 +55,11 @@ const WinnerList = ({ winnerList }) => {
               />
             </Box>
           </>
-        : <Nodata />}
+        ) : (
+          <Box m={1.4}>
+            <Nodata />
+          </Box>
+        )}
       </>
     </Box>
   );

@@ -13,11 +13,12 @@ const LastOpenBook = ({ lastOpenBook, winnerList }) => {
           return (
             <>
               <Grid container>
-                <Grid lg={4}>
+                <Grid lg={12}>
                   <Box
                     display="flex"
                     justifyContent="space-around"
                     className="total-imgs"
+                    style={{width: '300px'}}
                   >
                     <Box style={{ position: "relative" }}>
                       <Typography>{data?.bookNumber}</Typography>

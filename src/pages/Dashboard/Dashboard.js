@@ -20,19 +20,18 @@ const Dashboard = () => {
 
 
   useEffect(() => {
-    dispatch(fetchGamesData());
+    // dispatch(fetchGamesData());
     dispatch(booklistData());
     dispatch(booklistData());
     dispatch(winnerListData(data?._id));
-    if(gameId){
-    dispatch(gameResultData(gameId));
-    }
+    // if(gameId){
+    // dispatch(gameResultData(gameId));
+    // }
   }, [
     gameResultData,
     booklistData,
     winnerListData,
     booklistData,
-    fetchGamesData,
     gameId,
   ]);
 

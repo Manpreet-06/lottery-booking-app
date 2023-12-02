@@ -39,6 +39,7 @@ const Header = () => {
   const winningBalance = state?.userProfileReducer?.data?.data?.mainBalance;
   const winnerList = state?.winnerlistReducer?.data?.data?.winnerList;
   const gameResult = state?.gameresultReducer?.data?.data;
+  const gameId = state?.gameReducer?.data?.data?.gameID;
   const [startDateTime, setStartDateTime] = useState();
   const [endDateTime, setEndDateTime] = useState();
   const [showModal, setShowModal] = useState(false);
@@ -49,11 +50,13 @@ const Header = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const startDateString = state?.gameReducer?.data?.data?.startTime;
   const endTimeString = state?.gameReducer?.data?.data?.startTime;
-
+  // const startDateString = "15:30";
+  // const endTimeString = "15:31";
 
   useEffect(() => {
     if (startDateString && endTimeString) {
       const startDateString = state?.gameReducer?.data?.data?.startTime;
+      // const startDateString = "15:30";
       const [startHours, startMinutes] = startDateString.split(":").map(Number);
       const startDate = new Date();
       startDate.setHours(startHours);
@@ -63,6 +66,7 @@ const Header = () => {
       const formattedStartDate = startDate.toISOString();
 
       const endTimeString = state?.gameReducer?.data?.data?.endTime;
+      // const endTimeString = "15:31";
       const [endHours, endMinutes] = endTimeString.split(":").map(Number);
 
       const endDate = new Date();
@@ -89,28 +93,41 @@ const Header = () => {
   }, []);
 
   useEffect(() => {
-
     const calculateMessages = () => {
       if (currentTime > startDateTime && currentTime < endDateTime) {
-        setBookingMessage(`Booking closes in`);
+        setBookingMessage("Booking close in");
+        setNextGameMessage("");
       } else if (currentTime < startDateTime) {
         setNextGameMessage(`Next game starts in`);
-      } else if (currentTime?.getTime() === endDateTime?.getTime()) {
+        setBookingCloseMessage("");
+      } else {
         setBookingCloseMessage("Booking Closed");
+        setNextGameMessage("");
+        setBookingMessage("");
       }
     };
     calculateMessages();
     const remainingTime = calculateTimeRemaining();
 
-    if (remainingTime === "00:00:00" && bookingMessage === "Booking closes in") {
+    if (remainingTime === "00:00:00" && bookingMessage === "Booking close in") {
       setShowModal(true);
+      dispatch(fetchGamesData());
+    dispatch(gameResultData(gameId));
     }
     const modalTimer = setTimeout(() => {
       setShowModal(false);
     }, 1000);
 
     return () => clearTimeout(modalTimer);
-  }, [endTimeString, currentTime, startDateTime, showModal]);
+  }, [
+    endTimeString,
+    currentTime,
+    startDateTime,
+    showModal,
+    gameResultData,
+    fetchGamesData,
+    gameId
+  ]);
 
   function formatTime(date) {
     const formattedDate = date.toLocaleDateString();
@@ -127,10 +144,9 @@ const Header = () => {
     } else if (currentTime < startDateTime) {
       remainingTime = startDateTime - currentTime;
     } else if (currentTime === startDateTime) {
-      remainingTime = '';
+      remainingTime = "";
     } else {
       remainingTime = 0;
-      return "Booking Closed";
     }
     const seconds = Math.floor((remainingTime / 1000) % 60);
     const minutes = Math.floor((remainingTime / 1000 / 60) % 60);
@@ -173,19 +189,15 @@ const Header = () => {
     dispatch(walletHistoryData(data?._id));
     dispatch(fetchGamesData());
     dispatch(fetchWalletData(data?._id));
-    const gameId = state?.gameReducer?.data?.data?.gameID;
     dispatch(winnerListData(data?._id));
     if (gameId) {
-      dispatch(gameResultData(gameId));
       setInLocalStorage("gameId", gameId);
     }
   }, [
     dispatch,
     fetchUserProfileData,
     walletHistoryData,
-    fetchGamesData,
     fetchWalletData,
-    gameResultData,
     winnerListData,
   ]);
 
@@ -211,11 +223,26 @@ const Header = () => {
         </Grid>
         <Grid lg={3.5} md={5.5} sm={5.5} xs={9.5} className="clock">
           <img src="/assets/clock.png" alt="" className="clock__img" />
-          {bookingMessage && <Typography>{bookingMessage}</Typography>}
-          {nextGameMessage && <Typography>{nextGameMessage}</Typography>}
-          {bookingCloseMessage && <Typography>{bookingCloseMessage}</Typography>}
+          {bookingMessage && showModal === false && (
+            <Typography ml={1} fontWeight={600}>
+              {bookingMessage}
+            </Typography>
+          )}
+          {nextGameMessage &&  (
+            <Typography ml={1} fontWeight={600}>
+              {nextGameMessage}
+            </Typography>
+          )}
+          {bookingCloseMessage && (
+            <Typography ml={1} fontWeight={600}>
+              {bookingCloseMessage}
+            </Typography>
+          )}
           <Typography ml={1} className="clock__title">
             {calculateTimeRemaining()}
+          </Typography>
+          <Typography ml={1} className="clock__title">
+            Minutes
           </Typography>
         </Grid>
         <Grid lg={2} md={2} sm={2} xs={2.5} className="timer">
@@ -508,8 +535,13 @@ const Header = () => {
         </Box>
       </Popover>
       {showModal === true && (
-        <ModalComponent open={showModal} handleClose={handleCloseModal} ticketData={winnerList} gameResult={gameResult} />
-       )}
+        <ModalComponent
+          open={true}
+          handleClose={handleCloseModal}
+          ticketData={winnerList}
+          gameResult={gameResult}
+        />
+      )}
     </div>
   );
 };

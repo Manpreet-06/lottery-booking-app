@@ -10,7 +10,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 600,
+  width: "90%",
   height: "80%",
   bgcolor: "background.paper",
   borderRadius: 4,
@@ -29,6 +29,7 @@ const ModalComponent = (props) => {
         onClose={handleCloseModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        style={{width: "100%"}}
       >
         <Box sx={style} display="flex" justifyContent={"space-between"}>
           <Typography
