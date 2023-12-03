@@ -3,7 +3,9 @@ import {
   Box,
   Button,
   FormControl,
+  InputLabel,
   MenuItem,
+  OutlinedInput,
   Select,
   TextField,
   Typography,
@@ -24,9 +26,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
   const [open, setOpen] = React.useState(false);
   const [bookPrice, setBookPrice] = React.useState();
 
-
-
-  const handleBookNumber = (formikProps, fieldName, value) =>{
+  const handleBookNumber = (formikProps, fieldName, value) => {
     formikProps.handleChange({
       target: {
         name: fieldName,
@@ -39,7 +39,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
       }
     });
     setBookPrice(bookId?.price);
-  }
+  };
   const handleBookQuantity = (
     value,
     formikProps,
@@ -65,7 +65,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
     fieldName,
     value,
     bookNumberSubtotal,
-    bookPrice,
+    bookPrice
   ) => {
     formikProps.handleChange({
       target: {
@@ -95,7 +95,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
     });
     const selectedRangeTotal = parseInt(value, 10) || 0;
     const selectedSubTotal = selectedRangeTotal * bookPrice;
-    const total =  pageNumberSubtotal + selectedSubTotal;
+    const total = pageNumberSubtotal + selectedSubTotal;
     setTotal(total);
   };
 
@@ -212,7 +212,9 @@ const PlaceOrder = ({ bookList, gameId }) => {
                 className="book-number"
                 name="bookNumber"
                 value={formikProps?.values?.bookNumber}
-                onChange={(e) =>handleBookNumber(formikProps, "bookNumber", e.target.value)}
+                onChange={(e) =>
+                  handleBookNumber(formikProps, "bookNumber", e.target.value)
+                }
               />
               <TextField
                 style={{
@@ -267,31 +269,17 @@ const PlaceOrder = ({ bookList, gameId }) => {
               />
             </Box>
             <Box display="flex" justifyContent={"space-between"} mb={2}>
-              <FormControl fullWidth>
+              <FormControl variant="outlined" fullWidth>
+                <InputLabel id="demo-simple-select-outlined-label" style={{fontSize:"14px", textAlign: "center", color: "	#909090"}}>
+                  Select Page Range
+                </InputLabel>
                 <Select
-                  style={{
-                    width: "170px",
-                    height: "56px",
-                    borderRadius: "10px",
-                    border: "1px solid #003F63",
-                    color: "#000",
-                  }}
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={formikProps?.values?.pageNumberDropdown}
-                  label=""
-                  name="pageNumberDropdown"
-                  onChange={formikProps?.handleChange}
-                  renderValue={(selected) => {
-                    if (selected.length === 0) {
-                      return <em style={{ color: "#757575" }}>Placeholder</em>;
-                    }
-                    return selected;
-                  }}
+                  labelId="demo-simple-select-outlined-label"
+                  id="demo-simple-select-outlined"
+                  value={formikProps.values.pageNumberDropdown || ""}
+                  onChange={formikProps.handleChange}
+                  input={<OutlinedInput label="select page range" />}
                 >
-                  <MenuItem value="">
-                    <em>Select Page Range</em>
-                  </MenuItem>
                   <MenuItem value={"1 - 10"}>1-10</MenuItem>
                   <MenuItem value={"11 - 20"}>11-20</MenuItem>
                   <MenuItem value={"21 - 30"}>21-30</MenuItem>
@@ -299,6 +287,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
                   <MenuItem value={"41 - 50"}>41-50</MenuItem>
                 </Select>
               </FormControl>
+
               <TextField
                 style={{
                   width: "170px",
