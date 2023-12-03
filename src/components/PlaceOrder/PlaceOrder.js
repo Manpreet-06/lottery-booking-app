@@ -17,37 +17,41 @@ import { getFromLocalStorage } from "../../utils/localstorage";
 
 const PlaceOrder = ({ bookList, gameId }) => {
   const [total, setTotal] = useState(0);
-  const [updatedValue, setUpdatedValue] = useState(0);
   const [bookNumberSubtotal, setBookNumberSubTotal] = useState(0);
   const [pageNumberSubtotal, setPageNumberSubtotal] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [open, setOpen] = React.useState(false);
+  const [bookPrice, setBookPrice] = React.useState();
 
+
+
+  const handleBookNumber = (formikProps, fieldName, value) =>{
+    formikProps.handleChange({
+      target: {
+        name: fieldName,
+        value: value,
+      },
+    });
+    const bookId = bookList?.find((data) => {
+      if (value === data?.number) {
+        return data?.price;
+      }
+    });
+    setBookPrice(bookId?.price);
+  }
   const handleBookQuantity = (
     value,
     formikProps,
     fieldName,
-    bookList,
     total,
+    bookPrice
   ) => {
-    const bookId = bookList?.find((data) => {
-      if (formikProps?.values?.bookNumber === data?.number) {
-        return data?.price;
-      }
-    });
     const bookNumberQuantity = parseInt(value, 10) || 0;
-    const bookNumberSubtotal = bookNumberQuantity * bookId?.price;
+    const bookNumberSubtotal = bookNumberQuantity * bookPrice;
     const updatedTotal = total + bookNumberSubtotal;
     setBookNumberSubTotal(updatedTotal);
     setTotal(updatedTotal);
-    // if (total) {
-    //   const newTotal = bookNumberSubtotal + updatedValue;
-    //   console.log(newTotal);
-    //   setTotal(newTotal);
-    // } else {
-    //   setTotal(bookNumberSubtotal);
-    // }
     formikProps.handleChange({
       target: {
         name: fieldName,
@@ -60,9 +64,8 @@ const PlaceOrder = ({ bookList, gameId }) => {
     formikProps,
     fieldName,
     value,
-    bookList,
     bookNumberSubtotal,
-    updatedValue
+    bookPrice,
   ) => {
     formikProps.handleChange({
       target: {
@@ -70,32 +73,19 @@ const PlaceOrder = ({ bookList, gameId }) => {
         value: value,
       },
     });
-    const bookId = bookList?.find((data) => {
-      if (formikProps?.values?.bookNumber === data?.number) {
-        return data?.price;
-      }
-    });
     const pageNumberQuantity = parseInt(value, 10) || 0;
-    const pageNumberSubtotal = pageNumberQuantity * bookId?.price;
+    const pageNumberSubtotal = pageNumberQuantity * bookPrice;
     const total = pageNumberSubtotal + bookNumberSubtotal;
     setPageNumberSubtotal(total);
     setTotal(total);
-    // console.log(bookNumberSubtotal);
-    // if(updatedValue){
-    //   const updatedTotal = updatedValue + pageNumberSubtotal + bookNumberSubtotal;
-    //   setUpdatedValue(updatedTotal);
-    // }else {
-    //   console.log(total);
-    //   setTotal(total);
-    // }
   };
 
   const handleQuantity = (
     formikProps,
     fieldName,
     value,
-    bookList,
     pageNumberSubtotal,
+    bookPrice
   ) => {
     formikProps.handleChange({
       target: {
@@ -103,22 +93,10 @@ const PlaceOrder = ({ bookList, gameId }) => {
         value: value,
       },
     });
-    const bookId = bookList?.find((data) => {
-      if (formikProps?.values?.bookNumber === data?.number) {
-        return data?.price;
-      }
-    });
     const selectedRangeTotal = parseInt(value, 10) || 0;
-    const selectedSubTotal = selectedRangeTotal * bookId?.price;
+    const selectedSubTotal = selectedRangeTotal * bookPrice;
     const total =  pageNumberSubtotal + selectedSubTotal;
-    console.log(total);
     setTotal(total);
-    // if(updatedValue){
-    //   const updatedTotal = updatedValue + total;
-    //   setUpdatedValue(updatedTotal);
-    // }else{
-    //   setTotal(total);
-    // }
   };
 
   const handleOrder = async (values, gameId) => {
@@ -160,7 +138,6 @@ const PlaceOrder = ({ bookList, gameId }) => {
         setSuccessMessage("Order Placed");
         setOpen(true);
       } else {
-        console.log(response?.error);
         setErrorMessage(response?.error);
         setOpen(true);
       }
@@ -180,9 +157,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
   };
 
   const handleAdd = (formikProps) => {
-    // const currentTotal = updatedValue + total;
     formikProps && handleReset(formikProps);
-    // setUpdatedValue(currentTotal);
   };
 
   return (
@@ -237,7 +212,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
                 className="book-number"
                 name="bookNumber"
                 value={formikProps?.values?.bookNumber}
-                onChange={formikProps?.handleChange}
+                onChange={(e) =>handleBookNumber(formikProps, "bookNumber", e.target.value)}
               />
               <TextField
                 style={{
@@ -253,8 +228,8 @@ const PlaceOrder = ({ bookList, gameId }) => {
                     e?.target?.value,
                     formikProps,
                     "bookQuantity",
-                    bookList,
-                    total
+                    total,
+                    bookPrice
                   )
                 }
               />
@@ -285,8 +260,8 @@ const PlaceOrder = ({ bookList, gameId }) => {
                     formikProps,
                     "pageQuantity",
                     e.target.value,
-                    bookList,
                     bookNumberSubtotal,
+                    bookPrice
                   )
                 }
               />
@@ -338,8 +313,8 @@ const PlaceOrder = ({ bookList, gameId }) => {
                     formikProps,
                     "dropdownQuantity",
                     e.target.value,
-                    bookList,
                     pageNumberSubtotal,
+                    bookPrice
                   )
                 }
               />
