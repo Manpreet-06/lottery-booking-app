@@ -268,11 +268,11 @@ const Booking = ({ bookList }) => {
                 Order
               </Button>
             </Box>
-            <PrintPdf
+            {/* <PrintPdf
               placeOrderData={placeOrderData}
               open={open}
               handleClose={handleClose}
-            />
+            /> */}
           </Form>
         )}
       </Formik>

@@ -16,6 +16,7 @@ import "../PlaceOrder/PlaceOrder.scss";
 import AddIcon from "@mui/icons-material/Add";
 import { placeOrderService } from "../../services";
 import { getFromLocalStorage } from "../../utils/localstorage";
+import PrintPdf from "../PrintPdf/PrintPdf";
 
 const PlaceOrder = ({ bookList, gameId }) => {
   const [total, setTotal] = useState(0);
@@ -25,6 +26,8 @@ const PlaceOrder = ({ bookList, gameId }) => {
   const [successMessage, setSuccessMessage] = useState("");
   const [open, setOpen] = React.useState(false);
   const [bookPrice, setBookPrice] = React.useState();
+  const [openPdf, setOpenPdf] = React.useState(false);
+  const [placeOrderData, setPlaceOrderData] = React.useState();
 
   const handleBookNumber = (formikProps, fieldName, value) => {
     formikProps.handleChange({
@@ -94,10 +97,13 @@ const PlaceOrder = ({ bookList, gameId }) => {
       },
     });
     const selectedRangeTotal = parseInt(value, 10) || 0;
-    const selectedSubTotal = (selectedRangeTotal * bookPrice) * 10;
+    const selectedSubTotal = selectedRangeTotal * bookPrice * 10;
     const total = pageNumberSubtotal + selectedSubTotal;
     setTotal(total);
   };
+
+  const handleClosePdf = () => setOpenPdf(false);
+  const handleOpenPdf = () => setOpenPdf(true);
 
   const handleOrder = async (values, gameId) => {
     const user = getFromLocalStorage("loginData");
@@ -135,8 +141,23 @@ const PlaceOrder = ({ bookList, gameId }) => {
       };
       const response = await placeOrderService(newOrder);
       if (response.status === 200) {
+        const { orderId } = response.data; 
         setSuccessMessage("Order Placed");
         setOpen(true);
+        const newOrderData = {
+          orderData: [
+            {
+              bookNumber: values.bookNumber,
+              quantity: values.bookQuantity,
+              pageNumber: values?.pageNumber,
+              pageQuantity: values?.pageQuantity,
+              pageNumberDropdown: values?.pageNumberDropdown,
+              dropdownQuantity: values?.dropdownQuantity,
+              orderId: orderId,
+            },
+          ],
+        };
+        setPlaceOrderData(newOrderData?.orderData);
       } else {
         setErrorMessage(response?.error);
         setOpen(true);
@@ -270,7 +291,14 @@ const PlaceOrder = ({ bookList, gameId }) => {
             </Box>
             <Box display="flex" justifyContent={"space-between"} mb={2}>
               <FormControl variant="outlined" fullWidth>
-                <InputLabel id="demo-simple-select-outlined-label" style={{fontSize:"14px", textAlign: "center", color: "	#909090"}}>
+                <InputLabel
+                  id="demo-simple-select-outlined-label"
+                  style={{
+                    fontSize: "14px",
+                    textAlign: "center",
+                    color: "	#909090",
+                  }}
+                >
                   Select Page Range
                 </InputLabel>
                 <Select
@@ -350,10 +378,18 @@ const PlaceOrder = ({ bookList, gameId }) => {
                   marginTop: "10px",
                 }}
                 type="submit"
+                onClick={handleOpenPdf}
               >
                 Order
               </Button>
             </Box>
+            {openPdf === true && (
+              <PrintPdf
+                placeOrderData={placeOrderData}
+                open={openPdf}
+                handleClose={handleClosePdf}
+              />
+            )}
           </Form>
         )}
       </Formik>
