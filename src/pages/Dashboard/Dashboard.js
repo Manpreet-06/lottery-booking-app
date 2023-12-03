@@ -15,24 +15,20 @@ const Dashboard = () => {
   const state = useSelector((state) => state);
   const ticketData = state?.winnerlistReducer?.data?.data;
   const bookList = state.booklistReducer?.data?.data;
-  const gameId = getFromLocalStorage("gameId");
   const data = getFromLocalStorage("loginData");
-
+  const gameId = state?.gameReducer?.data?.data?.gameID;
 
   useEffect(() => {
-    // dispatch(fetchGamesData());
+    dispatch(fetchGamesData());
     dispatch(booklistData());
     dispatch(booklistData());
     dispatch(winnerListData(data?._id));
-    // if(gameId){
-    // dispatch(gameResultData(gameId));
-    // }
+    console.log(gameId);
   }, [
     gameResultData,
     booklistData,
     winnerListData,
     booklistData,
-    gameId,
   ]);
 
   return (

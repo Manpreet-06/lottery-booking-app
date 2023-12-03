@@ -28,6 +28,7 @@ const WinnerList = ({ winnerList }) => {
                   fontSize: "30px",
                   fontWeight: 500,
                   marginTop: "5px",
+                  marginLeft: "80px"
                 }}
               >
                 {winnerList?.drawResult?.bookNumber}
@@ -37,6 +38,7 @@ const WinnerList = ({ winnerList }) => {
                   fontSize: "30px",
                   fontWeight: 500,
                   marginTop: "5px",
+                  marginLeft: "120px"
                 }}
               >
                 {winnerList?.drawResult?.pageNumber}

@@ -94,7 +94,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
       },
     });
     const selectedRangeTotal = parseInt(value, 10) || 0;
-    const selectedSubTotal = selectedRangeTotal * bookPrice;
+    const selectedSubTotal = (selectedRangeTotal * bookPrice) * 10;
     const total = pageNumberSubtotal + selectedSubTotal;
     setTotal(total);
   };
@@ -278,6 +278,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
                   id="demo-simple-select-outlined"
                   value={formikProps.values.pageNumberDropdown || ""}
                   onChange={formikProps.handleChange}
+                  name="pageNumberDropdown"
                   input={<OutlinedInput label="select page range" />}
                 >
                   <MenuItem value={"1 - 10"}>1-10</MenuItem>

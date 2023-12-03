@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { fetchLoginData } from "../../Store/actions/loginAction";
 import { useNavigate } from "react-router-dom";
 import { setInLocalStorage } from "../../utils/localstorage";
+import { Image } from "@mui/icons-material";
 
 const LoginForm = ({ data, error, loading, fetchLoginData }) => {
   const navigate = useNavigate();
@@ -50,6 +51,7 @@ return (
             >
               {(formikProps) => (
                 <Form>
+                  <img src="/assets/logo1.png" width="100" />
                   <TextField
                     required
                     id="outlined-required"

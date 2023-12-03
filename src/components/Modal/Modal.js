@@ -21,6 +21,7 @@ const style = {
 const ModalComponent = (props) => {
   const { ticketData, open, handleCloseModal, gameResult } = props;
   const { width, height } = useWindowSize();
+  console.log(gameResult);
   return (
     <>
       <Confetti width={width} height={height} />
@@ -29,7 +30,7 @@ const ModalComponent = (props) => {
         onClose={handleCloseModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-        style={{width: "100%"}}
+        style={{ width: "100%" }}
       >
         <Box sx={style} display="flex" justifyContent={"space-between"}>
           <Typography
@@ -38,7 +39,7 @@ const ModalComponent = (props) => {
             component="h2"
             width="100%"
           >
-            <WinnerList winnerList={gameResult} />
+            <WinnerList winnerList={gameResult?.data} />
           </Typography>
           <Typography id="modal-modal-description" width="100%">
             <TicketCard ticketData={ticketData} />

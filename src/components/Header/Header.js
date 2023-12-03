@@ -93,6 +93,7 @@ const Header = () => {
       if (currentTime > startDateTime && currentTime < endDateTime) {
         setBookingMessage("Booking close in");
         setNextGameMessage("");
+        setBookingCloseMessage("");
       } else if (currentTime < startDateTime) {
         setNextGameMessage(`Next game starts in`);
         setBookingCloseMessage("");
@@ -108,7 +109,7 @@ const Header = () => {
     if (remainingTime === "00:00:00" && bookingMessage === "Booking close in") {
       setShowModal(true);
       dispatch(fetchGamesData());
-    dispatch(gameResultData(gameId));
+      dispatch(gameResultData(gameId));
     }
     const modalTimer = setTimeout(() => {
       setShowModal(false);
@@ -122,7 +123,7 @@ const Header = () => {
     showModal,
     gameResultData,
     fetchGamesData,
-    gameId
+    gameId,
   ]);
 
   function formatTime(date) {
@@ -187,8 +188,10 @@ const Header = () => {
     dispatch(fetchWalletData(data?._id));
     dispatch(winnerListData(data?._id));
     if (gameId) {
+      console.log(gameId);
       setInLocalStorage("gameId", gameId);
     }
+    console.log(state?.gameresultReducer?.data?.data);
   }, [
     dispatch,
     fetchUserProfileData,
@@ -224,7 +227,7 @@ const Header = () => {
               {bookingMessage}
             </Typography>
           )}
-          {nextGameMessage &&  (
+          {nextGameMessage && (
             <Typography ml={1} fontWeight={600}>
               {nextGameMessage}
             </Typography>
