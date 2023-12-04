@@ -17,9 +17,14 @@ import AddIcon from "@mui/icons-material/Add";
 import { placeOrderService } from "../../services";
 import { getFromLocalStorage } from "../../utils/localstorage";
 import PrintPdf from "../PrintPdf/PrintPdf";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchWalletData } from "../../Store/actions/walletAction";
+import { walletHistoryData } from "../../Store/actions/wallethistoryAction";
 
 const PlaceOrder = ({ bookList, gameId }) => {
   const [total, setTotal] = useState(0);
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state);
   const [bookNumberSubtotal, setBookNumberSubTotal] = useState(0);
   const [pageNumberSubtotal, setPageNumberSubtotal] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
@@ -28,6 +33,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
   const [bookPrice, setBookPrice] = React.useState();
   const [openPdf, setOpenPdf] = React.useState(false);
   const [placeOrderData, setPlaceOrderData] = React.useState();
+  const [orderData, setOrderData] = React.useState([]);
 
   const handleBookNumber = (formikProps, fieldName, value) => {
     formikProps.handleChange({
@@ -128,20 +134,25 @@ const PlaceOrder = ({ bookList, gameId }) => {
     }
     try {
       const newOrder = {
-        orderData: [
-          {
-            bookId: bookId._id,
-            userId: user?._id,
-            bookNumber: values.bookNumber,
-            quantity: values.bookQuantity,
-            gameId: gameId,
-            pages: pagesData,
-          },
-        ],
+        bookId: bookId._id,
+        userId: user?._id,
+        bookNumber: values.bookNumber,
+        quantity: values.bookQuantity,
+        gameId: gameId,
+        pages: pagesData,
       };
-      const response = await placeOrderService(newOrder);
+
+      let arrayToPass = [...orderData];
+      arrayToPass[arrayToPass.length] = newOrder;
+      setOrderData(arrayToPass);
+      console.log(" FINAL ARRAY ", JSON.stringify(arrayToPass));
+      let valueToPass = {
+        orderData: arrayToPass,
+      };
+      console.log(valueToPass);
+      const response = await placeOrderService(valueToPass);
       if (response.status === 200) {
-        const { orderId } = response.data; 
+        const { orderId } = response.data;
         setSuccessMessage("Order Placed");
         setOpen(true);
         const newOrderData = {
@@ -158,6 +169,8 @@ const PlaceOrder = ({ bookList, gameId }) => {
           ],
         };
         setPlaceOrderData(newOrderData?.orderData);
+        dispatch(fetchWalletData());
+        dispatch(walletHistoryData());
       } else {
         setErrorMessage(response?.error);
         setOpen(true);
@@ -177,7 +190,40 @@ const PlaceOrder = ({ bookList, gameId }) => {
     });
   };
 
-  const handleAdd = (formikProps) => {
+  const handleAdd = (formikProps, gameId) => {
+    const user = getFromLocalStorage("loginData");
+    const bookId = bookList?.find((data) => {
+      if (formikProps?.values?.bookNumber === data?.number) {
+        return data?._id;
+      }
+    });
+    const { pageNumberDropdown, dropdownQuantity } = formikProps?.values;
+    const [start, end] = pageNumberDropdown.split(" - ").map(Number);
+    const pagesData = [];
+    const data = {
+      pageNumber: formikProps?.values.pageNumber,
+      quantity: formikProps?.values.pageQuantity,
+    };
+    pagesData?.push(data);
+    for (let i = start; i <= end; i++) {
+      pagesData.push({
+        pageNumber: i.toString(),
+        quantity: dropdownQuantity,
+      });
+    }
+    const newOrder = {
+      bookId: bookId._id,
+      userId: user?._id,
+      bookNumber: formikProps?.values.bookNumber,
+      quantity: formikProps?.values.bookQuantity,
+      gameId: gameId,
+      pages: pagesData,
+    };
+
+    let arrayToPass = [...orderData];
+    arrayToPass[arrayToPass.length] = newOrder;
+    console.log(arrayToPass);
+    setOrderData(arrayToPass);
     formikProps && handleReset(formikProps);
   };
 
@@ -364,7 +410,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
                   marginTop: "10px",
                 }}
                 type="submit"
-                onClick={() => handleAdd(formikProps)}
+                onClick={() => handleAdd(formikProps, gameId)}
               >
                 <AddIcon />
               </Button>

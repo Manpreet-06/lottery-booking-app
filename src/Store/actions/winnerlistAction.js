@@ -17,7 +17,6 @@ export const winnerListFailure = (error) => ({
 });
 
 export const winnerListData = (id) => {
-  console.log(id);
   return (dispatch) => {
     dispatch(winnerListRequest(id));
     instance

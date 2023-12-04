@@ -18,7 +18,7 @@ const TicketCard = ({ticketData }) => {
         >
           WINNER LIST
         </Typography>
-        <Box className="ticket-box">
+        <Box className="ticket-box" style={{height: '500px', overflow: "scroll" }}>
           {ticketData?.length> 0 ? ticketData?.map((item) => {
             return (
               <Card className="ticket-card">

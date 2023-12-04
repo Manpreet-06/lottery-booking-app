@@ -23,12 +23,12 @@ const Dashboard = () => {
     dispatch(booklistData());
     dispatch(booklistData());
     dispatch(winnerListData(data?._id));
-    console.log(gameId);
   }, [
     gameResultData,
     booklistData,
     winnerListData,
     booklistData,
+    fetchGamesData
   ]);
 
   return (

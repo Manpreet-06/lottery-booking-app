@@ -40,6 +40,7 @@ const Header = () => {
   const winnerList = state?.winnerlistReducer?.data?.data?.winnerList;
   const gameResult = state?.gameresultReducer?.data?.data;
   const gameId = state?.gameReducer?.data?.data?.gameID;
+  const data = getFromLocalStorage("loginData");
   const [startDateTime, setStartDateTime] = useState();
   const [endDateTime, setEndDateTime] = useState();
   const [showModal, setShowModal] = useState(false);
@@ -110,6 +111,9 @@ const Header = () => {
       setShowModal(true);
       dispatch(fetchGamesData());
       dispatch(gameResultData(gameId));
+      dispatch(winnerListData(data?._id));
+      dispatch(fetchWalletData(data?._id));
+      dispatch(walletHistoryData(data?._id));
     }
     const modalTimer = setTimeout(() => {
       setShowModal(false);
@@ -155,7 +159,6 @@ const Header = () => {
 
   const handleCloseModal = () => {
     setShowModal(false);
-    localStorage.setItem("isModalshown", "false");
   };
 
   const dispatch = useDispatch();
@@ -181,17 +184,14 @@ const Header = () => {
   };
 
   useEffect(() => {
-    const data = getFromLocalStorage("loginData");
     dispatch(fetchUserProfileData(data?._id));
     dispatch(walletHistoryData(data?._id));
     dispatch(fetchGamesData());
     dispatch(fetchWalletData(data?._id));
     dispatch(winnerListData(data?._id));
     if (gameId) {
-      console.log(gameId);
       setInLocalStorage("gameId", gameId);
     }
-    console.log(state?.gameresultReducer?.data?.data);
   }, [
     dispatch,
     fetchUserProfileData,
@@ -367,7 +367,12 @@ const Header = () => {
             {userProfile?.email}
           </Typography>
         </Box>
-        <Box sx={{ width: "100%", padding: "10px" }}>
+        <Box
+          sx={{
+            width: "100%",
+            paddingLeft: "10px",
+          }}
+        >
           <Box>
             <TabContext value={value}>
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -379,87 +384,88 @@ const Header = () => {
                   <Tab label="Winning Balance History" value="2" />
                 </TabList>
               </Box>
-              {mainHistory?.length > 0 &&
-                mainHistory?.map((data) => {
-                  return (
-                    <TabPanel
-                      value="1"
-                      style={{ padding: "0px 25px 10px 0px" }}
-                    >
-                      <>
-                        <Box
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                          }}
-                        >
-                          <Typography style={{ fontSize: "14px" }}>
-                            Amount
-                          </Typography>
-                          <Typography
-                            style={{ fontSize: "14px", color: "#0c3b5e" }}
+                 <Box style={{height: "300px", overflow: "scroll"}}>
+                {mainHistory?.length > 0 &&
+                  mainHistory?.map((data) => {
+                    return (
+                      <TabPanel
+                        value="1"
+                        style={{ padding: "0px 25px 10px 0px" }}
+                      >
+                        <>
+                          <Box
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                            }}
                           >
-                            {data?.amount}
-                          </Typography>
-                        </Box>
-                        <Box
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                          }}
-                        >
-                          <Typography style={{ fontSize: "14px" }}>
-                            Balance Type
-                          </Typography>
-                          <Typography
-                            style={{ fontSize: "14px", color: "#0c3b5e" }}
+                            <Typography style={{ fontSize: "14px" }}>
+                              Amount
+                            </Typography>
+                            <Typography
+                              style={{ fontSize: "14px", color: "#0c3b5e" }}
+                            >
+                              {data?.amount}
+                            </Typography>
+                          </Box>
+                          <Box
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                            }}
                           >
-                            {data?.balanceType}
-                          </Typography>
-                        </Box>
-                        <Box
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                          }}
-                        >
-                          <Typography style={{ fontSize: "14px" }}>
-                            Mode
-                          </Typography>
-                          <Typography
-                            style={{ fontSize: "14px", color: "#0c3b5e" }}
+                            <Typography style={{ fontSize: "14px" }}>
+                              Balance Type
+                            </Typography>
+                            <Typography
+                              style={{ fontSize: "14px", color: "#0c3b5e" }}
+                            >
+                              {data?.balanceType}
+                            </Typography>
+                          </Box>
+                          <Box
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                            }}
                           >
-                            {data?.mode}
-                          </Typography>
-                        </Box>
-                        <Box
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                          }}
-                        >
-                          <Typography style={{ fontSize: "14px" }}>
-                            Transaction Type
-                          </Typography>
-                          <Typography
-                            style={{ fontSize: "14px", color: "#0c3b5e" }}
+                            <Typography style={{ fontSize: "14px" }}>
+                              Mode
+                            </Typography>
+                            <Typography
+                              style={{ fontSize: "14px", color: "#0c3b5e" }}
+                            >
+                              {data?.mode}
+                            </Typography>
+                          </Box>
+                          <Box
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                            }}
                           >
-                            {data?.transactionType}
-                          </Typography>
-                        </Box>
-                        <Divider />
-                      </>
-                    </TabPanel>
-                  );
-                })}
+                            <Typography style={{ fontSize: "14px" }}>
+                              Transaction Type
+                            </Typography>
+                            <Typography
+                              style={{ fontSize: "14px", color: "#0c3b5e" }}
+                            >
+                              {data?.transactionType}
+                            </Typography>
+                          </Box>
+                          <Divider />
+                        </>
+                      </TabPanel>
+                    );
+                  })}
               {walletHistory?.length > 0 &&
                 walletHistory?.map((data) => {
                   return (
-                    <TabPanel value="2">
+                    <TabPanel value="2" padding={0}>
                       <Box
                         style={{
                           display: "flex",
@@ -528,17 +534,21 @@ const Header = () => {
                     </TabPanel>
                   );
                 })}
+                </Box>
             </TabContext>
           </Box>
+          <Box style={{height: "400px", overflow: "scroll", marginTop: '10px'}}>
           <TicketCard ticketData={winnerList} />
+          </Box>
         </Box>
       </Popover>
       {showModal === true && (
         <ModalComponent
-          open={true}
+          open={showModal}
           handleClose={handleCloseModal}
           ticketData={winnerList}
           gameResult={gameResult}
+          gameId={gameId}
         />
       )}
     </div>

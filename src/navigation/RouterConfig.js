@@ -20,7 +20,7 @@ const RouterConfig = () => {
     <Routes>
       <Route>
         <Route exact path="/" element={<LoginForm />} />
-        <Route path="dashboard" element={<Layout />} />
+        {/* <Route path="dashboard" element={<Layout />} /> */}
         {isLoggedIn ? (
           <Route path="dashboard" element={<Layout />} />
         ) : (
