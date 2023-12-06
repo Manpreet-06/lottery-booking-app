@@ -23,6 +23,7 @@ import { logout } from "../../Store/actions/authAction";
 import { winnerListData } from "../../Store/actions/winnerlistAction";
 import TicketCard from "../TicketCard/TicketCard";
 import ModalComponent from "../Modal/Modal";
+import { routes } from "../../navigation/route-constant";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -204,7 +205,7 @@ const Header = () => {
     dispatch(logout());
     removeFromLocalStorage("loginData");
     removeFromLocalStorage("gameId");
-    navigate("/");
+    navigate(routes.login);
   };
 
   return (
@@ -384,7 +385,7 @@ const Header = () => {
                   <Tab label="Winning Balance History" value="2" />
                 </TabList>
               </Box>
-                 <Box style={{height: "300px", overflow: "scroll"}}>
+              <Box style={{ height: "300px", overflow: "scroll" }}>
                 {mainHistory?.length > 0 &&
                   mainHistory?.map((data) => {
                     return (
@@ -462,89 +463,91 @@ const Header = () => {
                       </TabPanel>
                     );
                   })}
-              {walletHistory?.length > 0 &&
-                walletHistory?.map((data) => {
-                  return (
-                    <TabPanel value="2" padding={0}>
-                      <Box
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Typography style={{ fontSize: "14px" }}>
-                          Amount
-                        </Typography>
-                        <Typography
-                          style={{ fontSize: "14px", color: "#0c3b5e" }}
+                {walletHistory?.length > 0 &&
+                  walletHistory?.map((data) => {
+                    return (
+                      <TabPanel value="2" padding={0}>
+                        <Box
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
                         >
-                          {data?.amount}
-                        </Typography>
-                      </Box>
-                      <Box
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Typography style={{ fontSize: "14px" }}>
-                          Balance Type
-                        </Typography>
-                        <Typography
-                          style={{ fontSize: "14px", color: "#0c3b5e" }}
+                          <Typography style={{ fontSize: "14px" }}>
+                            Amount
+                          </Typography>
+                          <Typography
+                            style={{ fontSize: "14px", color: "#0c3b5e" }}
+                          >
+                            {data?.amount}
+                          </Typography>
+                        </Box>
+                        <Box
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
                         >
-                          {data?.balanceType}
-                        </Typography>
-                      </Box>
-                      <Box
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Typography style={{ fontSize: "14px" }}>
-                          Mode
-                        </Typography>
-                        <Typography
-                          style={{ fontSize: "14px", color: "#0c3b5e" }}
+                          <Typography style={{ fontSize: "14px" }}>
+                            Balance Type
+                          </Typography>
+                          <Typography
+                            style={{ fontSize: "14px", color: "#0c3b5e" }}
+                          >
+                            {data?.balanceType}
+                          </Typography>
+                        </Box>
+                        <Box
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
                         >
-                          {data?.mode}
-                        </Typography>
-                      </Box>
-                      <Box
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Typography style={{ fontSize: "14px" }}>
-                          Transaction Type
-                        </Typography>
-                        <Typography
-                          style={{ fontSize: "14px", color: "#0c3b5e" }}
+                          <Typography style={{ fontSize: "14px" }}>
+                            Mode
+                          </Typography>
+                          <Typography
+                            style={{ fontSize: "14px", color: "#0c3b5e" }}
+                          >
+                            {data?.mode}
+                          </Typography>
+                        </Box>
+                        <Box
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
                         >
-                          {data?.transactionType}
-                        </Typography>
-                      </Box>
-                      <Divider variant="miidle" />
-                    </TabPanel>
-                  );
-                })}
-                </Box>
+                          <Typography style={{ fontSize: "14px" }}>
+                            Transaction Type
+                          </Typography>
+                          <Typography
+                            style={{ fontSize: "14px", color: "#0c3b5e" }}
+                          >
+                            {data?.transactionType}
+                          </Typography>
+                        </Box>
+                        <Divider variant="miidle" />
+                      </TabPanel>
+                    );
+                  })}
+              </Box>
             </TabContext>
           </Box>
-          <Box style={{height: "400px", overflow: "scroll", marginTop: '10px'}}>
-          <TicketCard ticketData={winnerList} />
+          <Box
+            style={{ height: "400px", overflow: "scroll", marginTop: "10px" }}
+          >
+            <TicketCard ticketData={winnerList} />
           </Box>
         </Box>
       </Popover>
       {showModal === true && (
         <ModalComponent
-          open={showModal}
+          open={true}
           handleClose={handleCloseModal}
           ticketData={winnerList}
           gameResult={gameResult}

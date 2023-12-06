@@ -1,4 +1,4 @@
 export const routes ={
     login: "/",
-    layout: "/dashboard"
+    dashboard: "/dashboard"
 }

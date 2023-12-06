@@ -111,7 +111,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
   const handleClosePdf = () => setOpenPdf(false);
   const handleOpenPdf = () => setOpenPdf(true);
 
-  const handleOrder = async (values, gameId) => {
+  const handleOrder = async (values, formikProps, gameId) => {
     const user = getFromLocalStorage("loginData");
     const bookId = bookList?.find((data) => {
       if (values?.bookNumber === data?.number) {
@@ -168,12 +168,16 @@ const PlaceOrder = ({ bookList, gameId }) => {
             },
           ],
         };
+        handleReset(formikProps);
+        formikProps.resetForm({ values: { bookNumber: "" } });
         setPlaceOrderData(newOrderData?.orderData);
-        dispatch(fetchWalletData());
-        dispatch(walletHistoryData());
+        dispatch(fetchWalletData(user?._id));
+        dispatch(walletHistoryData(user?._id));
       } else {
         setErrorMessage(response?.error);
         setOpen(true);
+        formikProps.resetForm({ values: { bookNumber: "" } });
+        handleReset(formikProps);
       }
     } catch (error) {}
   };
@@ -249,8 +253,8 @@ const PlaceOrder = ({ bookList, gameId }) => {
           pageNumberDropdown: "",
           dropdownQuantity: "",
         }}
-        onSubmit={(values) => {
-          handleOrder(values, gameId);
+        onSubmit={(values, formikProps) => {
+          handleOrder(values, formikProps, gameId);
         }}
       >
         {(formikProps) => (
