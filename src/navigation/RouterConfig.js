@@ -15,7 +15,6 @@ const RouterConfig = () => {
     } else {
       setIsLoggedIn(false);
     }
-    console.log(authToken?.id);
   }, []);
 
   if (isLoggedIn === true) {

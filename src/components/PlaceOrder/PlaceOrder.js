@@ -32,7 +32,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
   const [open, setOpen] = React.useState(false);
   const [bookPrice, setBookPrice] = React.useState();
   const [openPdf, setOpenPdf] = React.useState(false);
-  const [placeOrderData, setPlaceOrderData] = React.useState();
+  const [placeOrderData, setPlaceOrderData] = React.useState([]);
   const [orderData, setOrderData] = React.useState([]);
 
   const handleBookNumber = (formikProps, fieldName, value) => {
@@ -149,28 +149,27 @@ const PlaceOrder = ({ bookList, gameId }) => {
       let valueToPass = {
         orderData: arrayToPass,
       };
-      console.log(valueToPass);
       const response = await placeOrderService(valueToPass);
       if (response.status === 200) {
         const { orderId } = response.data;
         setSuccessMessage("Order Placed");
         setOpen(true);
-        const newOrderData = {
-          orderData: [
-            {
-              bookNumber: values.bookNumber,
-              quantity: values.bookQuantity,
-              pageNumber: values?.pageNumber,
-              pageQuantity: values?.pageQuantity,
-              pageNumberDropdown: values?.pageNumberDropdown,
-              dropdownQuantity: values?.dropdownQuantity,
-              orderId: orderId,
-            },
-          ],
-        };
+        const modifiedData = {
+          bookNumber: values?.bookNumber,
+          quantity: values?.bookQuantity,
+          pageNumber: values?.pageNumber,
+          pageQuantity: values?.pageQuantity,
+          pageNumberDropdown: values?.pageNumberDropdown,
+          dropdownQuantity: values?.dropdownQuantity,
+          orderId: orderId,
+        }
+        console.log(modifiedData);
+        let newArray = [...placeOrderData];
+        newArray[newArray.length] = modifiedData;
+        console.log("line no 158", newArray);
+        setPlaceOrderData(newArray);   
         handleReset(formikProps);
         formikProps.resetForm({ values: { bookNumber: "" } });
-        setPlaceOrderData(newOrderData?.orderData);
         dispatch(fetchWalletData(user?._id));
         dispatch(walletHistoryData(user?._id));
       } else {
@@ -226,8 +225,18 @@ const PlaceOrder = ({ bookList, gameId }) => {
 
     let arrayToPass = [...orderData];
     arrayToPass[arrayToPass.length] = newOrder;
-    console.log(arrayToPass);
+    console.log(JSON.stringify(arrayToPass));
+    const modifiedOrderData = arrayToPass.map((order) => ({
+      bookNumber: order.bookNumber,
+      quantity: order.quantity,
+      pageNumber: formikProps?.values.pageNumber,
+      pageQuantity: formikProps?.values.pageQuantity,
+      pageNumberDropdown: formikProps?.values?.pageNumberDropdown,
+      dropdownQuantity: formikProps?.values?.dropdownQuantity,
+    }));
+    console.log("add order" ,modifiedOrderData);
     setOrderData(arrayToPass);
+    setPlaceOrderData(modifiedOrderData);
     formikProps && handleReset(formikProps);
   };
 

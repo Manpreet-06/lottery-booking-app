@@ -19,8 +19,15 @@ const style = {
 };
 
 const ModalComponent = (props) => {
-  const { ticketData, open, handleClose, gameResult } = props;
+  const { ticketData, open, handleClose, gameResult, gameId } = props;
   const { width, height } = useWindowSize();
+
+  const filteredData =ticketData.map((data)=>{
+    if(data?.gameId === gameId){
+      return data;
+    }
+  })
+
   return (
     <>
       <Confetti width={width} height={height} />
@@ -49,7 +56,13 @@ const ModalComponent = (props) => {
               <TicketCard ticketData={ticketData} />
             </Typography>
           </Box>
-          <Box display="flex" justifyContent={"end"} alignItems={"end"} mt={7} mr={2}>
+          <Box
+            display="flex"
+            justifyContent={"end"}
+            alignItems={"end"}
+            mt={7}
+            mr={2}
+          >
             <Button
               variant="contained"
               style={{ background: "#0c3b5e", color: "fff", boxShadow: "none" }}

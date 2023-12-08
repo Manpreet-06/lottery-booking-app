@@ -110,12 +110,15 @@ const Header = () => {
 
     if (remainingTime === "00:00:00" && bookingMessage === "Booking close in") {
       setShowModal(true);
-      dispatch(fetchGamesData());
       dispatch(gameResultData(gameId));
       dispatch(winnerListData(data?._id));
       dispatch(fetchWalletData(data?._id));
       dispatch(walletHistoryData(data?._id));
+      dispatch(fetchGamesData());
     }
+
+    // console.log(state?.winnerlistReducer?.data?.data?.winnerList);
+
     const modalTimer = setTimeout(() => {
       setShowModal(false);
     }, 1000);
