@@ -155,28 +155,48 @@ const PlaceOrder = ({ bookList, gameId }) => {
         setSuccessMessage("Order Placed");
         setOpen(true);
         const modifiedData = {
-          bookNumber: values?.bookNumber,
-          quantity: values?.bookQuantity,
-          pageNumber: values?.pageNumber,
-          pageQuantity: values?.pageQuantity,
-          pageNumberDropdown: values?.pageNumberDropdown,
-          dropdownQuantity: values?.dropdownQuantity,
-          orderId: orderId,
-        }
-        console.log(modifiedData);
+          bookNumber: values?.bookNumber ? values?.bookNumber : "",
+          quantity: values?.bookQuantity ? values?.bookQuantity : "",
+          pageNumber: values?.pageNumber ? values?.pageNumber : "",
+          pageQuantity: values?.pageQuantity ? values?.pageQuantity : "",
+          pageNumberDropdown: values?.pageNumberDropdown
+            ? values?.pageNumberDropdown
+            : "",
+          dropdownQuantity: values?.dropdownQuantity
+            ? values?.dropdownQuantity
+            : "",
+          orderId: orderId ? orderId : "",
+        };
         let newArray = [...placeOrderData];
         newArray[newArray.length] = modifiedData;
-        console.log("line no 158", newArray);
-        setPlaceOrderData(newArray);   
-        handleReset(formikProps);
-        formikProps.resetForm({ values: { bookNumber: "" } });
+        setPlaceOrderData(newArray);
+        console.log(response?.error);
+        formikProps.resetForm({
+          values: {
+            bookNumber: "",
+            bookQuantity: "",
+            pageNumber: "",
+            pageQuantity: "",
+            pageNumberDropdown: "",
+            dropdownQuantity: "",
+          },
+        });
         dispatch(fetchWalletData(user?._id));
         dispatch(walletHistoryData(user?._id));
       } else {
+        console.log(response?.error);
         setErrorMessage(response?.error);
         setOpen(true);
-        formikProps.resetForm({ values: { bookNumber: "" } });
-        handleReset(formikProps);
+        formikProps.resetForm({
+          values: {
+            bookNumber: "",
+            bookQuantity: "",
+            pageNumber: "",
+            pageQuantity: "",
+            pageNumberDropdown: "",
+            dropdownQuantity: "",
+          },
+        });
       }
     } catch (error) {}
   };
@@ -234,7 +254,6 @@ const PlaceOrder = ({ bookList, gameId }) => {
       pageNumberDropdown: formikProps?.values?.pageNumberDropdown,
       dropdownQuantity: formikProps?.values?.dropdownQuantity,
     }));
-    console.log("add order" ,modifiedOrderData);
     setOrderData(arrayToPass);
     setPlaceOrderData(modifiedOrderData);
     formikProps && handleReset(formikProps);
@@ -268,14 +287,14 @@ const PlaceOrder = ({ bookList, gameId }) => {
       >
         {(formikProps) => (
           <Form className="booking-page">
-            {open && errorMessage && (
+            {open && errorMessage.length>0 && (
               <Box mb={2}>
                 <Alert onClose={() => setOpen(false)} severity="error">
                   {errorMessage}
                 </Alert>
               </Box>
             )}
-            {open && successMessage && (
+            {open && successMessage.length>0 && (
               <Box mb={2}>
                 <Alert onClose={() => setOpen(false)} severity="success">
                   {successMessage}
@@ -442,7 +461,7 @@ const PlaceOrder = ({ bookList, gameId }) => {
                 Order
               </Button>
             </Box>
-            {openPdf === true && (
+            {gameId && openPdf === true && (
               <PrintPdf
                 placeOrderData={placeOrderData}
                 open={openPdf}

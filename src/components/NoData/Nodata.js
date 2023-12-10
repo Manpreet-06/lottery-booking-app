@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import React from "react";
 
-const Nodata = () => {
+const Nodata = ({message}) => {
   return (
     <Typography
       style={{
@@ -16,7 +16,7 @@ const Nodata = () => {
         justifyContent:"center"
       }}
     >
-      No Data Found
+    {message}
     </Typography>
   );
 };

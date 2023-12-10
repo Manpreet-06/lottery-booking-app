@@ -19,14 +19,8 @@ const style = {
 };
 
 const ModalComponent = (props) => {
-  const { ticketData, open, handleClose, gameResult, gameId } = props;
+  const { ticketData, open, handleClose, gameResult } = props;
   const { width, height } = useWindowSize();
-
-  const filteredData =ticketData.map((data)=>{
-    if(data?.gameId === gameId){
-      return data;
-    }
-  })
 
   return (
     <>
@@ -53,7 +47,9 @@ const ModalComponent = (props) => {
               <WinnerList winnerList={gameResult?.data} />
             </Typography>
             <Typography id="modal-modal-description" width="100%">
-              <TicketCard ticketData={ticketData} />
+              <TicketCard
+                ticketData={ticketData}
+              />
             </Typography>
           </Box>
           <Box

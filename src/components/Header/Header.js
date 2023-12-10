@@ -48,6 +48,7 @@ const Header = () => {
   const [bookingMessage, setBookingMessage] = useState("");
   const [nextGameMessage, setNextGameMessage] = useState("");
   const [bookingCloseMessage, setBookingCloseMessage] = useState("");
+  const [filteredTicketData, setFilteredTicketData] = useState("");
 
   const [currentTime, setCurrentTime] = useState(new Date());
   const startDateString = state?.gameReducer?.data?.data?.startTime;
@@ -110,14 +111,15 @@ const Header = () => {
 
     if (remainingTime === "00:00:00" && bookingMessage === "Booking close in") {
       setShowModal(true);
+      const filteredData = winnerList?.filter(data => data?.gameId === gameId);
+      setFilteredTicketData(filteredData);
+      setFilteredTicketData(filteredData);
       dispatch(gameResultData(gameId));
       dispatch(winnerListData(data?._id));
       dispatch(fetchWalletData(data?._id));
       dispatch(walletHistoryData(data?._id));
       dispatch(fetchGamesData());
     }
-
-    // console.log(state?.winnerlistReducer?.data?.data?.winnerList);
 
     const modalTimer = setTimeout(() => {
       setShowModal(false);
@@ -552,7 +554,7 @@ const Header = () => {
         <ModalComponent
           open={true}
           handleClose={handleCloseModal}
-          ticketData={winnerList}
+          ticketData={filteredTicketData}
           gameResult={gameResult}
           gameId={gameId}
         />

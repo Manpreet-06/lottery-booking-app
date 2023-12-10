@@ -16,11 +16,11 @@ const WinnerList = ({ winnerList }) => {
         >
           LUCKY DRAW
         </Typography>
-        {winnerList?.drawResult ? (
+        {winnerList?.drawResult  ? (
           <>
             <Box
               display={"flex"}
-              justifyContent={"space-evenly"}
+              justifyContent={"start"}
               alignItems="center"
             >
               <Typography
@@ -38,7 +38,7 @@ const WinnerList = ({ winnerList }) => {
                   fontSize: "30px",
                   fontWeight: 500,
                   marginTop: "5px",
-                  marginLeft: "120px"
+                  marginLeft: "160px"
                 }}
               >
                 {winnerList?.drawResult?.pageNumber}
@@ -48,18 +48,18 @@ const WinnerList = ({ winnerList }) => {
               <img
                 src={winnerList?.drawResult?.bookUrl}
                 alt=""
-                style={{ width: "196px", height: "233px" }}
+                style={{ width: "250px", height: "260px" }}
               />
               <img
                 src={winnerList?.drawResult?.pageUrl}
                 alt=""
-                style={{ width: "150px", height: "200px" }}
+                style={{ width: "200px", height: "230px" }}
               />
             </Box>
           </>
         ) : (
           <Box m={1.4}>
-            <Nodata />
+            <Nodata message="No Game Winner" />
           </Box>
         )}
       </>

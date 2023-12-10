@@ -4,7 +4,7 @@ import Nodata from "../NoData/Nodata";
 
 import "./Ticket.scss";
 
-const TicketCard = ({ticketData }) => {
+const TicketCard = ({ ticketData}) => {
   return (
     <Box>
       <>
@@ -18,28 +18,35 @@ const TicketCard = ({ticketData }) => {
         >
           WINNER LIST
         </Typography>
-        <Box className="ticket-box" style={{height: '500px', overflow: "scroll" }}>
-          {ticketData?.length> 0 ? ticketData?.map((item) => {
-            return (
-              <Card className="ticket-card">
-                <Typography className="ticket-number-text">
-                  TICKET NUMBER:-
-                </Typography>
-                <Box
-                  display="flex"
-                  alignItems={"baseline"}
-                  justifyContent={"space-between"}
-                >
-                  <Typography className="ticket-card__number">
-                    {item?.orderId}
+        <Box
+          className="ticket-box"
+          style={{ height: "500px", overflow: "scroll" }}
+        >
+          {ticketData && ticketData?.length > 0 ? (
+            ticketData?.map((item) => {
+              return (
+                <Card className="ticket-card">
+                  <Typography className="ticket-number-text">
+                    TICKET NUMBER:-
                   </Typography>
-                  <Typography className="ticket-card__price">
-                    {item?.amount}
-                  </Typography>
-                </Box>
-              </Card>
-            );
-          }): <Nodata />}
+                  <Box
+                    display="flex"
+                    alignItems={"baseline"}
+                    justifyContent={"space-between"}
+                  >
+                    <Typography className="ticket-card__number">
+                      {item?.orderId}
+                    </Typography>
+                    <Typography className="ticket-card__price">
+                      {item?.amount}
+                    </Typography>
+                  </Box>
+                </Card>
+              );
+            })
+          ) : (
+            <Nodata message="No Winners" />
+          )}
         </Box>
       </>
     </Box>
