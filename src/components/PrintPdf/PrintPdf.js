@@ -28,7 +28,6 @@ const PrintPdf = ({ placeOrderData, open, handleClose }) => {
   });
   const currentDate = new Date();
   const formattedDate = currentDate.toLocaleDateString();
-  console.log(JSON.stringify(placeOrderData));
 
   const rows =
     placeOrderData?.length > 0

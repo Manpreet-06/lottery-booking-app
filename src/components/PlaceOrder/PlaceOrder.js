@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Form, Formik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../PlaceOrder/PlaceOrder.scss";
 import AddIcon from "@mui/icons-material/Add";
 import { placeOrderService } from "../../services";
@@ -108,7 +108,10 @@ const PlaceOrder = ({ bookList, gameId }) => {
     setTotal(total);
   };
 
-  const handleClosePdf = () => setOpenPdf(false);
+  const handleClosePdf = () => {
+    setOpenPdf(false);
+    window.location.reload();
+  };
   const handleOpenPdf = () => setOpenPdf(true);
 
   const handleOrder = async (values, formikProps, gameId) => {
@@ -145,7 +148,6 @@ const PlaceOrder = ({ bookList, gameId }) => {
       let arrayToPass = [...orderData];
       arrayToPass[arrayToPass.length] = newOrder;
       setOrderData(arrayToPass);
-      console.log(" FINAL ARRAY ", JSON.stringify(arrayToPass));
       let valueToPass = {
         orderData: arrayToPass,
       };
@@ -170,33 +172,13 @@ const PlaceOrder = ({ bookList, gameId }) => {
         let newArray = [...placeOrderData];
         newArray[newArray.length] = modifiedData;
         setPlaceOrderData(newArray);
-        console.log(response?.error);
-        formikProps.resetForm({
-          values: {
-            bookNumber: "",
-            bookQuantity: "",
-            pageNumber: "",
-            pageQuantity: "",
-            pageNumberDropdown: "",
-            dropdownQuantity: "",
-          },
-        });
+        handleReset(formikProps);
         dispatch(fetchWalletData(user?._id));
         dispatch(walletHistoryData(user?._id));
       } else {
-        console.log(response?.error);
         setErrorMessage(response?.error);
         setOpen(true);
-        formikProps.resetForm({
-          values: {
-            bookNumber: "",
-            bookQuantity: "",
-            pageNumber: "",
-            pageQuantity: "",
-            pageNumberDropdown: "",
-            dropdownQuantity: "",
-          },
-        });
+        handleReset(formikProps);
       }
     } catch (error) {}
   };
@@ -287,14 +269,14 @@ const PlaceOrder = ({ bookList, gameId }) => {
       >
         {(formikProps) => (
           <Form className="booking-page">
-            {open && errorMessage.length>0 && (
+            {open && errorMessage.length > 0 && (
               <Box mb={2}>
                 <Alert onClose={() => setOpen(false)} severity="error">
                   {errorMessage}
                 </Alert>
               </Box>
             )}
-            {open && successMessage.length>0 && (
+            {open && successMessage.length > 0 && (
               <Box mb={2}>
                 <Alert onClose={() => setOpen(false)} severity="success">
                   {successMessage}
