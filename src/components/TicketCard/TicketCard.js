@@ -35,6 +35,18 @@ const TicketCard = ({ ticketData}) => {
                     justifyContent={"space-between"}
                   >
                     <Typography className="ticket-card__number">
+                      {'Date'}
+                    </Typography>
+                    <Typography className="ticket-card__price" style={{fontSize: '12px'}}>
+                      {item?.date}
+                    </Typography>
+                  </Box>
+                  <Box
+                    display="flex"
+                    alignItems={"baseline"}
+                    justifyContent={"space-between"}
+                  >
+                    <Typography className="ticket-card__number">
                       {item?.orderId}
                     </Typography>
                     <Typography className="ticket-card__price">

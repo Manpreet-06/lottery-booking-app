@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Form, Formik } from "formik";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "../PlaceOrder/PlaceOrder.scss";
 import AddIcon from "@mui/icons-material/Add";
 import { placeOrderService } from "../../services";
@@ -172,13 +172,35 @@ const PlaceOrder = ({ bookList, gameId }) => {
         let newArray = [...placeOrderData];
         newArray[newArray.length] = modifiedData;
         setPlaceOrderData(newArray);
-        handleReset(formikProps);
+        console.log(response?.error);
+        formikProps.resetForm({
+          values: {
+            // bookNumber: "",
+            bookQuantity: "",
+            pageNumber: "",
+            pageQuantity: "",
+            pageNumberDropdown: "",
+            dropdownQuantity: "",
+          },
+        });
+        setTotal(0);
         dispatch(fetchWalletData(user?._id));
         dispatch(walletHistoryData(user?._id));
       } else {
+        console.log(response?.error);
         setErrorMessage(response?.error);
         setOpen(true);
-        handleReset(formikProps);
+        formikProps.resetForm({
+          values: {
+            // bookNumber: "",
+            bookQuantity: "",
+            pageNumber: "",
+            pageQuantity: "",
+            pageNumberDropdown: "",
+            dropdownQuantity: "",
+          },
+        });
+        setTotal(0);
       }
     } catch (error) {}
   };

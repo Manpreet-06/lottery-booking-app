@@ -28,6 +28,7 @@ const PrintPdf = ({ placeOrderData, open, handleClose }) => {
   });
   const currentDate = new Date();
   const formattedDate = currentDate.toLocaleDateString();
+  console.log(JSON.stringify(placeOrderData));
 
   const rows =
     placeOrderData?.length > 0
@@ -51,7 +52,7 @@ const PrintPdf = ({ placeOrderData, open, handleClose }) => {
       width: 110,
       sortable: false,
     },
-    { field: "quantity", headerName: "Quantity", width: 100, sortable: false },
+    { field: "quantity", headerName: "Book Quantity", width: 100, sortable: false },
     {
       field: "pageNumber",
       headerName: "Page Number",
@@ -96,6 +97,7 @@ const PrintPdf = ({ placeOrderData, open, handleClose }) => {
           style={{ padding: "20px", ...style, width: "80%" }}
           ref={componentPDF}
         >
+          <Typography style={{color:  '#003F63', fontWeight: 600, fontSize: '24px', alignSelf: 'center', paddingBottom: '20px'}}>Invoice -  </Typography>
           <Box display="flex" alignItems="center" mb={2}>
           <Typography style={{color:  '#003F63', fontWeight: 600}}>Order Id -  </Typography>
           <Typography> {placeOrderData[0]?.orderId}</Typography>

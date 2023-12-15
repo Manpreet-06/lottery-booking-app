@@ -399,6 +399,22 @@ const Header = () => {
                         style={{ padding: "0px 25px 10px 0px" }}
                       >
                         <>
+                        <Box
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Typography style={{ fontSize: "14px" }}>
+                              Date
+                            </Typography>
+                            <Typography
+                              style={{ fontSize: "12px", color: "#0c3b5e" }}
+                            >
+                              {data?.date}
+                            </Typography>
+                          </Box>
                           <Box
                             style={{
                               display: "flex",
@@ -471,7 +487,23 @@ const Header = () => {
                 {walletHistory?.length > 0 &&
                   walletHistory?.map((data) => {
                     return (
-                      <TabPanel value="2" padding={0}>
+                      <TabPanel value="2" style={{ padding: "0px 25px 10px 0px" }}>
+                        <Box
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Typography style={{ fontSize: "14px" }}>
+                            Date
+                          </Typography>
+                          <Typography
+                            style={{ fontSize: "12px", color: "#0c3b5e" }}
+                          >
+                            {data?.date}
+                          </Typography>
+                        </Box>
                         <Box
                           style={{
                             display: "flex",
